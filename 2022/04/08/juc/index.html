@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Rayson Wen">
+
+
+
+
+
+<title>java并发 | Wonderland</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Rayson13&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Rayson13&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6;    // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function () {
+            tocbot.refresh(obj_merge(tocbot_default_config, { hasInnerContainers: true }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function () {
+        tocbot.init(obj_merge(tocbot_default_config, { collapseDepth: 1 }));
+    });
+
+    function expandToc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, { collapseDepth: expanded ? 1 : DEPTH_MAX }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">java并发</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Rayson Wen</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">April 8, 2022&nbsp;&nbsp;21:08:39</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h4 id="1-为什么调用start-方法时会执行run-方法，为什么不能直接调用run-方法？"><a href="#1-为什么调用start-方法时会执行run-方法，为什么不能直接调用run-方法？" class="headerlink" title="1.为什么调用start()方法时会执行run()方法，为什么不能直接调用run()方法？"></a>1.为什么调用start()方法时会执行run()方法，为什么不能直接调用run()方法？</h4><ul>
+<li>new一个thread，线程进入了新建状态。调用start()方法会启动一个线程并使线程进入就绪状态，当分配到<strong>时间片</strong>后就开始运行了。start()会执行线程相应的准备工作然后自动执行run()方法的内容，这才是多线程工作</li>
+<li>直接执行run()方法，会把run()方法当成一个main线程下的普通方法去执行并不会再线程中执行它，这不是多线程工作。</li>
+</ul>
+<p>总结：调用start帆帆可启动线程并使线程进入就绪状态，而run方法只是thread的一个普通方法单纯调用它还是在主程序里执行。</p>
+<h4 id="2-sleep-和wait"><a href="#2-sleep-和wait" class="headerlink" title="2.sleep()和wait()"></a>2.sleep()和wait()</h4><ul>
+<li>sleep()是Thread线程类中的静态方法，wait()是Object类的方法。</li>
+<li>sleep()不释放锁，wait()释放锁</li>
+<li>wait()通常用于线程间交交互&#x2F;通信，sleep()通常用于暂停执行。</li>
+<li>wait()方法被调用后，线程不会自动苏醒，需要别的线程调用同一个对象上的notify()或者notifyAll()方法。sleep()方法执行完成后，线程会自动苏醒。或则适用wait(long timeout)超时后线程自动苏醒。</li>
+</ul>
+<h4 id="3-wait-notify-和-notifyAll-必须在同步方法或者同步块中被调用？"><a href="#3-wait-notify-和-notifyAll-必须在同步方法或者同步块中被调用？" class="headerlink" title="3.wait(), notify()和 notifyAll()必须在同步方法或者同步块中被调用？"></a>3.wait(), notify()和 notifyAll()必须在同步方法或者同步块中被调用？</h4><ul>
+<li>当一个线程需要调用对象的 wait()方法的时候，这个线程必须拥有该对象的锁，接着它就会释放这 个对象锁并进入等待状态直到其他线程调用这个对象上的 notify()方法。同样的，当一个线程需要 调用对象的 notify()方法时，它会释放这个对象的锁，以便其他在等待的线程就可以得到这个对象 锁。由于所有的这些方法都需要线程持有对象的锁，这样就只能通过同步来实现，所以他们只能在 同步方法或者同步块中被调用。</li>
+</ul>
+<h4 id="4-线程的-sleep-方法和-yield-方法有什么区别？"><a href="#4-线程的-sleep-方法和-yield-方法有什么区别？" class="headerlink" title="4.线程的 sleep()方法和 yield()方法有什么区别？"></a>4.线程的 sleep()方法和 yield()方法有什么区别？</h4><ul>
+<li>（1） sleep()方法给其他线程运行机会时不考虑线程的优先级，因此会给低优先级的线程以运行的 机会；yield()方法只会给相同优先级或更高优先级的线程以运行的机会；</li>
+<li>（2） 线程执行 sleep()方法后转入阻塞（blocked）状态，而执行 yield()方法后转入就绪 （ready）状态；</li>
+<li>（3）sleep()方法声明抛出 InterruptedException，而 yield()方法没有声明任何异常；</li>
+<li>（4）sleep()方法比 yield()方法（跟操作系统 CPU 调度相关）具有更好的可移植性，通常不建议 使用yield()方法来控制并发线程的执行。</li>
+</ul>
+<h4 id="5-线程类的构造方法、静态块是被哪个线程调用的"><a href="#5-线程类的构造方法、静态块是被哪个线程调用的" class="headerlink" title="5.线程类的构造方法、静态块是被哪个线程调用的"></a>5.线程类的构造方法、静态块是被哪个线程调用的</h4><ul>
+<li>线程类的构造方法、静态块是被 new这个线程类所在 的线程所调用的，而 run 方法里面的代码才是被线程自身所调用的。</li>
+<li>eg:Thread2 中 new 了Thread1，main 函 数中 new 了 Thread2<ul>
+<li>Thread2 的构造方法、静态块是 main 线程调用的，Thread2 的 run()方法是Thread2 自己调用的</li>
+<li>Thread1 的构造方法、静态块是 Thread2 调用的，Thread1 的 run()方法是Thread1 自己调用的</li>
+</ul>
+</li>
+</ul>
+<h4 id="6-synchronized-关键字"><a href="#6-synchronized-关键字" class="headerlink" title="6.synchronized 关键字"></a>6.synchronized 关键字</h4><ul>
+<li>修饰实例方法: 作用于当前对象实例加锁，进入同步代码前要获得当前对象实例的锁</li>
+<li>修饰静态方法: 也就是给当前类加锁，会作用于类的所有对象实例，因为静态成员不属于任何一个 实例对象，是类成员（ static 表明这是该类的一个静态资源，不管new了多少个对象，只有一 份）。所以如果一个线程A调用一个实例对象的非静态 synchronized 方法，而线程B需要调用这个 实例对象所属类的静态 synchronized 方法，是允许的，不会发生互斥现象，因为访问静态 synchronized 方法占用的锁是当前类的锁，而访问非静态 synchronized 方法占用的锁是当前实 例对象锁。</li>
+<li>修饰代码块: 指定加锁对象，对给定对象加锁，进入同步代码库前要获得给定对象的锁。</li>
+</ul>
+<h4 id="7-解释双重检验锁方式实现单例模式"><a href="#7-解释双重检验锁方式实现单例模式" class="headerlink" title="7.解释双重检验锁方式实现单例模式"></a>7.解释双重检验锁方式实现单例模式</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public class Singleton&#123;</span><br><span class="line">	private volatile static Singleton instance;</span><br><span class="line">	private Singleton()&#123;&#125;</span><br><span class="line">	public static Singleton getInstance()&#123;</span><br><span class="line">		if(instance == null)&#123;</span><br><span class="line">			synchronized(Singleton.class)&#123;</span><br><span class="line">				if(instance == null)&#123;</span><br><span class="line">					instance = new Singleton();</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		return instance;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>instance采用 volatile 关键字修饰很重要，instance &#x3D; new Singleton();这段代码其实是分为三步执行：</p>
+<ol>
+<li>为instance分配内存空间</li>
+<li>初始化instance</li>
+<li>将instance指向分配的内存地址</li>
+</ol>
+<p>但是由于 JVM 具有指令重排的特性，执行顺序有可能变成 1-&gt;3-&gt;2。指令重排在单线程环境下不会出现问题， 但是在多线程环境下会导致一个线程获得还没有初始化的实例。例如，线程 T1 执行了 1 和 3，此时 T2 调用 getInstance() 后发现 instance 不为空，因此返回 instance，但此时 instance 还未被初始化。</p>
+<p>适用volatile可以禁止JVM的指令重排，保证在多线程下也能正常运行。</p>
+<h4 id="8-synchronzied底层实现原理"><a href="#8-synchronzied底层实现原理" class="headerlink" title="8.synchronzied底层实现原理"></a>8.synchronzied底层实现原理</h4><ul>
+<li>Synchronized的语义底层是通过一个monitor（监视器锁）的对象来完成</li>
+<li>每个对象有一个监视器锁(monitor)。每个Synchronized修饰过的代码当它的monitor被占用时就 会处于锁定状态并且尝试获取monitor的所有权 ，过程：<ol>
+<li>如果monitor的进入数为0，则该线程进入monitor，然后将进入数设置为1，该线程即为 monitor的所有者。</li>
+<li>如果线程已经占有该monitor，只是重新进入，则进入monitor的进入数加1.</li>
+<li>如果其他线程已经占用了monitor，则该线程进入阻塞状态，直到monitor的进入数为0，再 重新尝试获取monitor的所有权。</li>
+</ol>
+</li>
+</ul>
+<h4 id="9-什么是自旋"><a href="#9-什么是自旋" class="headerlink" title="9.什么是自旋"></a>9.什么是自旋</h4><ul>
+<li>很多 synchronized 里面的代码只是一些很简单的代码，执行时间非常快，此时等待的线程都加锁 可能是一种不太值得的操作，因为线程阻塞涉及到用户态和内核态切换的问题。既然 synchronized 里面的代码执行得非常快，不妨让等待锁的线程不要被阻塞，而是在 synchronized 的边界做忙循环，这就是自旋。如果做了多次循环发现还没有获得锁，再阻塞，这样可能是一种更好的策略。</li>
+<li>忙循环：就是程序员用循环让一个线程等待，不像传统方法wait(), sleep() 或 yield() 它们都放弃了 CPU控制，而忙循环不会放弃CPU，它就是在运行一个空循环。这么做的目的是为了保留CPU缓 存，在多核系统中，一个等待线程醒来的时候可能会在另一个内核运行，这样会重建缓存。为了避 免重建缓存和减少等待重建的时间就可以使用它了。</li>
+</ul>
+<h4 id="10-线程B怎么知道线程A修改了变量"><a href="#10-线程B怎么知道线程A修改了变量" class="headerlink" title="10.线程B怎么知道线程A修改了变量"></a>10.线程B怎么知道线程A修改了变量</h4><ol>
+<li>volatile修饰变量</li>
+<li>synchronized修饰修改变量的方法</li>
+<li>wait&#x2F;notify</li>
+<li>while轮询</li>
+</ol>
+<h4 id="11-乐观锁和悲观锁"><a href="#11-乐观锁和悲观锁" class="headerlink" title="11.乐观锁和悲观锁"></a>11.乐观锁和悲观锁</h4><ul>
+<li>总是假设最坏的情况，每次去拿数据的时候都认为别人会修改，所以每次在拿数据的时候 都会上锁，这样别人想拿这个数据就会阻塞直到它拿到锁。传统的关系型数据库里边就用到了很多 这种锁机制，比如行锁，表锁等，读锁，写锁等，都是在做操作之前先上锁。再比如 Java 里面的 同步原语 synchronized 关键字的实现也是悲观锁。</li>
+<li>顾名思义，就是很乐观，每次去拿数据的时候都认为别人不会修改，所以不会上锁，但是 在更新的时候会判断一下在此期间别人有没有去更新这个数据，可以使用版本号等机制。乐观锁适 用于多读的应用类型，这样可以提高吞吐量，像数据库提供的类似于 write_condition 机制，其实 都是提供的乐观锁。在 Java中 java.util.concurrent.atomic 包下面的原子变量类就是使用了乐观 锁的一种实现方式 CAS 实现的。</li>
+</ul>
+<h4 id="12-CAS"><a href="#12-CAS" class="headerlink" title="12.CAS"></a>12.CAS</h4><ul>
+<li>CAS 是 compare and swap 的缩写，即我们所说的比较交换。</li>
+<li>cas 是一种基于锁的操作，而且是乐观锁。</li>
+<li>CAS 操作包含三个操作数 —— 内存位置（V）、预期原值（A）和新值(B)。如果内存地址里面的 值和 A 的值是一样的，那么就将内存里面的值更新成 B。CAS是通过无限循环来获取数据的，若果 在第一轮循环中，a 线程获取地址里面的值被b 线程修改了，那么 a 线程需要自旋，到下次循环才 有可能机会执行。</li>
+</ul>
+<p>​    CAS产生的问题：</p>
+<ol>
+<li>ABA问题：比如说一个线程 one 从内存位置 V 中取出 A，这时候另一个线程 two 也从内存中取出 A，并且 two 进 行了一些操作变成了 B，然后 two 又将 V 位置的数据变成 A，这时候线程 one 进行 CAS 操作发现内存 中仍然是 A，然后 one 操作成功。“值相同&#x3D;没有被改变过”无法成立，即使第二个线程确确实实改过这个值，只不过又改回来了。“值曾经发生过改动”这个事件就无法被观测到。对于需要<strong>跟踪值的改变</strong>过程（比如记录值改变的次数）的场景来说ABA问题就是致命的。</li>
+<li>循环时间长开销大：对于资源竞争严重（线程冲突严重）的情况，CAS 自旋的概率会比较大，从而浪费更多的 CPU 资源， 效率低于 synchronized。</li>
+<li>只能保证一个共享变量的原子操作：当对一个共享变量执行操作时，我们可以使用循环 CAS 的方式来保证原子操作，但是对多个共享变量 操作时，循环 CAS 就无法保证操作的原子性，这个时候就可以用锁。</li>
+</ol>
+<h4 id="13-死锁与活锁的区别，死锁与饥饿的区别？"><a href="#13-死锁与活锁的区别，死锁与饥饿的区别？" class="headerlink" title="13.死锁与活锁的区别，死锁与饥饿的区别？"></a>13.死锁与活锁的区别，死锁与饥饿的区别？</h4><ul>
+<li><p>死锁：是指两个或两个以上的进程（或线程）在执行过程中，因争夺资源而造成的一种互相等待的 现象，若无外力作用，它们都将无法推进下去。</p>
+</li>
+<li><p>活锁：任务或者执行者没有被阻塞，由于某些条件没有满足，导致一直重复尝试，失败，尝试，失败。</p>
+</li>
+<li><p>活锁和死锁的区别在于，处于活锁的实体是在不断的改变状态，这就是所谓的“活”， 而处于死锁的 实体表现为等待；活锁有可能自行解开，死锁则不能。</p>
+</li>
+<li><p>饥饿：一个或者多个线程因为种种原因无法获得所需要的资源，导致一直无法执行的状态。</p>
+</li>
+<li><p>java中导致饥饿的原因：</p>
+<ul>
+<li>1、高优先级线程吞噬所有的低优先级线程的 CPU 时间。</li>
+<li>2、线程被永久堵塞在一个等待进入同步块的状态，因为其他线程总是能在它之前持续地对该 同步块进行访问。</li>
+<li>3、线程在等待一个本身也处于永久等待完成的对象(比如调用这个对象的 wait 方法)，因为其 他线程总是被持续地获得唤醒。</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Rayson Wen</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://rayson13.github.io/2022/04/08/juc/">https://rayson13.github.io/2022/04/08/juc/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2022 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/juc/"># juc</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2022/04/08/redis/">redis知识点</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Rayson Wen | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>
