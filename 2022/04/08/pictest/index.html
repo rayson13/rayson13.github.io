@@ -13,7 +13,7 @@
 
 
 
-<title>pictest | Hexo</title>
+<title>hexo上传图片测试 | Hexo</title>
 
 
 
@@ -127,11 +127,70 @@
                 <div class="container">
     
     
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6;    // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function () {
+            tocbot.refresh(obj_merge(tocbot_default_config, { hasInnerContainers: true }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function () {
+        tocbot.init(obj_merge(tocbot_default_config, { collapseDepth: 1 }));
+    });
+
+    function expandToc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, { collapseDepth: expanded ? 1 : DEPTH_MAX }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
 
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">pictest</h1>
+            <h1 class="post-title">hexo上传图片测试</h1>
             
                 <div class="post-meta">
                     
@@ -144,13 +203,35 @@
                         </span>
                     
                     
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/test/">test</a>
+                            
+                        </span>
+                    
                 </div>
             
         </header>
 
         <div class="post-content">
-            <p><img src="/springboot.jpg" alt="test"></p>
+            <h3 id="使用Hexo-asset-image插件"><a href="#使用Hexo-asset-image插件" class="headerlink" title="使用Hexo-asset-image插件"></a>使用Hexo-asset-image插件</h3><p>1.markdown写法不能显示本地图片，其url为<a target="_blank" rel="noopener" href="https://rayson13.github.io/springboot.jpg">https://rayson13.github.io/springboot.jpg</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">![test](springboot.jpg)</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="/springboot.jpg" alt="test"></p>
+<p>2.Hexo 内置标签系统-图片标签可用</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;% asset_img springboot.jpg This is an example image %&#125;</span><br></pre></td></tr></table></figure>
+
 <img src="/2022/04/08/pictest/springboot.jpg" class title="This is an example image">
+
+
+
+<p>3.markdown加cdn可用</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">![test](https://cdn.jsdelivr.net/gh/rayson13/BlogResource/Blog/img/wallhaven-k762j7.png)</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/rayson13/BlogResource/Blog/img/wallhaven-k762j7.png" alt="test"></p>
 
         </div>
 
@@ -188,6 +269,10 @@
                 <span>Tag(s):</span>
                 <span class="tag">
                     
+                    
+                        <a href="/tags/test/"># test</a>
+                    
+                        
                 </span>
             </div>
             <div>
