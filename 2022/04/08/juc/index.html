@@ -215,27 +215,63 @@
         </header>
 
         <div class="post-content">
-            <h4 id="1-为什么调用start-方法时会执行run-方法，为什么不能直接调用run-方法？"><a href="#1-为什么调用start-方法时会执行run-方法，为什么不能直接调用run-方法？" class="headerlink" title="1.为什么调用start()方法时会执行run()方法，为什么不能直接调用run()方法？"></a>1.为什么调用start()方法时会执行run()方法，为什么不能直接调用run()方法？</h4><ul>
+            <h4 id="1-线程和进程"><a href="#1-线程和进程" class="headerlink" title="1.线程和进程"></a>1.线程和进程</h4><ul>
+<li><p>进程是程序的一次执行过程，是系统运行程序的基本单位，因此进程是动态的。系统运行一个程序即是一个进程从创建，运行到消亡的过程。</p>
+<p>在 Java 中，当我们启动 main 函数时其实就是启动了一个 JVM 的进程，而 main 函数所在的线程就是这个进程中的一个线程，也称主线程。</p>
+</li>
+<li><p>线程与进程相似，但线程是一个比进程更小的执行单位。一个进程在其执行的过程中可以产生多个线程。与进程不同的是同类的多个线程共享进程的<strong>堆</strong>和<strong>方法区</strong>资源，但每个线程有自己的<strong>程序计数器</strong>、<strong>虚拟机栈</strong>和<strong>本地方法栈</strong>，所以系统在产生一个线程，或是在各个线程之间作切换工作时，负担要比进程小得多，也正因为如此，线程也被称为轻量级进程。</p>
+</li>
+</ul>
+<h4 id="2-并发与并行"><a href="#2-并发与并行" class="headerlink" title="2.并发与并行"></a>2.并发与并行</h4><ul>
+<li><strong>并发</strong>：两个及两个以上的作业在同一 <strong>时间段</strong> 内执行。</li>
+<li><strong>并行</strong>：两个及两个以上的作业在同一 <strong>时刻</strong> 执行。</li>
+</ul>
+<h4 id="3-上下文切换"><a href="#3-上下文切换" class="headerlink" title="3.上下文切换"></a>3.上下文切换</h4><p>线程在执行过程中会有自己的运行条件和状态（也称上下文），比如程序计数器，栈信息等。当出现如下情况的时候，线程会从占用 CPU 状态中退出。</p>
+<ul>
+<li>主动让出 CPU，比如调用了 <code>sleep()</code>, <code>wait()</code> 等。</li>
+<li>时间片用完，因为操作系统要防止一个线程或者进程长时间占用CPU导致其他线程或者进程饿死。</li>
+<li>调用了阻塞类型的系统中断，比如请求 IO，线程被阻塞。</li>
+<li>被终止或结束运行</li>
+</ul>
+<p>这其中前三种都会发生线程切换，线程切换意味着需要保存当前线程的上下文，留待线程下次占用 CPU 的时候恢复现场。并加载下一个将要占用 CPU 的线程上下文。这就是所谓的 <strong>上下文切换</strong>。</p>
+<p>上下文切换是现代操作系统的基本功能，因其每次需要保存信息恢复信息，这将会占用 CPU，内存等系统资源进行处理，也就意味着效率会有一定损耗，如果频繁切换就会造成整体效率低下。</p>
+<h4 id="4-线程死锁"><a href="#4-线程死锁" class="headerlink" title="4.线程死锁"></a>4.线程死锁</h4><ul>
+<li>线程死锁描述的是这样一种情况：多个线程同时被阻塞，它们中的一个或者全部都在等待某个资源被释放。由于线程被无限期地阻塞，因此程序不可能正常终止。</li>
+<li>产生死锁的四个必要条件：<ol>
+<li>互斥条件：该资源任意一个时刻只由一个线程占用。</li>
+<li>请求与保持条件：一个线程因请求资源而阻塞时，对已获得的资源保持不放。</li>
+<li>不剥夺条件:线程已获得的资源在未使用完之前不能被其他线程强行剥夺，只有自己使用完毕后才释放资源。</li>
+<li>循环等待条件:若干线程之间形成一种头尾相接的循环等待资源关系。</li>
+</ol>
+</li>
+<li><strong>如何预防死锁？</strong> 破坏死锁的产生的必要条件即可：<ol>
+<li><strong>破坏请求与保持条件</strong> ：一次性申请所有的资源</li>
+<li><strong>破坏不剥夺条件</strong> ：占用部分资源的线程进一步申请其他资源时，如果申请不到，可以主动释放它占有的资源。</li>
+<li><strong>破坏循环等待条件</strong> ：靠按序申请资源来预防。按某一顺序申请资源，释放资源则反序释放。破坏循环等待条件。</li>
+</ol>
+</li>
+</ul>
+<h4 id="5-为什么调用start-方法时会执行run-方法，为什么不能直接调用run-方法？"><a href="#5-为什么调用start-方法时会执行run-方法，为什么不能直接调用run-方法？" class="headerlink" title="5.为什么调用start()方法时会执行run()方法，为什么不能直接调用run()方法？"></a>5.为什么调用start()方法时会执行run()方法，为什么不能直接调用run()方法？</h4><ul>
 <li>new一个thread，线程进入了新建状态。调用start()方法会启动一个线程并使线程进入就绪状态，当分配到<strong>时间片</strong>后就开始运行了。start()会执行线程相应的准备工作然后自动执行run()方法的内容，这才是多线程工作</li>
 <li>直接执行run()方法，会把run()方法当成一个main线程下的普通方法去执行并不会再线程中执行它，这不是多线程工作。</li>
 </ul>
 <p>总结：调用start帆帆可启动线程并使线程进入就绪状态，而run方法只是thread的一个普通方法单纯调用它还是在主程序里执行。</p>
-<h4 id="2-sleep-和wait"><a href="#2-sleep-和wait" class="headerlink" title="2.sleep()和wait()"></a>2.sleep()和wait()</h4><ul>
+<h4 id="6-sleep-和wait"><a href="#6-sleep-和wait" class="headerlink" title="6.sleep()和wait()"></a>6.sleep()和wait()</h4><ul>
 <li>sleep()是Thread线程类中的静态方法，wait()是Object类的方法。</li>
 <li>sleep()不释放锁，wait()释放锁</li>
 <li>wait()通常用于线程间交交互&#x2F;通信，sleep()通常用于暂停执行。</li>
 <li>wait()方法被调用后，线程不会自动苏醒，需要别的线程调用同一个对象上的notify()或者notifyAll()方法。sleep()方法执行完成后，线程会自动苏醒。或则适用wait(long timeout)超时后线程自动苏醒。</li>
 </ul>
-<h4 id="3-wait-notify-和-notifyAll-必须在同步方法或者同步块中被调用？"><a href="#3-wait-notify-和-notifyAll-必须在同步方法或者同步块中被调用？" class="headerlink" title="3.wait(), notify()和 notifyAll()必须在同步方法或者同步块中被调用？"></a>3.wait(), notify()和 notifyAll()必须在同步方法或者同步块中被调用？</h4><ul>
+<h4 id="7-wait-notify-和-notifyAll-必须在同步方法或者同步块中被调用？"><a href="#7-wait-notify-和-notifyAll-必须在同步方法或者同步块中被调用？" class="headerlink" title="7.wait(), notify()和 notifyAll()必须在同步方法或者同步块中被调用？"></a>7.wait(), notify()和 notifyAll()必须在同步方法或者同步块中被调用？</h4><ul>
 <li>当一个线程需要调用对象的 wait()方法的时候，这个线程必须拥有该对象的锁，接着它就会释放这 个对象锁并进入等待状态直到其他线程调用这个对象上的 notify()方法。同样的，当一个线程需要 调用对象的 notify()方法时，它会释放这个对象的锁，以便其他在等待的线程就可以得到这个对象 锁。由于所有的这些方法都需要线程持有对象的锁，这样就只能通过同步来实现，所以他们只能在 同步方法或者同步块中被调用。</li>
 </ul>
-<h4 id="4-线程的-sleep-方法和-yield-方法有什么区别？"><a href="#4-线程的-sleep-方法和-yield-方法有什么区别？" class="headerlink" title="4.线程的 sleep()方法和 yield()方法有什么区别？"></a>4.线程的 sleep()方法和 yield()方法有什么区别？</h4><ul>
+<h4 id="8-线程的-sleep-方法和-yield-方法有什么区别？"><a href="#8-线程的-sleep-方法和-yield-方法有什么区别？" class="headerlink" title="8.线程的 sleep()方法和 yield()方法有什么区别？"></a>8.线程的 sleep()方法和 yield()方法有什么区别？</h4><ul>
 <li>（1） sleep()方法给其他线程运行机会时不考虑线程的优先级，因此会给低优先级的线程以运行的 机会；yield()方法只会给相同优先级或更高优先级的线程以运行的机会；</li>
 <li>（2） 线程执行 sleep()方法后转入阻塞（blocked）状态，而执行 yield()方法后转入就绪 （ready）状态；</li>
 <li>（3）sleep()方法声明抛出 InterruptedException，而 yield()方法没有声明任何异常；</li>
 <li>（4）sleep()方法比 yield()方法（跟操作系统 CPU 调度相关）具有更好的可移植性，通常不建议 使用yield()方法来控制并发线程的执行。</li>
 </ul>
-<h4 id="5-线程类的构造方法、静态块是被哪个线程调用的"><a href="#5-线程类的构造方法、静态块是被哪个线程调用的" class="headerlink" title="5.线程类的构造方法、静态块是被哪个线程调用的"></a>5.线程类的构造方法、静态块是被哪个线程调用的</h4><ul>
+<h4 id="9-线程类的构造方法、静态块是被哪个线程调用的"><a href="#9-线程类的构造方法、静态块是被哪个线程调用的" class="headerlink" title="9.线程类的构造方法、静态块是被哪个线程调用的"></a>9.线程类的构造方法、静态块是被哪个线程调用的</h4><ul>
 <li>线程类的构造方法、静态块是被 new这个线程类所在 的线程所调用的，而 run 方法里面的代码才是被线程自身所调用的。</li>
 <li>eg:Thread2 中 new 了Thread1，main 函 数中 new 了 Thread2<ul>
 <li>Thread2 的构造方法、静态块是 main 线程调用的，Thread2 的 run()方法是Thread2 自己调用的</li>
@@ -243,12 +279,13 @@
 </ul>
 </li>
 </ul>
-<h4 id="6-synchronized-关键字"><a href="#6-synchronized-关键字" class="headerlink" title="6.synchronized 关键字"></a>6.synchronized 关键字</h4><ul>
+<h4 id="10-synchronized-关键字"><a href="#10-synchronized-关键字" class="headerlink" title="10.synchronized 关键字"></a>10.synchronized 关键字</h4><p><strong><code>synchronized</code> 关键字解决的是多个线程之间访问资源的同步性，<code>synchronized</code>关键字可以保证被它修饰的方法或者代码块在任意时刻只能有一个线程执行。</strong></p>
+<ul>
 <li>修饰实例方法: 作用于当前对象实例加锁，进入同步代码前要获得当前对象实例的锁</li>
 <li>修饰静态方法: 也就是给当前类加锁，会作用于类的所有对象实例，因为静态成员不属于任何一个 实例对象，是类成员（ static 表明这是该类的一个静态资源，不管new了多少个对象，只有一 份）。所以如果一个线程A调用一个实例对象的非静态 synchronized 方法，而线程B需要调用这个 实例对象所属类的静态 synchronized 方法，是允许的，不会发生互斥现象，因为访问静态 synchronized 方法占用的锁是当前类的锁，而访问非静态 synchronized 方法占用的锁是当前实 例对象锁。</li>
 <li>修饰代码块: 指定加锁对象，对给定对象加锁，进入同步代码库前要获得给定对象的锁。</li>
 </ul>
-<h4 id="7-解释双重检验锁方式实现单例模式"><a href="#7-解释双重检验锁方式实现单例模式" class="headerlink" title="7.解释双重检验锁方式实现单例模式"></a>7.解释双重检验锁方式实现单例模式</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public class Singleton&#123;</span><br><span class="line">	private volatile static Singleton instance;</span><br><span class="line">	private Singleton()&#123;&#125;</span><br><span class="line">	public static Singleton getInstance()&#123;</span><br><span class="line">		if(instance == null)&#123;</span><br><span class="line">			synchronized(Singleton.class)&#123;</span><br><span class="line">				if(instance == null)&#123;</span><br><span class="line">					instance = new Singleton();</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		return instance;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="11-解释双重检验锁方式实现单例模式"><a href="#11-解释双重检验锁方式实现单例模式" class="headerlink" title="11.解释双重检验锁方式实现单例模式"></a>11.解释双重检验锁方式实现单例模式</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public class Singleton&#123;</span><br><span class="line">	private volatile static Singleton instance;</span><br><span class="line">	private Singleton()&#123;&#125;</span><br><span class="line">	public static Singleton getInstance()&#123;</span><br><span class="line">		if(instance == null)&#123;</span><br><span class="line">			synchronized(Singleton.class)&#123;</span><br><span class="line">				if(instance == null)&#123;</span><br><span class="line">					instance = new Singleton();</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		return instance;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>instance采用 volatile 关键字修饰很重要，instance &#x3D; new Singleton();这段代码其实是分为三步执行：</p>
 <ol>
@@ -258,7 +295,7 @@
 </ol>
 <p>但是由于 JVM 具有指令重排的特性，执行顺序有可能变成 1-&gt;3-&gt;2。指令重排在单线程环境下不会出现问题， 但是在多线程环境下会导致一个线程获得还没有初始化的实例。例如，线程 T1 执行了 1 和 3，此时 T2 调用 getInstance() 后发现 instance 不为空，因此返回 instance，但此时 instance 还未被初始化。</p>
 <p>适用volatile可以禁止JVM的指令重排，保证在多线程下也能正常运行。</p>
-<h4 id="8-synchronzied底层实现原理"><a href="#8-synchronzied底层实现原理" class="headerlink" title="8.synchronzied底层实现原理"></a>8.synchronzied底层实现原理</h4><ul>
+<h4 id="12-synchronzied底层实现原理"><a href="#12-synchronzied底层实现原理" class="headerlink" title="12.synchronzied底层实现原理"></a>12.synchronzied底层实现原理</h4><ul>
 <li>Synchronized的语义底层是通过一个monitor（监视器锁）的对象来完成</li>
 <li>每个对象有一个监视器锁(monitor)。每个Synchronized修饰过的代码当它的monitor被占用时就 会处于锁定状态并且尝试获取monitor的所有权 ，过程：<ol>
 <li>如果monitor的进入数为0，则该线程进入monitor，然后将进入数设置为1，该线程即为 monitor的所有者。</li>
@@ -267,21 +304,21 @@
 </ol>
 </li>
 </ul>
-<h4 id="9-什么是自旋"><a href="#9-什么是自旋" class="headerlink" title="9.什么是自旋"></a>9.什么是自旋</h4><ul>
+<h4 id="13-什么是自旋"><a href="#13-什么是自旋" class="headerlink" title="13.什么是自旋"></a>13.什么是自旋</h4><ul>
 <li>很多 synchronized 里面的代码只是一些很简单的代码，执行时间非常快，此时等待的线程都加锁 可能是一种不太值得的操作，因为线程阻塞涉及到用户态和内核态切换的问题。既然 synchronized 里面的代码执行得非常快，不妨让等待锁的线程不要被阻塞，而是在 synchronized 的边界做忙循环，这就是自旋。如果做了多次循环发现还没有获得锁，再阻塞，这样可能是一种更好的策略。</li>
 <li>忙循环：就是程序员用循环让一个线程等待，不像传统方法wait(), sleep() 或 yield() 它们都放弃了 CPU控制，而忙循环不会放弃CPU，它就是在运行一个空循环。这么做的目的是为了保留CPU缓 存，在多核系统中，一个等待线程醒来的时候可能会在另一个内核运行，这样会重建缓存。为了避 免重建缓存和减少等待重建的时间就可以使用它了。</li>
 </ul>
-<h4 id="10-线程B怎么知道线程A修改了变量"><a href="#10-线程B怎么知道线程A修改了变量" class="headerlink" title="10.线程B怎么知道线程A修改了变量"></a>10.线程B怎么知道线程A修改了变量</h4><ol>
+<h4 id="14-线程B怎么知道线程A修改了变量"><a href="#14-线程B怎么知道线程A修改了变量" class="headerlink" title="14.线程B怎么知道线程A修改了变量"></a>14.线程B怎么知道线程A修改了变量</h4><ol>
 <li>volatile修饰变量</li>
 <li>synchronized修饰修改变量的方法</li>
 <li>wait&#x2F;notify</li>
 <li>while轮询</li>
 </ol>
-<h4 id="11-乐观锁和悲观锁"><a href="#11-乐观锁和悲观锁" class="headerlink" title="11.乐观锁和悲观锁"></a>11.乐观锁和悲观锁</h4><ul>
+<h4 id="15-乐观锁和悲观锁"><a href="#15-乐观锁和悲观锁" class="headerlink" title="15.乐观锁和悲观锁"></a>15.乐观锁和悲观锁</h4><ul>
 <li>总是假设最坏的情况，每次去拿数据的时候都认为别人会修改，所以每次在拿数据的时候 都会上锁，这样别人想拿这个数据就会阻塞直到它拿到锁。传统的关系型数据库里边就用到了很多 这种锁机制，比如行锁，表锁等，读锁，写锁等，都是在做操作之前先上锁。再比如 Java 里面的 同步原语 synchronized 关键字的实现也是悲观锁。</li>
 <li>顾名思义，就是很乐观，每次去拿数据的时候都认为别人不会修改，所以不会上锁，但是 在更新的时候会判断一下在此期间别人有没有去更新这个数据，可以使用版本号等机制。乐观锁适 用于多读的应用类型，这样可以提高吞吐量，像数据库提供的类似于 write_condition 机制，其实 都是提供的乐观锁。在 Java中 java.util.concurrent.atomic 包下面的原子变量类就是使用了乐观 锁的一种实现方式 CAS 实现的。</li>
 </ul>
-<h4 id="12-CAS"><a href="#12-CAS" class="headerlink" title="12.CAS"></a>12.CAS</h4><ul>
+<h4 id="16-CAS"><a href="#16-CAS" class="headerlink" title="16.CAS"></a>16.CAS</h4><ul>
 <li>CAS 是 compare and swap 的缩写，即我们所说的比较交换。</li>
 <li>cas 是一种基于锁的操作，而且是乐观锁。</li>
 <li>CAS 操作包含三个操作数 —— 内存位置（V）、预期原值（A）和新值(B)。如果内存地址里面的 值和 A 的值是一样的，那么就将内存里面的值更新成 B。CAS是通过无限循环来获取数据的，若果 在第一轮循环中，a 线程获取地址里面的值被b 线程修改了，那么 a 线程需要自旋，到下次循环才 有可能机会执行。</li>
@@ -292,7 +329,7 @@
 <li>循环时间长开销大：对于资源竞争严重（线程冲突严重）的情况，CAS 自旋的概率会比较大，从而浪费更多的 CPU 资源， 效率低于 synchronized。</li>
 <li>只能保证一个共享变量的原子操作：当对一个共享变量执行操作时，我们可以使用循环 CAS 的方式来保证原子操作，但是对多个共享变量 操作时，循环 CAS 就无法保证操作的原子性，这个时候就可以用锁。</li>
 </ol>
-<h4 id="13-死锁与活锁的区别，死锁与饥饿的区别？"><a href="#13-死锁与活锁的区别，死锁与饥饿的区别？" class="headerlink" title="13.死锁与活锁的区别，死锁与饥饿的区别？"></a>13.死锁与活锁的区别，死锁与饥饿的区别？</h4><ul>
+<h4 id="17-死锁与活锁的区别，死锁与饥饿的区别？"><a href="#17-死锁与活锁的区别，死锁与饥饿的区别？" class="headerlink" title="17.死锁与活锁的区别，死锁与饥饿的区别？"></a>17.死锁与活锁的区别，死锁与饥饿的区别？</h4><ul>
 <li><p>死锁：是指两个或两个以上的进程（或线程）在执行过程中，因争夺资源而造成的一种互相等待的 现象，若无外力作用，它们都将无法推进下去。</p>
 </li>
 <li><p>活锁：任务或者执行者没有被阻塞，由于某些条件没有满足，导致一直重复尝试，失败，尝试，失败。</p>
@@ -306,6 +343,14 @@
 <li>1、高优先级线程吞噬所有的低优先级线程的 CPU 时间。</li>
 <li>2、线程被永久堵塞在一个等待进入同步块的状态，因为其他线程总是能在它之前持续地对该 同步块进行访问。</li>
 <li>3、线程在等待一个本身也处于永久等待完成的对象(比如调用这个对象的 wait 方法)，因为其 他线程总是被持续地获得唤醒。</li>
+</ul>
+</li>
+</ul>
+<h4 id="18-JMM-java内存模型"><a href="#18-JMM-java内存模型" class="headerlink" title="18.JMM(java内存模型)"></a>18.JMM(java内存模型)</h4><ul>
+<li>Java 内存模型抽象了线程和主内存之间的关系，就比如说线程之间的共享变量必须存储在主内存中。Java 内存模型主要目的是为了屏蔽系统和硬件的差异，避免一套代码在不同的平台下产生的效果不一致。</li>
+<li>在 JDK1.2 之前，Java 的内存模型实现总是从<strong>主存</strong>（即共享内存）读取变量，是不需要进行特别的注意的。而在当前的 Java 内存模型下，线程可以把变量保存<strong>本地内存</strong>（比如机器的寄存器）中，而不是直接在主存中进行读写。这就可能造成一个线程在主存中修改了一个变量的值，而另外一个线程还继续使用它在寄存器中的变量值的拷贝，造成<strong>数据的不一致</strong><ul>
+<li><strong>主内存</strong> ：所有线程创建的实例对象都存放在主内存中，不管该实例对象是成员变量还是方法中的本地变量(也称局部变量)</li>
+<li><strong>本地内存</strong> ：每个线程都有一个私有的本地内存来存储共享变量的副本，并且，每个线程只能访问自己的本地内存，无法访问其他线程的本地内存。本地内存是 JMM 抽象出来的一个概念，存储了主内存中的共享变量副本。</li>
 </ul>
 </li>
 </ul>
