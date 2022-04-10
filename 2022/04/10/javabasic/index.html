@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Rayson Wen">
+
+
+
+
+
+<title>java基础 | Rayson13&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Rayson13&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Rayson13&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6;    // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function () {
+            tocbot.refresh(obj_merge(tocbot_default_config, { hasInnerContainers: true }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function () {
+        tocbot.init(obj_merge(tocbot_default_config, { collapseDepth: 1 }));
+    });
+
+    function expandToc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, { collapseDepth: expanded ? 1 : DEPTH_MAX }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">java基础</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Rayson Wen</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">April 10, 2022&nbsp;&nbsp;10:39:46</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h4 id="1-JDK和JRE"><a href="#1-JDK和JRE" class="headerlink" title="1.JDK和JRE"></a>1.JDK和JRE</h4><ul>
+<li>jdk:JDK 是 Java Development Kit 缩写，它是功能齐全的 Java SDK。它拥有 JRE 所拥有的一切，还有编译器（javac）和工具（如 javadoc 和 jdb）。它能够创建和编译程序。</li>
+<li>jre:JRE 是 Java 运行时环境。它是运行已编译 Java 程序所需的所有内容的集合，包括 Java 虚拟机（JVM），Java 类库，java 命令和其他的一些基础构件。但是，它不能用于创建新程序。</li>
+</ul>
+<h4 id="2-基本数据类型"><a href="#2-基本数据类型" class="headerlink" title="2.基本数据类型"></a>2.基本数据类型</h4><ul>
+<li>6种数字类型：<ul>
+<li>4种整数型:byte、short、int、long</li>
+<li>2种浮点型：float、double</li>
+</ul>
+</li>
+<li>1种字符类型：char</li>
+<li>1种布尔型：boolean</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">基本类型</th>
+<th align="center">位数</th>
+<th align="center">字节</th>
+<th align="center">默认值</th>
+<th align="center">取值范围</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">byte</td>
+<td align="center">8</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">-128 ~ 127</td>
+</tr>
+<tr>
+<td align="center">short</td>
+<td align="center">16</td>
+<td align="center">2</td>
+<td align="center">0</td>
+<td align="center">-32768 ~ 32767</td>
+</tr>
+<tr>
+<td align="center">int</td>
+<td align="center">32</td>
+<td align="center">4</td>
+<td align="center">0</td>
+<td align="center">-2147483648 ~ 2147483647</td>
+</tr>
+<tr>
+<td align="center">long</td>
+<td align="center">64</td>
+<td align="center">8</td>
+<td align="center">0L</td>
+<td align="center">-9223372036854775808 ~ 9223372036854775807</td>
+</tr>
+<tr>
+<td align="center">char</td>
+<td align="center">16</td>
+<td align="center">2</td>
+<td align="center">‘u0000’</td>
+<td align="center">0 ~ 65535</td>
+</tr>
+<tr>
+<td align="center">float</td>
+<td align="center">32</td>
+<td align="center">4</td>
+<td align="center">0f</td>
+<td align="center">1.4E-45 ~ 3.4028235E38</td>
+</tr>
+<tr>
+<td align="center">double</td>
+<td align="center">64</td>
+<td align="center">8</td>
+<td align="center">0d</td>
+<td align="center">4.9E-324 ~ 1.7976931348623157E308</td>
+</tr>
+<tr>
+<td align="center">boolean</td>
+<td align="center">1</td>
+<td align="center"></td>
+<td align="center">false</td>
+<td align="center">true、false</td>
+</tr>
+</tbody></table>
+<ul>
+<li><p>这八种基本类型都有对应的包装类分别为：<code>Byte</code>、<code>Short</code>、<code>Integer</code>、<code>Long</code>、<code>Float</code>、<code>Double</code>、<code>Character</code>、<code>Boolean</code> 。</p>
+</li>
+<li><p>基本类型和包装类型的区别？</p>
+<ul>
+<li>包装类型不赋值就是 <code>null</code> ，而基本类型有默认值且不是 <code>null</code>。</li>
+<li>包装类型可用于泛型，而基本类型不可以。</li>
+<li>基本数据类型的局部变量存放在 Java 虚拟机栈中的局部变量表中，基本数据类型的成员变量（未被 <code>static</code> 修饰 ）存放在 Java 虚拟机的堆中。包装类型属于对象类型，我们知道几乎所有对象实例都存在于堆中。</li>
+<li>相比于对象类型， 基本数据类型占用的空间非常小。</li>
+</ul>
+</li>
+<li><p><strong>自动拆装箱？</strong></p>
+<ul>
+<li><p><strong>装箱</strong>：将基本类型用它们对应的引用类型包装起来；</p>
+</li>
+<li><p><strong>拆箱</strong>：将包装类型转换为基本数据类型；</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Integer i = 10;//装箱</span><br><span class="line">int n = i;//拆箱</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h4 id="3-switch作用范围？"><a href="#3-switch作用范围？" class="headerlink" title="3.switch作用范围？"></a>3.switch作用范围？</h4><ul>
+<li>在 Java 5 以前，switch(expr)中，expr 只能是 byte、short、char、int。从 Java5 开始，Java 中 引入了枚举类型，expr 也可以是 enum 类型，从 Java 7 开始，expr 还可以是字符串（String）， 但是长整型（long）在目前所有的版本中都是不可以的。</li>
+</ul>
+<h4 id="4-访问修饰符"><a href="#4-访问修饰符" class="headerlink" title="4.访问修饰符"></a>4.访问修饰符</h4><ul>
+<li><p>定义：java中，可以使用访问修饰符来保护对类、变量、方法和构造方法的访问。Java 支持 4 种 不同的访问权限。</p>
+</li>
+<li><p>分类：</p>
+<ul>
+<li>private : 在同一类内可见。使用对象：变量、方法。 注意：不能修饰类（外部类）</li>
+<li>default (即缺省，什么也不写，不使用任何关键字）: 在同一包内可见，不使用任何修饰符。 使用对象：类、接口、变量、方法。</li>
+<li>protected : 对同一包内的类和所有子类可见。使用对象：变量、方法。 注意：不能修饰类 （外部类）。</li>
+<li>public : 对所有类可见。使用对象：类、接口、变量、方法</li>
+</ul>
+</li>
+<li><p>访问修饰符图</p>
+<table>
+<thead>
+<tr>
+<th align="center">修饰符</th>
+<th align="center">当前类</th>
+<th align="center">同包</th>
+<th align="center">子类</th>
+<th align="center">其它包</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">privated</td>
+<td align="center"><em>√</em></td>
+<td align="center">×</td>
+<td align="center">×</td>
+<td align="center">×</td>
+</tr>
+<tr>
+<td align="center">default</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">×</td>
+<td align="center">×</td>
+</tr>
+<tr>
+<td align="center">protected</td>
+<td align="center"><em>√</em></td>
+<td align="center"><em>√</em></td>
+<td align="center"><em>√</em></td>
+<td align="center">×</td>
+</tr>
+<tr>
+<td align="center">public</td>
+<td align="center"><em>√</em></td>
+<td align="center"><em>√</em></td>
+<td align="center"><em>√</em></td>
+<td align="center"><em>√</em></td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<h4 id="5-final"><a href="#5-final" class="headerlink" title="5.final"></a>5.final</h4><ul>
+<li>final有什么用？<ul>
+<li>被final修饰的类不可以被继承</li>
+<li>被final修饰的方法不可以被重写</li>
+<li>被final修饰的变量不可以被改变，被final修饰不可变的是变量的引用，而不是引用指向的内容， 引用指向的内容是可以改变的</li>
+</ul>
+</li>
+<li>final finally finalize区别<ul>
+<li>final可以修饰类、变量、方法，修饰类表示该类不能被继承、修饰方法表示该方法不能被重写、 修饰变量表 示该变量是一个常量不能被重新赋值</li>
+<li>finally一般作用在try-catch代码块中，在处理异常的时候，通常我们将一定要执行的代码方法 finally代码块 中，表示不管是否出现异常，该代码块都会执行，一般用来存放一些关闭资源的代码。</li>
+<li>finalize是一个方法，属于Object类的一个方法，而Object类是所有类的父类，该方法一般由垃圾 回收器来调 用，当我们调用System.gc() 方法的时候，由垃圾回收器调用finalize()，回收垃圾，一个对象是否可回收的 最后判断。</li>
+</ul>
+</li>
+</ul>
+<h4 id="6-static"><a href="#6-static" class="headerlink" title="6.static"></a>6.static</h4><ul>
+<li>static主要意义<ul>
+<li>static的主要意义是在于创建独立于具体对象的域变量或者方法。以致于即使没有创建对象，也能 使用属性和调用方法！</li>
+<li>static关键字还有一个比较关键的作用就是 用来形成静态代码块以优化程序性能。static块可以置 于类中的任何地方，类中可以有多个static块。在类初次被加载的时候，会按照static块的顺序来执 行每个static块，并且只会执行一次。</li>
+<li>为什么说static块可以用来优化程序性能，是因为它的特性:只会在类加载的时候执行一次。因此， 很多时候会将一些只需要进行一次的初始化操作都放在static代码块中进行。</li>
+</ul>
+</li>
+<li>static的独特之处<ol>
+<li>被static修饰的变量或者方法是独立于该类的任何对象，也就是说，这些变量和方法不属于任 何一个实例对象，而是被类的实例对象所共享。</li>
+<li>在该类被第一次加载的时候，就会去加载被static修饰的部分，而且只在类第一次使用时加载 并进行初始化，注意这是第一次用就要初始化，后面根据需要是可以再次赋值的。</li>
+<li>static变量值在类加载的时候分配空间，以后创建类对象的时候不会重新分配。赋值的话，是 可以任意赋值的！</li>
+<li>被static修饰的变量或者方法是优先于对象存在的，也就是说当一个类加载完毕之后，即便没 有创建对象，也可以去访问。</li>
+</ol>
+</li>
+<li>static注意事项<ul>
+<li>静态之恶能访问静态</li>
+<li>非静态既可以访问非静态，也可以访问静态的。</li>
+</ul>
+</li>
+</ul>
+<h4 id="7-面向过程与面向对象"><a href="#7-面向过程与面向对象" class="headerlink" title="7.面向过程与面向对象"></a>7.面向过程与面向对象</h4><ul>
+<li>面向过程：<ul>
+<li>优点：性能比面向对象高，因为类调用时需要实例化，开销比较大，比较消耗资源;比如单片机、 嵌入式开发、Linux&#x2F;Unix等一般采用面向过程开发，性能是最重要的因素。</li>
+<li>缺点：没有面向对象易维护、易复用、易扩展</li>
+</ul>
+</li>
+<li>面向对象：<ul>
+<li>优点：易维护、易复用、易扩展，由于面向对象有封装、继承、多态性的特性，可以设计出 低耦合的系统，使系统更加灵活、更加易于维护</li>
+<li>缺点：性能比面向过程低</li>
+</ul>
+</li>
+<li>面向过程是具体化的，流程化的，解决一个问题，你需要一步一步的分析，一步一步的实现。</li>
+<li>面向对象是模型化的，你只需抽象出一个类，这是一个封闭的盒子，在这里你拥有数据也拥有解决问题的方法。需 要什么功能直接使用就可以了，不必去一步一步的实现，至于这个功能是如何实现的，管我们什么事？我们会用就 可以了。</li>
+<li>面向对象的底层其实还是面向过程，把面向过程抽象成类，然后封装，方便我们使用的就是面向对象了。</li>
+</ul>
+<h4 id="8-面向对象的特征有哪些方面"><a href="#8-面向对象的特征有哪些方面" class="headerlink" title="8.面向对象的特征有哪些方面?"></a>8.面向对象的特征有哪些方面?</h4><ul>
+<li>抽象：抽象是将一类对象的共同特征总结出来构造类的过程，包括数据抽象和行为抽象两方面。抽 象只关注对象有哪些属性和行为，并不关注这些行为的细节是什么。</li>
+<li>封装把一个对象的属性私有化，同时提供一些可以被外界访问的属性的方法，如果属性不想被外界 访问，我们大可不必提供方法给外界访问。但是如果一个类没有提供给外界访问的方法，那么这个类也没有什么意义了。</li>
+<li>继承是使用已存在的类的定义作为基础建立新类的技术，新类的定义可以增加新的数据或新的功 能，也可以用父类的功能，但不能选择性地继承父类。通过使用继承我们能够非常方便地复用以前 的代码。<ul>
+<li>子类拥有父类非 private 的属性和方法。</li>
+<li>子类可以拥有自己属性和方法，即子类可以对父类进行扩展。</li>
+<li>子类可以用自己的方式实现父类的方法。</li>
+</ul>
+</li>
+<li>多态：父类或接口定义的引用变量可以指向子类或具体实现类的实例对象。提高了程序的拓展性。 在Java中有两种形式可以实现多态：继承（多个子类对同一方法的重写）和接口（实现接口并覆盖 接口中同一方法）。</li>
+</ul>
+<h4 id="9-什么是多态？java语言如何实现多态的？"><a href="#9-什么是多态？java语言如何实现多态的？" class="headerlink" title="9.什么是多态？java语言如何实现多态的？"></a>9.什么是多态？java语言如何实现多态的？</h4><ul>
+<li><p>所谓多态就是指程序中定义的引用变量所指向的具体类型和通过该引用变量发出的方法调用在编程 时并不确定，而是在程序运行期间才确定，即一个引用变量倒底会指向哪个类的实例对象，该引用 变量发出的方法调用到底是哪个类中实现的方法，必须在由程序运行期间才能决定。因为在程序运 行时才确定具体的类，这样，不用修改源程序代码，就可以让引用变量绑定到各种不同的类实现上，从而导致该引用调用的具体方法随之改变，即不修改程序代码就可以改变程序运行时所绑定的 具体代码，让程序可以选择多个运行状态，这就是多态性。</p>
+</li>
+<li><p>多态分为编译时多态和运行时多态。其中编译时多态是静态的，主要是指方法的重载，它是根据参数列表的不同来区分不同的函数，通过编辑之后会变成两个不同的函数，在运行时谈不上多态。而运行时多态是动态的，它是通过动态绑定来实现的，也就是我们所说的多态性。</p>
+</li>
+<li><p>多态实现由三个必要条件：</p>
+<ol>
+<li><p>继承：在多态中必须存在有继承关系的子类和父类。</p>
+</li>
+<li><p>重写：子类对父类中某些方法进行重新定义，在调用这些方法时就会调用子类的方法</p>
+</li>
+<li><p>向上转型：在多态中需要将子类的引用赋给父类对象，只有这样该引用才能够具备技能调用 父类的方法和子类的方法。</p>
+</li>
+</ol>
+</li>
+</ul>
+<h4 id="10-构造方法"><a href="#10-构造方法" class="headerlink" title="10.构造方法"></a>10.构造方法</h4><ul>
+<li>构造方法是一种特殊的方法，主要作用是完成对象的初始化工作。</li>
+<li>如果一个类没有声明构造方法，也可以执行！因为一个类即使没有声明构造方法也会有默认的不带参数的构造方法。如果我们自己添加了类的构造方法（无论是否有参），Java 就不会再添加默认的无参数的构造方法了，这时候，就不能直接 new 一个对象而不传递参数了，所以我们一直在不知不觉地使用构造方法，这也是为什么我们在创建对象的时候后面要加一个括号（因为要调用无参的构造方法）。如果我们重载了有参的构造方法，记得都要把无参的构造方法也写出来（无论是否用到），因为这可以帮助我们在创建对象的时候少踩坑。</li>
+<li>构造方法特点;<ul>
+<li>名字与类名相同。</li>
+<li>没有返回值，但不能用 void 声明构造函数。</li>
+<li>生成类的对象时自动执行，无需调用。</li>
+<li>构造方法不能被 override（重写）,但是可以 overload（重载）,所以你可以看到一个类中有多个构造函数的情况。</li>
+</ul>
+</li>
+</ul>
+<h4 id="11-抽象类与接口"><a href="#11-抽象类与接口" class="headerlink" title="11.抽象类与接口"></a>11.抽象类与接口</h4><ul>
+<li><p>共同点：</p>
+<ul>
+<li>都不能被实例化。</li>
+<li>都可以包含抽象方法。</li>
+<li>都位于继承的顶端，用于被其他实现或继承</li>
+<li>都可以有默认实现的方法（Java 8 可以用 <code>default</code> 关键在接口中定义默认方法）。</li>
+</ul>
+</li>
+<li><p>不同点：</p>
+<table>
+<thead>
+<tr>
+<th align="center">参数</th>
+<th align="center">抽象类</th>
+<th align="center">接口</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">声明</td>
+<td align="center">抽象类使用abstract关键字声明</td>
+<td align="center">接口使用interface关键字声明</td>
+</tr>
+<tr>
+<td align="center">实现</td>
+<td align="center">子类使用extends关键字来继承抽象类。如果子类 不是抽象类的话，它需要提供抽象类中所有声明 的方法的实现</td>
+<td align="center">子类使用implements关键字来实现 接口。它需要提供接口中所有声明的 方法的实现</td>
+</tr>
+<tr>
+<td align="center">构造器</td>
+<td align="center">抽象类可以有构造器</td>
+<td align="center">接口不能有构造器</td>
+</tr>
+<tr>
+<td align="center">访问修饰符</td>
+<td align="center">抽象类中的方法可以是任意访问修饰符</td>
+<td align="center">接口方法默认修饰符是public。并且 不允许定义为 private 或者 protected</td>
+</tr>
+<tr>
+<td align="center">多继承</td>
+<td align="center">一个类最多只能继承一个抽象类</td>
+<td align="center">一个类可以实现多个接口</td>
+</tr>
+<tr>
+<td align="center">字段声明</td>
+<td align="center">抽象类的字段声明可以是任意的</td>
+<td align="center">接口的字段默认都是 static 和 final 的</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<h4 id="12-创建一个对象用什么运算符-对象实体与对象引用有何不同"><a href="#12-创建一个对象用什么运算符-对象实体与对象引用有何不同" class="headerlink" title="12.创建一个对象用什么运算符?对象实体与对象引用有何不同?"></a>12.创建一个对象用什么运算符?对象实体与对象引用有何不同?</h4><ul>
+<li>new 运算符，new 创建对象实例（对象实例在堆内存中），对象引用指向对象实例（对象引用存放在栈内存中）。</li>
+<li>一个对象引用可以指向 0 个或 1 个对象（一根绳子可以不系气球，也可以系一个气球）;一个对象可以有 n 个引用指向它（可以用 n 条绳子系住一个气球）。</li>
+</ul>
+<h4 id="13-成员变量与局部变量"><a href="#13-成员变量与局部变量" class="headerlink" title="13.成员变量与局部变量"></a>13.成员变量与局部变量</h4><ul>
+<li><p>变量；在程序执行的过程中，在某个范围内其值可以发生改变的量。从本质上讲，变量其实是内存 中的一小块区域</p>
+</li>
+<li><p>成员变量：方法外部，类内部定义的变量</p>
+</li>
+<li><p>局部变量：类的方法中的变量。</p>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">成员变量</th>
+<th align="center">局部变量</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">作用域</td>
+<td align="center">针对整个类有效。</td>
+<td align="center">只在某个范围内有效。(一般指的就是方法,语句体内)</td>
+</tr>
+<tr>
+<td align="center">存储位置</td>
+<td align="center">随着对象的创建而存在，随着对象的消失而消失，存储在堆内存中。</td>
+<td align="center">在方法被调用，或者语句被执行的时候存在，存储在栈内存中。当方法调用完，或者语 句结束后，就自动释放。</td>
+</tr>
+<tr>
+<td align="center">生命周期</td>
+<td align="center">随着对象的创建而存在，随着对象的消失而消失</td>
+<td align="center">当方法调用完，或者语句结束后，就自动释放。</td>
+</tr>
+<tr>
+<td align="center">初始值</td>
+<td align="center">有默认初始值。</td>
+<td align="center">没有默认初始值，使用前必须赋值。</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<h4 id="14-在Java中定义一个不做事且没有参数的构造方法的作用"><a href="#14-在Java中定义一个不做事且没有参数的构造方法的作用" class="headerlink" title="14.在Java中定义一个不做事且没有参数的构造方法的作用"></a>14.在Java中定义一个不做事且没有参数的构造方法的作用</h4><ul>
+<li>Java程序在执行子类的构造方法之前，如果没有用super()来调用父类特定的构造方法，则会调用 父类中“没有参数的构造方法”。因此，如果父类中只定义了有参数的构造方法，而在子类的构造方 法中又没有用super()来调用父类中特定的构造方法，则编译时将发生错误，因为Java程序在父类 中找不到没有参数的构造方法可供执行。解决办法是在父类里加上一个不做事且没有参数的构造方 法</li>
+<li>在调用子类构造方法之前会先调用父类没有参数的构造方法，其目的也就是帮助子类做初始化工作。</li>
+</ul>
+<h4 id="15-静态变量、实例变量、普通变量"><a href="#15-静态变量、实例变量、普通变量" class="headerlink" title="15.静态变量、实例变量、普通变量"></a>15.静态变量、实例变量、普通变量</h4><ul>
+<li>静态变量与实例变量的区别：<ul>
+<li>静态变量： 静态变量由于不属于任何实例对象，属于类的，所以在内存中只会有一份，在类的加 载过程中，JVM只为静态变量分配一次内存空间。</li>
+<li>实例变量： 每次创建对象，都会为每个对象分配成员变量内存空间，实例变量是属于实例对象 的，在内存中，创建几次对象，就有几份成员变量。</li>
+</ul>
+</li>
+<li>静态变量与普通变量的区别：<ul>
+<li>static变量也称作静态变量，静态变量和非静态变量的区别是：静态变量被所有的对象所共享，在内存中只有一个副本，它当且仅当在类初次加载时会被初始化。而非静态变量是对象所拥有的，在 创建对象的时候被初始化，存在多个副本，各个对象拥有的副本互不影响。</li>
+<li>还有一点就是static成员变量的初始化顺序按照定义的顺序进行初始化。</li>
+</ul>
+</li>
+</ul>
+<h4 id="16-静态方法与实例方法"><a href="#16-静态方法与实例方法" class="headerlink" title="16.静态方法与实例方法"></a>16.静态方法与实例方法</h4><ul>
+<li>在外部调用静态方法时，可以使用”类名.方法名”的方式，也可以使用”对象名.方法名”的方式。而 实例方法只有后面这种方式。也就是说，调用静态方法可以无需创建对象。</li>
+<li>静态方法在访问本类的成员时，只允许访问静态成员（即静态成员变量和静态方法），而不允许访 问实例成员变量和实例方法；实例方法则无此限制</li>
+</ul>
+<h4 id="17-内部类"><a href="#17-内部类" class="headerlink" title="17.内部类"></a>17.内部类</h4><ul>
+<li><p>在Java中，可以将一个类的定义放在另外一个类的定义内部，这就是内部类。内部类本身就是类的 一个属性，与其他属性定义方式一致。</p>
+</li>
+<li><p>内部类可以分为四种：成员内部类、局部内部类、匿名内部类和静态内部类</p>
+</li>
+<li><p>静态内部类</p>
+<ul>
+<li>定义在类内部的静态类，就是静态内部类。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public class Outer&#123;</span><br><span class="line">	private static int redius = 1;</span><br><span class="line">	static class StaticInner&#123;</span><br><span class="line">		public void visit()&#123;</span><br><span class="line">			System.out.prinyln(&quot;visit outer static variable:&quot;+radius);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>静态内部类可以访问外部类所有的静态变量，但不可以访问外部类的非静态变量；静态内部类得到创建方式，<code>new 外部类.静态内部类() </code>,如下：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Outer.StaticInner inner = new Outer.StaticInner();</span><br><span class="line">inner.visit();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>成员内部类</p>
+<ul>
+<li>定义在类内部，成员位置上的非静态类，就是成员内部类。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public class Outer&#123;</span><br><span class="line">	private static int redius = 1;</span><br><span class="line">	private int count = 2;</span><br><span class="line">	class Inner&#123;</span><br><span class="line">		public void visit()&#123;</span><br><span class="line">			System.out.prinyln(&quot;visit outer static variable:&quot;+radius);</span><br><span class="line">			System.out.prinyln(&quot;visit outer variable:&quot;+count);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>成员内部类可以访问外部类所有的变量和方法，包括静态和非静态，私有和公有。成员内部类依赖 于外部类的实例，它的创建方式<code>外部类实例.new 内部类()</code></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Outer outer = new Outer();</span><br><span class="line">Outer.Inner inner = outer.new Inner();</span><br><span class="line">inner.visit();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>局部内部类</p>
+<ul>
+<li>定义在方法中的内部类，就是局部内部类。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">public class Outer&#123;</span><br><span class="line">	private int out_a = 1;</span><br><span class="line">	private static int static_b = 2;</span><br><span class="line">	</span><br><span class="line">	public void testFunctionClass()&#123;</span><br><span class="line">		int inner_c = 3;</span><br><span class="line">		class Inner&#123;</span><br><span class="line">            public void fun()&#123;</span><br><span class="line">                System.out.prinyln(out_a);</span><br><span class="line">                System.out.prinyln(static_b);</span><br><span class="line">                System.out.prinyln(inner_c);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">		Inner inner = new Inner();</span><br><span class="line">		inner.fun();</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	public static void testStaticFunctionClass()&#123;</span><br><span class="line">		int d = 3;</span><br><span class="line">		class Inner&#123;</span><br><span class="line">            public void fun()&#123;</span><br><span class="line">                System.out.prinyln(out_a);//编译错误，定义在静态方法中的局部类不可以方位外部类的实例变量</span><br><span class="line">                System.out.prinyln(static_b);</span><br><span class="line">                System.out.prinyln(d);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        Inner inner = new Inner();</span><br><span class="line">		inner.fun();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>定义在实例方法中的局部类可以访问外部类的所有变量和方法，定义在静态方法中的局部类只能访问外部类的静态变量和方法。局部内部类的创建方式，在对应方法内，<code>new 内部类()</code>,如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public static void testStaticFunctionClass()&#123;</span><br><span class="line">	class Inner&#123;</span><br><span class="line">	&#125;</span><br><span class="line">	Inner inner = new Inner();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>匿名内部类</p>
+<ul>
+<li>匿名内部类就是没有名字的内部类，日常开发中使用的比较多。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">public class Outer&#123;</span><br><span class="line">	private void test(final int i)&#123;</span><br><span class="line">		new Service()&#123;</span><br><span class="line">			public void method()&#123;</span><br><span class="line">				for(int j=0;j&lt;i;j++)&#123;</span><br><span class="line">					System.out.println(&quot;匿名内部类&quot;)</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;.method();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//匿名内部类必须继承或实现一个已有接口</span><br><span class="line">interface Service&#123;</span><br><span class="line">	void method();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>除了没有名字，匿名内部类还有以下特点：</p>
+<ul>
+<li>匿名内部类必须继承一个抽象类或者实现一个接口。</li>
+<li>匿名内部类不能定义任何静态成员和静态方法。</li>
+<li>当所在的方法的形参需要被匿名内部类使用时，必须声明为 final。</li>
+<li>匿名内部类不能是抽象的，它必须要实现继承的类或者实现的接口的所有抽象方法。</li>
+</ul>
+</li>
+<li><p>匿名内部类创建方式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">new 类/接口&#123;</span><br><span class="line">	//匿名内部类实现部分</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h4 id="18-内部类的优点"><a href="#18-内部类的优点" class="headerlink" title="18.内部类的优点"></a>18.内部类的优点</h4><ul>
+<li>一个内部类对象可以访问创建它的外部类对象的内容，包括私有数据！</li>
+<li>内部类不为同一包的其他类所见，具有很好的封装性；</li>
+<li>内部类有效实现了“多重继承”，优化 java 单继承的缺陷。</li>
+<li>匿名内部类可以很方便的定义回调。</li>
+</ul>
+<h4 id="19-重载（Overload）和重写（Override）的区别。"><a href="#19-重载（Overload）和重写（Override）的区别。" class="headerlink" title="19.重载（Overload）和重写（Override）的区别。"></a>19.重载（Overload）和重写（Override）的区别。</h4><ul>
+<li>方法的重载和重写都是实现多态的方式，区别在于前者实现的是编译时的多态性，而后者实现的是 运行时的多态性</li>
+<li>重载：发生在同一个类中，方法名相同参数列表不同（参数类型不同、个数不同、顺序不同），与 方法返回值和访问修饰符无关，即重载的方法不能根据返回类型进行区分</li>
+<li>重写：发生在父子类中，方法名、参数列表必须相同，返回值小于等于父类，抛出的异常小于等于父类，访问修饰符大于等于父类（里氏代换原则）；如果父类方法访问修饰符为private则子类中 就不是重写。</li>
+</ul>
+<h4 id="20-x3D-x3D-和equals的区别"><a href="#20-x3D-x3D-和equals的区别" class="headerlink" title="20.&#x3D;&#x3D;和equals的区别"></a>20.&#x3D;&#x3D;和equals的区别</h4><ul>
+<li>&#x3D;&#x3D; : 它的作用是判断两个对象的地址是不是相等。即，判断两个对象是不是同一个对象。(基本数 据类型 &#x3D;&#x3D; 比较的是值，引用数据类型 &#x3D;&#x3D; 比较的是内存地址)</li>
+<li>equals() : 它的作用也是判断两个对象是否相等。但它一般有两种使用情况：<ul>
+<li>情况1：类没有覆盖 equals() 方法。则通过 equals() 比较该类的两个对象时，等价于通过 “&#x3D;&#x3D;”比较这两个对象。 </li>
+<li>情况2：类覆盖了 equals() 方法。一般，我们都覆盖 equals() 方法来两个对象的内容相等； 若它们的内容相等，则返回 true (即，认为这两个对象相等)。</li>
+<li>说明：<ul>
+<li>String中的equals方法是被重写过的，因为object的equals方法是比较的对象的内存地址， 而String的equals方法比较的是对象的值。</li>
+<li>当创建String类型的对象时，虚拟机会在常量池中查找有没有已经存在的值和要创建的值相同的对象，如果有就把它赋给当前引用。如果没有就在常量池中重新创建一个String对象。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="21-hashCode与equals"><a href="#21-hashCode与equals" class="headerlink" title="21.hashCode与equals"></a>21.hashCode与equals</h4><ul>
+<li>hashCode()作用<ul>
+<li><code>hashCode()</code> 的作用是获取哈希码（<code>int</code> 整数），也称为散列码。这个哈希码的作用是确定该对象在哈希表中的索引位置。</li>
+<li><code>hashCode()</code>定义在 JDK 的 <code>Object</code> 类中，这就意味着 Java 中的任何类都包含有 <code>hashCode()</code> 函数。另外需要注意的是： <code>Object</code> 的 <code>hashCode()</code> 方法是本地方法，也就是用 C 语言或 C++ 实现的，该方法通常用来将对象的内存地址转换为整数之后返回。</li>
+</ul>
+</li>
+<li>为什么要有hashCode()<ul>
+<li>当你把对象加入 <code>HashSet</code> 时，<code>HashSet</code> 会先计算对象的 <code>hashCode</code> 值来判断对象加入的位置，同时也会与其他已经加入的对象的 <code>hashCode</code> 值作比较，如果没有相符的 <code>hashCode</code>，<code>HashSet</code> 会假设对象没有重复出现。但是如果发现有相同 <code>hashCode</code> 值的对象，这时会调用 <code>equals()</code> 方法来检查 <code>hashCode</code> 相等的对象是否真的相同。如果两者相同，<code>HashSet</code> 就不会让其加入操作成功。如果不同的话，就会重新散列到其他位置。这样我们就大大减少了 <code>equals</code> 的次数，相应就大大提高了执行速度。</li>
+<li><code>hashCode()</code> 和 <code>equals()</code>都是用于比较两个对象是否相等。</li>
+</ul>
+</li>
+<li>为什么JDK还要同时提供这两个方法呢？<ul>
+<li>在一些容器（比如 <code>HashMap</code>、<code>HashSet</code>）中，有了 <code>hashCode()</code> 之后，判断元素是否在对应容器中的效率会更高（参考添加元素进<code>HashSet</code>的过程）！</li>
+<li>添加元素进<code>HashSet</code>的过程，如果 <code>HashSet</code> 在对比的时候，同样的 <code>hashCode</code> 有多个对象，它会继续使用 <code>equals()</code> 来判断是否真的相同。也就是说 <code>hashCode</code> 帮助我们大大缩小了查找成本。</li>
+<li>两个对象有相同的 <code>hashCode</code> 值，它们也不一定是相等的。<code>hashCode()</code> 所使用的哈希算法也许刚好会让多个对象传回相同的哈希值。越糟糕的哈希算法越容易碰撞，但这也与数据值域分布的特性有关（所谓哈希碰撞也就是指的是不同的对象得到相同的 <code>hashCode</code> )。</li>
+</ul>
+</li>
+<li>hashCode()与equals()总结<ul>
+<li>如果两个对象的<code>hashCode</code> 值相等，那这两个对象不一定相等（哈希碰撞）。</li>
+<li>如果两个对象的<code>hashCode</code> 值相等并且<code>equals()</code>方法也返回 <code>true</code>，我们才认为这两个对象相等。</li>
+<li>如果两个对象的<code>hashCode</code> 值不相等，我们就可以直接认为这两个对象不相等。</li>
+</ul>
+</li>
+<li>为什么重写equals()时必须重写hashCode()方法？<ul>
+<li>因为两个相等的对象的 <code>hashCode</code> 值必须是相等。也就是说如果 <code>equals</code> 方法判断两个对象是相等的，那这两个对象的 <code>hashCode</code> 值也要相等。</li>
+<li>如果重写 <code>equals()</code> 时没有重写 <code>hashCode()</code> 方法的话就可能会导致 <code>equals</code> 方法判断是相等的两个对象，<code>hashCode</code> 值却不相等。</li>
+</ul>
+</li>
+</ul>
+<h4 id="22-值传递"><a href="#22-值传递" class="headerlink" title="22.值传递"></a>22.值传递</h4><ul>
+<li><p>当一个对象被当作参数传递到一个方法后，此方法可改变这个对象的属性，并 可返回变化后的结果，那么这里到底是值传递还是引用传递？</p>
+<ul>
+<li>是值传递。Java 语言的方法调用只支持参数的值传递。当一个对象实例作为一个参数被传递到方 法中时，参数的值就是对该对象的引用。对象的属性可以在被调用过程中被改变，但对对象引用的 改变是不会影响到调用者的。</li>
+</ul>
+</li>
+<li><p>值传递&amp;引用传递</p>
+<ul>
+<li><strong>值传递</strong> ：方法接收的是实参值的拷贝，会创建副本</li>
+<li><strong>引用传递</strong> ：方法接收的直接是实参所引用的对象在堆中的地址，不会创建副本，对形参的修改将影响到实参。</li>
+</ul>
+</li>
+<li><p>Java 只有值传递</p>
+<ul>
+<li>案例1：传递基本类型参数</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">    int num1 = 10;</span><br><span class="line">    int num2 = 20;</span><br><span class="line">    swap(num1, num2);</span><br><span class="line">    System.out.println(&quot;num1 = &quot; + num1);</span><br><span class="line">    System.out.println(&quot;num2 = &quot; + num2);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public static void swap(int a, int b) &#123;</span><br><span class="line">    int temp = a;</span><br><span class="line">    a = b;</span><br><span class="line">    b = temp;</span><br><span class="line">    System.out.println(&quot;a = &quot; + a);</span><br><span class="line">    System.out.println(&quot;b = &quot; + b);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a = 20</span><br><span class="line">b = 10</span><br><span class="line">num1 = 10</span><br><span class="line">num2 = 20</span><br></pre></td></tr></table></figure>
+
+<img src="/2022/04/10/javabasic/1.png" class title="This is an example image">
+
+<ul>
+<li>案例2：传递引用类型参数1</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">    int[] arr = &#123; 1, 2, 3, 4, 5 &#125;;</span><br><span class="line">    System.out.println(arr[0]);</span><br><span class="line">    change(arr);</span><br><span class="line">    System.out.println(arr[0]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public static void change(int[] array) &#123;</span><br><span class="line">    // 将数组的第一个元素变为0</span><br><span class="line">    array[0] = 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1</span><br><span class="line">0</span><br></pre></td></tr></table></figure>
+
+<img src="/2022/04/10/javabasic/2.png" class title="This is an example image">
+
+<ul>
+<li>传递引用类型参数2</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">public class Person &#123;</span><br><span class="line">    private String name;</span><br><span class="line">   // 省略构造函数、Getter&amp;Setter方法</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">    Person xiaoZhang = new Person(&quot;小张&quot;);</span><br><span class="line">    Person xiaoLi = new Person(&quot;小李&quot;);</span><br><span class="line">    swap(xiaoZhang, xiaoLi);</span><br><span class="line">    System.out.println(&quot;xiaoZhang:&quot; + xiaoZhang.getName());</span><br><span class="line">    System.out.println(&quot;xiaoLi:&quot; + xiaoLi.getName());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public static void swap(Person person1, Person person2) &#123;</span><br><span class="line">    Person temp = person1;</span><br><span class="line">    person1 = person2;</span><br><span class="line">    person2 = temp;</span><br><span class="line">    System.out.println(&quot;person1:&quot; + person1.getName());</span><br><span class="line">    System.out.println(&quot;person2:&quot; + person2.getName());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">person1:小李</span><br><span class="line">person2:小张</span><br><span class="line">xiaoZhang:小张</span><br><span class="line">xiaoLi:小李</span><br></pre></td></tr></table></figure>
+
+<p>交换之前：</p>
+<img src="/2022/04/10/javabasic/3.png" class title="This is an example image">
+
+<p>交换之后：</p>
+<img src="/2022/04/10/javabasic/4.png" class title="This is an example image">
+
+
+</li>
+<li><p>总结</p>
+<ul>
+<li>如果参数是基本类型的话，很简单，传递的就是基本类型的字面量值的拷贝，会创建副本。</li>
+<li>如果参数是引用类型，传递的就是实参所引用的对象在堆中地址值的拷贝，同样也会创建副本。</li>
+<li>一个方法不能修改一个基本数据类型的参数（即数值型或布尔型》</li>
+<li>一个方法可以改变一个对象参数的状态。</li>
+<li>一个方法不能让对象参数引用一个新的对象。</li>
+</ul>
+</li>
+</ul>
+<h4 id="23-JDK中常用的包有哪些？"><a href="#23-JDK中常用的包有哪些？" class="headerlink" title="23.JDK中常用的包有哪些？"></a>23.JDK中常用的包有哪些？</h4><ul>
+<li>java.lang：这个是系统的基础类；</li>
+<li>java.io：这里面是所有输入输出有关的类，比如文件操作等；</li>
+<li>java.nio：为了完善 io 包中的功能，提高 io 包中性能而写的一个新包；</li>
+<li>java.net：这里面是与网络有关的类；</li>
+<li>java.util：这个是系统辅助类，特别是集合类；</li>
+<li>java.sql：这个是数据库操作的类。</li>
+</ul>
+<h4 id="24-String相关"><a href="#24-String相关" class="headerlink" title="24.String相关"></a>24.String相关</h4><ul>
+<li><p>字符型常量和字符串常量的区别</p>
+<ol>
+<li>形式上: 字符常量是单引号引起的一个字符 字符串常量是双引号引起的若干个字符</li>
+<li>含义上: 字符常量相当于一个整形值(ASCII值),可以参加表达式运算 字符串常量代表一个地址值(该 字符串在内存中存放位置)</li>
+<li>占内存大小 字符常量只占两个个字节 字符串常量占若干个字节(至少一个字符结束标志)</li>
+</ol>
+</li>
+<li><p>字符串常量池？</p>
+<ul>
+<li>字符串常量池位于堆内存中，专门用来存储字符串常量，可以提高内存的使用率，避免开辟多块空 间存储相同的字符串，在创建字符串时 JVM 会首先检查字符串常量池，如果该字符串已经存在池 中，则返回它的引用，如果不存在，则实例化一个字符串放到池中，并返回其引用。</li>
+</ul>
+</li>
+<li><p>String 是最基本的数据类型吗？</p>
+<ul>
+<li>不是。Java 中的基本数据类型只有 8 个 ：byte、short、int、long、float、double、char、 boolean；除了基本类型（primitive type），剩下的都是引用类型（referencetype），Java 5 以 后引入的枚举类型也算是一种比较特殊的引用类型。</li>
+</ul>
+</li>
+<li><p>String有哪些特性？</p>
+<ul>
+<li>不变性：String 是只读字符串，是一个典型的 immutable 对象，对它进行任何操作，其实都是创 建一个新的对象，再把引用指向该对象。不变模式的主要作用在于当一个对象需要被多线程共享并 频繁访问时，可以保证数据的一致性。</li>
+<li>常量池优化：String 对象创建之后，会在字符串常量池中进行缓存，如果下次创建同样的对象时， 会直接返回缓存的引用。</li>
+<li>final：使用 final 来定义 String 类，表示 String 类不能被继承，提高了系统的安全性。</li>
+</ul>
+</li>
+<li><p>String为什么是不可变的？</p>
+<ul>
+<li><code>String</code> 类中使用 <code>final</code> 关键字修饰字符数组来保存字符串并且是私有的，<code>String</code> 类没有提供&#x2F;暴露修改这个字符串的方法</li>
+<li><code>String</code> 类被 <code>final</code> 修饰导致其不能被继承，进而避免了子类破坏 <code>String</code> 不可变</li>
+</ul>
+</li>
+<li><p>String str&#x3D;”i”与 String str&#x3D;new String(“i”)一样吗？</p>
+<ul>
+<li>不一样，因为内存的分配方式不一样。String str&#x3D;”i”的方式，java 虚拟机会将其分配到常量池中； 而 String str&#x3D;new String(“i”) 则会被分到堆内存中。</li>
+</ul>
+</li>
+<li><p>String s &#x3D; new String(“abc”);创建了几个字符串对象？</p>
+<ul>
+<li>会创建 1 或 2 个字符串：<ul>
+<li>如果字符串常量池中已存在字符串常量“abc”，则只会在堆空间创建一个字符串常量“abc”。</li>
+<li>如果字符串常量池中没有字符串常量“abc”，那么它将首先在字符串常量池中创建，然后在堆空间中创建，因此将创建总共 2 个字符串对象。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>String、StringBuffer、StringBuilder 的区别？</p>
+<p><strong>可变性</strong></p>
+<ul>
+<li>String类中使用字符数组保存字符串，private final char value[]，所以string对象是不可变 的。StringBuilder与StringBuffer都继承自AbstractStringBuilder类，在AbstractStringBuilder中 也是使用字符数组保存字符串，char[] value，这两种对象都是可变的。</li>
+</ul>
+<p><strong>线程安全性</strong></p>
+<ul>
+<li><code>String</code> 中的对象是不可变的，也就可以理解为常量，线程安全。<code>AbstractStringBuilder</code> 是 <code>StringBuilder</code> 与 <code>StringBuffer</code> 的公共父类，定义了一些字符串的基本操作，如 <code>expandCapacity</code>、<code>append</code>、<code>insert</code>、<code>indexOf</code> 等公共方法。<code>StringBuffer</code> 对方法加了同步锁或者对调用的方法加了同步锁，所以是线程安全的。<code>StringBuilder</code> 并没有对方法进行加同步锁，所以是非线程安全的。</li>
+</ul>
+<p><strong>性能</strong></p>
+<ul>
+<li>每次对 <code>String</code> 类型进行改变的时候，都会生成一个新的 <code>String</code> 对象，然后将指针指向新的 <code>String</code> 对象。<code>StringBuffer</code> 每次都会对 <code>StringBuffer</code> 对象本身进行操作，而不是生成新的对象并改变对象引用。相同情况下使用 <code>StringBuilder</code> 相比使用 <code>StringBuffer</code> 仅能获得 10%~15% 左右的性能提升，但却要冒多线程不安全的风险。</li>
+</ul>
+<p><strong>三者使用总结</strong></p>
+<ol>
+<li>操作少量的数据: 适用 <code>String</code></li>
+<li>单线程操作字符串缓冲区下操作大量数据: 适用 <code>StringBuilder</code></li>
+<li>多线程操作字符串缓冲区下操作大量数据: 适用 <code>StringBuffer</code></li>
+</ol>
+</li>
+<li><p><strong>String 类型的变量和常量做“+”运算时发生了什么？</strong></p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">String str1 = &quot;str&quot;;</span><br><span class="line">String str2 = &quot;ing&quot;;</span><br><span class="line">String str3 = &quot;str&quot; + &quot;ing&quot;;//常量池中的对象</span><br><span class="line">String str4 = str1 + str2; //在堆上创建的新的对象</span><br><span class="line">String str5 = &quot;string&quot;;//常量池中的对象</span><br><span class="line">System.out.println(str3 == str4);//false</span><br><span class="line">System.out.println(str3 == str5);//true</span><br><span class="line">System.out.println(str4 == str5);//false</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>JDK1.7 之前运行时常量池逻辑包含字符串常量池存放在方法区。JDK1.7 的时候，字符串常量池被从方法区拿到了堆中。并且，字符串常量拼接得到的字符串常量在编译阶段就已经被存放字符串常量池，这个得益于编译器的优化。</p>
+</li>
+<li><p>在编译过程中，Javac 编译器（下文中统称为编译器）会进行一个叫做 <strong>常量折叠(Constant Folding)</strong> 的代码优化。常量折叠会把常量表达式的值求出来作为常量嵌在最终生成的代码中，这是 Javac 编译器会对源代码做的极少量优化措施之一(代码优化几乎都在即时编译器中进行)。</p>
+<p>对于 <code>String str3 = &quot;str&quot; + &quot;ing&quot;;</code> 编译器会给你优化成 <code>String str3 = &quot;string&quot;;</code> 。</p>
+<p>并不是所有的常量都会进行折叠，只有编译器在程序编译期就可以确定值的常量才可以：</p>
+<ul>
+<li>基本数据类型( <code>byte</code>、<code>boolean</code>、<code>short</code>、<code>char</code>、<code>int</code>、<code>float</code>、<code>long</code>、<code>double</code>)以及字符串常量。</li>
+<li><code>final</code> 修饰的基本数据类型和字符串变量</li>
+<li>字符串通过 “+”拼接得到的字符串、基本数据类型之间算数运算（加减乘除）、基本数据类型的位运算（&lt;&lt;、&gt;&gt;、&gt;&gt;&gt; ）</li>
+</ul>
+<p>因此，<code>str1</code> 、 <code>str2</code> 、 <code>str3</code> 都属于字符串常量池中的对象。</p>
+</li>
+<li><p>对象引用和“+”的字符串拼接方式，实际上是通过 <code>StringBuilder</code> 调用 <code>append()</code> 方法实现的，拼接完成之后调用 <code>toString()</code> 得到一个 <code>String</code> 对象 。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String str4 = new StringBuilder().append(str1).append(str2).toString();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>因此，<code>str4</code> 并不是字符串常量池中存在的对象，属于堆上的新对象。</p>
+<p>不过，字符串使用 <code>final</code> 关键字声明之后，可以让编译器当做常量来处理。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">final String str1 = &quot;str&quot;;</span><br><span class="line">final String str2 = &quot;ing&quot;;</span><br><span class="line">// 下面两个表达式其实是等价的</span><br><span class="line">String c = &quot;str&quot; + &quot;ing&quot;;// 常量池中的对象</span><br><span class="line">String d = str1 + str2; // 常量池中的对象</span><br><span class="line">System.out.println(c == d);// true</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>被 <code>final</code> 关键字修改之后的 <code>String</code> 会被编译器当做常量来处理，编译器在程序编译期就可以确定它的值，其效果就相当于访问常量。如果 ，编译器在运行时才能知道其确切值的话，就无法对其优化。示例代码如下（<code>str2</code> 在运行时才能确定其值）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">final String str1 = &quot;str&quot;;</span><br><span class="line">final String str2 = getStr();</span><br><span class="line">String c = &quot;str&quot; + &quot;ing&quot;;// 常量池中的对象</span><br><span class="line">String d = str1 + str2; // 在堆上创建的新的对象</span><br><span class="line">System.out.println(c == d);// false</span><br><span class="line">public static String getStr() &#123;</span><br><span class="line">      return &quot;ing&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>只要使用 new 的方式创建对象，便需要创建新的对象</strong> 。</p>
+<p>使用 new 的方式创建对象的方式如下，可以简单概括为 3 步：</p>
+<ol>
+<li>在堆中创建一个字符串对象</li>
+<li>检查字符串常量池中是否有和 new 的字符串值相等的字符串常量</li>
+<li>如果没有的话需要在字符串常量池中也创建一个值相等的字符串常量，如果有的话，就直接返回堆中的字符串实例对象地址。</li>
+</ol>
+</li>
+<li><p><strong>字符串常量池比较特殊，它的主要使用方法有两种：</strong></p>
+<ol>
+<li><p>直接使用双引号声明出来的 <code>String</code> 对象会直接存储在常量池中。</p>
+</li>
+<li><p>如果不是用双引号声明的 <code>String</code> 对象，使用 <code>String</code> 提供的 <code>intern()</code> 方法也有同样的效果。<code>String.intern()</code> 是一个 Native 方法，它的作用是：如果字符串常量池中已经包含一个等于此 String 对象内容的字符串，则返回常量池中该字符串的引用；如果没有，JDK1.7 之前（不包含 1.7）的处理方式是在常量池中创建与此 <code>String</code> 内容相同的字符串，并返回常量池中创建的字符串的引用，JDK1.7 以及之后，字符串常量池被从方法区拿到了堆中，jvm 不会在常量池中创建该对象，而是将堆中这个对象的引用直接放到常量池中，减少不必要的内存开销。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">String s1 = &quot;Javatpoint&quot;;</span><br><span class="line">String s2 = s1.intern();</span><br><span class="line">String s3 = new String(&quot;Javatpoint&quot;);</span><br><span class="line">String s4 = s3.intern();</span><br><span class="line">System.out.println(s1==s2); // True</span><br><span class="line">System.out.println(s1==s3); // False</span><br><span class="line">System.out.println(s1==s4); // True</span><br><span class="line">System.out.println(s2==s3); // False</span><br><span class="line">System.out.println(s2==s4); // True</span><br><span class="line">System.out.println(s3==s4); // False</span><br></pre></td></tr></table></figure></li>
+</ol>
+</li>
+<li><p><strong>总结</strong></p>
+<ol>
+<li>对于基本数据类型来说，&#x3D;&#x3D;比较的是值。对于引用数据类型来说，&#x3D;&#x3D;比较的是对象的内存地址。</li>
+<li>在编译过程中，Javac 编译器（下文中统称为编译器）会进行一个叫做 <strong>常量折叠(Constant Folding)</strong> 的代码优化。常量折叠会把常量表达式的值求出来作为常量嵌在最终生成的代码中，这是 Javac 编译器会对源代码做的极少量优化措施之一(代码优化几乎都在即时编译器中进行)。</li>
+<li>一般来说，我们要尽量避免通过 new 的方式创建字符串。使用双引号声明的 <code>String</code> 对象（ <code>String s1 = &quot;java&quot;</code> ）更利于让编译器有机会优化我们的代码，同时也更易于阅读。</li>
+<li>被 <code>final</code> 关键字修改之后的 <code>String</code> 会被编译器当做常量来处理，编译器程序编译期就可以确定它的值，其效果就相当于访问常量。</li>
+</ol>
+</li>
+</ul>
+<h4 id="25-泛型"><a href="#25-泛型" class="headerlink" title="25.泛型"></a>25.泛型</h4><ul>
+<li><p><strong>Java 泛型（generics）</strong> 是 JDK 5 中引入的一个新特性, 泛型提供了编译时类型安全检测机制，该机制允许程序员在编译时检测到非法的类型。泛型的本质是参数化类型，也就是说所操作的数据类型被指定为一个参数。</p>
+</li>
+<li><p>Java 的泛型是伪泛型，这是因为 Java 在运行期间，所有的泛型信息都会被擦掉，这也就是通常所说类型擦除 。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; list = new ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">list.add(12);</span><br><span class="line">//这里直接添加会报错</span><br><span class="line">list.add(&quot;a&quot;);</span><br><span class="line">Class&lt;? extends List&gt; clazz = list.getClass();</span><br><span class="line">Method add = clazz.getDeclaredMethod(&quot;add&quot;, Object.class);</span><br><span class="line">//但是通过反射添加是可以的</span><br><span class="line">//这就说明在运行期间所有的泛型信息都会被擦掉</span><br><span class="line">add.invoke(list, &quot;kl&quot;);</span><br><span class="line">System.out.println(list);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>常用的通配符为： T，E，K，V，？</strong></p>
+<ul>
+<li>？ 表示不确定的 Java 类型</li>
+<li>T (type) 表示具体的一个 Java 类型</li>
+<li>K V (key value) 分别代表 Java 键值中的 Key Value</li>
+<li>E (element) 代表 Element</li>
+</ul>
+</li>
+</ul>
+<h4 id="26-反射"><a href="#26-反射" class="headerlink" title="26.反射"></a>26.反射</h4><ul>
+<li>什么是反射？<ul>
+<li>JAVA反射机制是在运行状态中，对于任意一个类，都能够知道这个类的所有属性和方法；对于任意一个对象，都能够调用它的任意一个方法和属性；这种动态获取的信息以及动态调用对象的方法 的功能称为java语言的反射机制。</li>
+</ul>
+</li>
+<li>反射机制优缺点<ul>
+<li>优点： 运行期类型的判断，动态加载类，提高代码灵活度。</li>
+<li>性能瓶颈：反射相当于一系列解释操作，通知 JVM 要做的事情，性能比直接的java代码要 慢很多。存在安全问题。比如可以无视泛型参数的安全检查（泛型参数的安全检查发生在编译时）。</li>
+</ul>
+</li>
+</ul>
+<h4 id="27-注解"><a href="#27-注解" class="headerlink" title="27.注解"></a>27.注解</h4><ul>
+<li><p><code>Annotation</code> （注解） 是Java5 开始引入的新特性，可以看作是一种特殊的注释，主要用于修饰类、方法或者变量。注解本质是一个继承了<code>Annotation</code> 的特殊接口：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@Target(ElementType.METHOD)</span><br><span class="line">@Retention(RetentionPolicy.SOURCE)</span><br><span class="line">public @interface Override &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public interface Override extends Annotation&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>注解只有被解析之后才会生效，常见的解析方法有两种：</p>
+<ul>
+<li><strong>编译期直接扫描</strong> ：编译器在编译 Java 代码的时候扫描对应的注解并处理，比如某个方法使用<code>@Override</code> 注解，编译器在编译的时候就会检测当前的方法是否重写了父类对应的方法。</li>
+<li><strong>运行期通过反射处理</strong> ：像框架中自带的注解(比如 Spring 框架的 <code>@Value</code> 、<code>@Component</code>)都是通过反射来进行处理的。</li>
+</ul>
+</li>
+</ul>
+<h4 id="28-异常"><a href="#28-异常" class="headerlink" title="28.异常"></a>28.异常</h4><ul>
+<li><p>Exception 和 Error 有什么区别？</p>
+<p>在 Java 中，所有的异常都有一个共同的祖先 <code>java.lang</code> 包中的 <code>Throwable</code> 类。<code>Throwable</code> 类有两个重要的子类:</p>
+<ul>
+<li><strong><code>Exception</code></strong> :程序本身可以处理的异常，可以通过 <code>catch</code> 来进行捕获。<code>Exception</code> 又可以分为 Checked Exception (受检查异常，必须处理) 和 Unchecked Exception (不受检查异常，可以不处理)。</li>
+<li><strong><code>Error</code></strong> ：<code>Error</code> 属于程序无法处理的错误 ，<del>我们没办法通过 <code>catch</code> 来进行捕获</del>不建议通过<code>catch</code>捕获 。例如Java 虚拟机运行错误（<code>Virtual MachineError</code>）、虚拟机内存不够错误(<code>OutOfMemoryError</code>)、类定义错误（<code>NoClassDefFoundError</code>）等 。这些异常发生时，Java 虚拟机（JVM）一般会选择线程终止。</li>
+</ul>
+</li>
+<li><p>Throwable 类常用方法有哪些？</p>
+<ul>
+<li><code>String getMessage()</code>: 返回异常发生时的简要描述</li>
+<li><code>String toString()</code>: 返回异常发生时的详细信息</li>
+<li><code>String getLocalizedMessage()</code>: 返回异常对象的本地化信息。使用 <code>Throwable</code> 的子类覆盖这个方法，可以生成本地化信息。如果子类没有覆盖该方法，则该方法返回的信息与 <code>getMessage()</code>返回的结果相同</li>
+<li><code>void printStackTrace()</code>: 在控制台上打印 <code>Throwable</code> 对象封装的异常信息</li>
+</ul>
+</li>
+<li><p>try-catch-finally 如何使用？</p>
+<ul>
+<li><strong><code>try</code>块：</strong> 用于捕获异常。其后可接零个或多个 <code>catch</code> 块，如果没有 <code>catch</code> 块，则必须跟一个 <code>finally</code> 块。</li>
+<li><strong><code>catch</code>块：</strong> 用于处理 try 捕获到的异常。</li>
+<li><strong><code>finally</code> 块：</strong> 无论是否捕获或处理异常，<code>finally</code> 块里的语句都会被执行。当在 <code>try</code> 块或 <code>catch</code> 块中遇到 <code>return</code> 语句时，<code>finally</code> 语句块将在方法返回之前被执行。</li>
+<li><strong>注意：不要在 finally 语句块中使用 return!</strong> 当 try 语句和 finally 语句中都有 return 语句时，try 语句块中的 return 语句会被忽略。这是因为 try 语句中的 return 返回值会先被暂存在一个本地变量中，当执行到 finally 语句中的 return 之后，这个本地变量的值就变为了 finally 语句中的 return 返回值。</li>
+</ul>
+</li>
+</ul>
+<h4 id="29-I-x2F-O"><a href="#29-I-x2F-O" class="headerlink" title="29.I&#x2F;O"></a>29.I&#x2F;O</h4><ul>
+<li><p>什么是序列化?什么是反序列化?</p>
+<p>如果我们需要持久化 Java 对象比如将 Java 对象保存在文件中，或者在网络传输 Java 对象，这些场景都需要用到序列化。</p>
+<ul>
+<li><strong>序列化</strong>： 将数据结构或对象转换成二进制字节流的过程</li>
+<li><strong>反序列化</strong>：将在序列化过程中所生成的二进制字节流转换成数据结构或者对象的过程</li>
+</ul>
+</li>
+<li><p>Java 序列化中如果有些字段不想进行序列化，怎么办？</p>
+<p>对于不想进行序列化的变量，使用 <code>transient</code> 关键字修饰。</p>
+<p><code>transient</code> 关键字的作用是：阻止实例中那些用此关键字修饰的的变量序列化；当对象被反序列化时，被 <code>transient</code> 修饰的变量值不会被持久化和恢复。</p>
+<ul>
+<li><code>transient</code> 只能修饰变量，不能修饰类和方法。</li>
+<li><code>transient</code> 修饰的变量，在反序列化后变量值将会被置成类型的默认值。例如，如果是修饰 <code>int</code> 类型，那么反序列后结果就是 <code>0</code>。</li>
+<li><code>static</code> 变量因为不属于任何对象(Object)，所以无论有没有 <code>transient</code> 关键字修饰，均不会被序列化。</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Rayson Wen</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://rayson13.github.io/2022/04/10/javabasic/">https://rayson13.github.io/2022/04/10/javabasic/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2022 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/java/"># java</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2022/04/08/juc/">java并发</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Rayson Wen | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>
