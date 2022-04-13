@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Rayson Wen">
+
+
+
+
+
+<title>jvm题目 | Rayson13&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Rayson13&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Rayson13&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6;    // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function () {
+            tocbot.refresh(obj_merge(tocbot_default_config, { hasInnerContainers: true }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function () {
+        tocbot.init(obj_merge(tocbot_default_config, { collapseDepth: 1 }));
+    });
+
+    function expandToc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, { collapseDepth: expanded ? 1 : DEPTH_MAX }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">jvm题目</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Rayson Wen</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">April 13, 2022&nbsp;&nbsp;9:59:53</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h4 id="1-JVM运行时数据区"><a href="#1-JVM运行时数据区" class="headerlink" title="1.JVM运行时数据区"></a>1.JVM运行时数据区</h4><ul>
+<li><p>程序计数器（Program Counter Register）：当前线程所执行的字节码的行号指示器，字节码解 析器的工作是通过改变这个计数器的值，来选取下一条需要执行的字节码指令，分支、循环、跳 转、异常处理、线程恢复等基础功能，都需要依赖这个计数器来完成；</p>
+<p>为什么要线程计数器？因为线程是不具备记忆功能</p>
+</li>
+<li><p>Java 虚拟机栈（Java Virtual Machine Stacks）：每个方法在执行的同时都会在Java 虚拟机栈中创 建一个栈帧（Stack Frame）用于存储局部变量表、操作数栈、动态链接、方法出口等信息；</p>
+<p>栈帧就是Java虚拟机栈中的下一个单位</p>
+</li>
+<li><p>本地方法栈（Native Method Stack）：与虚拟机栈的作用是一样的，只不过虚拟机栈是服务 Java 方法的，而本地方法栈是为虚拟机调用 Native 方法服务的；</p>
+</li>
+<li><p>Java 堆（Java Heap）：Java 虚拟机中内存最大的一块，是被所有线程共享的，几乎所有的对象实 例都在这里分配内存；</p>
+</li>
+<li><p>方法区（Methed Area）：用于存储已被虚拟机加载的类信息、常量、静态变量、即时编译后的 代码等数据</p>
+</li>
+</ul>
+<h4 id="2-程序计数器"><a href="#2-程序计数器" class="headerlink" title="2.程序计数器"></a>2.程序计数器</h4><ol>
+<li>程序计数器是一块较小的内存空间，它可以看作是：保存当前线程所正在执行的字节码指令的地址 (行号)</li>
+<li>由于Java虚拟机的多线程是通过线程轮流切换并分配处理器执行时间的方式来实现的，一个处理器 都只会执行一条线程中的指令。因此，为了线程切换后能恢复到正确的执行位置，每条线程都有一 个独立的程序计数器，各个线程之间计数器互不影响，独立存储。称之为“线程私有”的内存。程序 计数器内存区域是虚拟机中唯一没有规定OutOfMemoryError情况的区域。</li>
+</ol>
+<h4 id="3-java虚拟机栈"><a href="#3-java虚拟机栈" class="headerlink" title="3.java虚拟机栈"></a>3.java虚拟机栈</h4><ol>
+<li>java虚拟机是线程私有的，它的生命周期和线程相同。</li>
+<li>虚拟机栈描述的是Java方法执行的内存模型： 每个方法在执行的同时 都会创建一个栈帧（Stack Frame）用于存储局部变量表、操作数栈、动态链接、方法出口等信息。</li>
+</ol>
+<ul>
+<li>解释：虚拟机栈中是有单位的，单位就是栈帧，一个方法一个栈帧。一个栈帧中他又要存储，局部 变量，操作数栈，动态链接，出口等。</li>
+</ul>
+<p>解析栈帧：</p>
+<ol>
+<li>局部变量表：是用来存储我们临时8个基本数据类型、对象引用地址、returnAddress类型。 （returnAddress中保存的是return后要执行的字节码的指令地址。）</li>
+<li>操作数栈：操作数栈就是用来操作的，例如代码中有个 i &#x3D; 6*6，他在一开始的时候就会进行操 作，读取我们的代码，进行计算后再放入局部变量表中去</li>
+<li>动态链接：假如我方法中，有个 service.add()方法，要链接到别的方法中去，这就是动态链接， 存储链接的地方。</li>
+<li>出口：出口是什呢，出口正常的话就是return 不正常的话就是抛出异常</li>
+</ol>
+<ul>
+<li>一个方法调用另一个方法，会创建很多栈帧吗？<ul>
+<li>答：会创建。如果一个栈中有动态链接调用别的方法，就会去创建新的栈帧，栈中是由顺序的，一 个栈帧调用另一个栈帧，另一个栈帧就会排在调用者下面</li>
+</ul>
+</li>
+<li>栈指向堆是什么意思？<ul>
+<li>栈指向堆是什么意思，就是栈中要使用成员变量怎么办，栈中不会存储成员变量，只会存储一个应 用地址</li>
+</ul>
+</li>
+<li>递归的调用自己会创建很多栈帧吗？<ul>
+<li>答：递归的话也会创建多个栈帧，就是在栈中一直从上往下排下去</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-java堆"><a href="#4-java堆" class="headerlink" title="4.java堆"></a>4.java堆</h4><ul>
+<li>java堆（Java Heap）是java虚拟机所管理的内存中最大的一块，是被所有线程共享的一块内存区 域，在虚拟机启动时创建。此内存区域的唯一目的就是存放对象实例。</li>
+<li>在Java虚拟机规范中的描述是：所有的对象实例以及数组都要在堆上分配。</li>
+<li>java堆是垃圾收集器管理的主要区域，因此也被成为“GC堆”。</li>
+<li>从内存回收角度来看java堆可分为：新生代和老生代。</li>
+<li>从内存分配的角度看，线程共享的Java堆中可能划分出多个线程私有的分配缓冲区。</li>
+<li>无论怎么划分，都与存放内容无关，无论哪个区域，存储的都是对象实例，进一步的划分都是为了 更好的回收内存，或者更快的分配内存。</li>
+<li>根据Java虚拟机规范的规定，java堆可以处于物理上不连续的内存空间中。当前主流的虚拟机都是 可扩展的（通过 -Xmx 和 -Xms 控制）。如果堆中没有内存可以完成实例分配，并且堆也无法再扩 展时，将会抛出OutOfMemoryError异常。</li>
+</ul>
+<h4 id="5-本地方法栈"><a href="#5-本地方法栈" class="headerlink" title="5.本地方法栈"></a>5.本地方法栈</h4><ol>
+<li>本地方法栈很好理解，他很栈很像，只不过方法上带了 native 关键字的栈字</li>
+<li>它是虚拟机栈为虚拟机执行Java方法（也就是字节码）的服务方法</li>
+<li>native关键字的方法是看不到的，必须要去oracle官网去下载才可以看的到，而且native关键字修 饰的大部分源码都是C和C++的代码。</li>
+<li>同理可得，本地方法栈中就是C和C++的代码</li>
+</ol>
+<h4 id="6-方法区"><a href="#6-方法区" class="headerlink" title="6.方法区"></a>6.方法区</h4><ol>
+<li>方法区是所有线程共享的内存区域，它用于存储已被Java虚拟机加载的类信息、常量、静态变量、 即时编译器编译后的代码等数据</li>
+<li>它有个别命叫Non-Heap（非堆）。当方法区无法满足内存分配需求时，抛出OutOfMemoryError 异常。</li>
+</ol>
+<h4 id="7-JVM字节码执行引擎"><a href="#7-JVM字节码执行引擎" class="headerlink" title="7.JVM字节码执行引擎"></a>7.JVM字节码执行引擎</h4><ul>
+<li>虚拟机核心的组件就是执行引擎，它负责执行虚拟机的字节码，一般先进行编译成机器码后执 行。</li>
+<li>“虚拟机”是一个相对于“物理机”的概念，虚拟机的字节码是不能直接在物理机上运行的，需要JVM 字节码执行引擎- 编译成机器码后才可在物理机上执行。</li>
+</ul>
+<h4 id="8-直接内存"><a href="#8-直接内存" class="headerlink" title="8.直接内存"></a>8.直接内存</h4><ul>
+<li>直接内存（Direct Memory）并不是虚拟机运行时数据区的一部分，也不是Java虚拟机中定义的内 存区域。但是这部分内存也被频繁地使用，而且也可能导致 OutOfMemoryError 异常出现，所以 我们放到这里一起讲解。</li>
+<li>我的理解就是直接内存是基于物理内存和Java虚拟机内存的中间内存</li>
+</ul>
+<h4 id="9-堆栈区别"><a href="#9-堆栈区别" class="headerlink" title="9.堆栈区别"></a>9.堆栈区别</h4><table>
+<thead>
+<tr>
+<th align="center">对比</th>
+<th align="center">JVM堆</th>
+<th align="center">JVM栈</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">物理地址</td>
+<td align="center">堆的物理地址分配对对象是不连续的。因此性能慢些。在 GC的时候也要考虑到不连续的分配，所以有各种算法。比 如，标记-消除，复制，标记-压缩，分代（即新生代使用 复制算法，老年代使用标记——压缩）</td>
+<td align="center">栈使用的是数据结构 中的栈，先进后出的 原则，物理地址分配 是连续的。所以性能 快。</td>
+</tr>
+<tr>
+<td align="center">内存分别</td>
+<td align="center">分 别 堆因为是不连续的，所以分配的内存是在运行期确认的， 因此大小不固定。一般堆大小远远大于栈。</td>
+<td align="center">栈是连续的，所以分 配的内存大小要在编 译期就确认，大小是 固定的。</td>
+</tr>
+<tr>
+<td align="center">存放的内容</td>
+<td align="center">堆存放的是对象的实例和数组。因此该区更关注的是数据 的存储</td>
+<td align="center">栈存放：局部变量， 操作数栈，返回结 果。该区更关注的是 程序方法的执行。</td>
+</tr>
+<tr>
+<td align="center">程序的可见性</td>
+<td align="center">堆对于整个应用程序都是共享、可见的。</td>
+<td align="center">栈只对于线程是可见 的。所以也是线程私 有。他的生命周期和 线程相同。</td>
+</tr>
+</tbody></table>
+<ul>
+<li>注意：<ul>
+<li>静态变量放在方法区</li>
+<li>静态的对象放在堆</li>
+</ul>
+</li>
+</ul>
+<h4 id="15-深拷贝和浅拷贝"><a href="#15-深拷贝和浅拷贝" class="headerlink" title="15.深拷贝和浅拷贝"></a>15.深拷贝和浅拷贝</h4><ul>
+<li>浅拷贝（shallowCopy）只是增加了一个指针指向已存在的内存地址</li>
+<li>深拷贝（deepCopy）是增加了一个指针并且申请了一个新的内存，使这个增加的指针指向这个新的内存</li>
+<li>浅复制：仅仅是指向被复制的内存地址，如果原地址发生改变，那么浅复制出来的对象也会相应的改变</li>
+<li>深复制：在计算机中开辟一块新的内存地址用于存放复制的对象</li>
+</ul>
+<h4 id="16-java内存泄漏"><a href="#16-java内存泄漏" class="headerlink" title="16.java内存泄漏"></a>16.java内存泄漏</h4><ul>
+<li>内存泄漏是指不再被使用的对象或者变量一直被占据在内存中。理论上来说，Java是有GC垃圾回 收机制的，也就是说，不再被使用的对象，会被GC自动回收掉，自动从内存中清除。</li>
+<li>但是，即使这样，Java也还是存在着内存泄漏的情况，java导致内存泄露的原因很明确：长生命周 期的对象持有短生命周期对象的引用就很可能发生内存泄露， 尽管短生命周期对象已经不再需要，但 是因为长生命周期对象持有它的引用而导致不能被回收 ，这就是java中内存泄露的发生场景。</li>
+</ul>
+<h4 id="17-java垃圾回收机制"><a href="#17-java垃圾回收机制" class="headerlink" title="17.java垃圾回收机制"></a>17.java垃圾回收机制</h4><ul>
+<li>在java中，程序员是不需要显示的去释放一个对象的内存的，而是由虚拟机自行执行。在JVM中， 有一个垃圾回收线程，它是低优先级的，在正常情况下是不会执行的，只有在虚拟机空闲或者当前 堆内存不足时，才会触发执行，扫面那些没有被任何引用的对象，并将它们添加到要回收的集合 中，进行回收。</li>
+</ul>
+<h4 id="18-垃圾回收器原理？有什么办法手动进行垃圾回收？"><a href="#18-垃圾回收器原理？有什么办法手动进行垃圾回收？" class="headerlink" title="18.垃圾回收器原理？有什么办法手动进行垃圾回收？"></a>18.垃圾回收器原理？有什么办法手动进行垃圾回收？</h4><ul>
+<li>对于GC来说，当程序员创建对象时，GC就开始监控这个对象的地址、大小以及使用情况。</li>
+<li>通常，GC采用有向图的方式记录和管理堆(heap)中的所有对象。通过这种方式确定哪些对象是”可 达的”，哪些对象是”不可达的”。当GC确定一些对象为”不可达”时，GC就有责任回收这些内存空 间。</li>
+<li>可以。程序员可以手动执行System.gc()，通知GC运行，但是Java语言规范并不保证GC一定会执 行。</li>
+</ul>
+<h4 id="19-jvm有哪些引用类型？"><a href="#19-jvm有哪些引用类型？" class="headerlink" title="19.jvm有哪些引用类型？"></a>19.jvm有哪些引用类型？</h4><ul>
+<li>强引用：发生 gc 的时候不会被回收。</li>
+<li>软引用：有用但不是必须的对象，在发生内存溢出之前会被回收。</li>
+<li>弱引用：有用但不是必须的对象，在下一次GC时会被回收。</li>
+<li>虚引用（幽灵引用&#x2F;幻影引用）：无法通过虚引用获得对象，用 PhantomReference 实现虚引用， 虚引用的用途是在 gc 时返回一个通知。</li>
+</ul>
+<h4 id="20-如何判断对象是否可以被回收？"><a href="#20-如何判断对象是否可以被回收？" class="headerlink" title="20.如何判断对象是否可以被回收？"></a>20.如何判断对象是否可以被回收？</h4><ul>
+<li>垃圾收集器在做垃圾回收的时候，首先需要判定的就是哪些内存是需要被回收的，哪些对象是存活 的，是不可以被回收的；哪些对象已经死掉了，需要被回收。</li>
+<li>一般有两种方法来判断：<ul>
+<li>引用计数器法：为每个对象创建一个引用计数，有对象引用时计数器 +1，引用被释放时计数 -1，当计数器为 0 时就可以被回收。它有一个缺点不能解决循环引用的问题；（这个已经淘 汰了）</li>
+<li>可达性分析算法：从 GC Roots 开始向下搜索，搜索所走过的路径称为引用链。当一个对象 到 GC Roots 没有任何引用链相连时，则证明此对象是可以被回收的。（市场上用的非常非 常广泛）</li>
+</ul>
+</li>
+</ul>
+<h4 id="21-JVM垃圾回收算法有哪些？"><a href="#21-JVM垃圾回收算法有哪些？" class="headerlink" title="21.JVM垃圾回收算法有哪些？"></a>21.JVM垃圾回收算法有哪些？</h4><ul>
+<li>标记-清除算法<ul>
+<li>标记无用对象，然后进行清除回收。</li>
+<li>标记-清除算法（Mark-Sweep）是一种常见的基础垃圾收集算法，它将垃圾收集分为两个阶段： <ul>
+<li>标记阶段：标记出可以回收的对象。</li>
+<li>清除阶段：回收被标记的对象所占用的空间。</li>
+</ul>
+</li>
+<li>标记-清除算法之所以是基础的，是因为后面讲到的垃圾收集算法都是在此算法的基础上进行改进 的。</li>
+<li><strong>优点</strong>：实现简单，不需要对象进行移动。</li>
+<li><strong>缺点</strong>：标记、清除过程效率低，产生大量不连续的内存碎片，提高了垃圾回收的频率。</li>
+</ul>
+</li>
+<li>复制算法<ul>
+<li>复制算法 为了解决标记-清除算法的效率不高的问题，产生了复制算法。它把内存空间划为两个相等的区 域，每次只使用其中一个区域。垃圾收集时，遍历当前使用的区域，把存活对象复制到另外一个区 域中，最后将当前使用的区域的可回收的对象进行回收。</li>
+<li><strong>优点</strong>：按顺序分配内存即可，实现简单、运行高效，不用考虑内存碎片。</li>
+<li><strong>缺点</strong>：可用的内存大小缩小为原来的一半，对象存活率高时会频繁进行复制</li>
+</ul>
+</li>
+<li>标记-真理算法<ul>
+<li>在新生代中可以使用复制算法，但是在老年代就不能选择复制算法了，因为老年代的对象存活率会 较高，这样会有较多的复制操作，导致效率变低。标记-清除算法可以应用在老年代中，但是它效 率不高，在内存回收后容易产生大量内存碎片。因此就出现了一种标记-整理算法（MarkCompact）算法，与标记-整理算法不同的是，在标记可回收的对象后将所有存活的对象压缩到内存的一端，使他们紧凑的排列在一起，然后对端边界以外的内存进行回收。回收后，已用和未用的 内存都各自一边。</li>
+<li><strong>优点</strong>：解决了标记-清理算法存在的内存碎片问题。</li>
+<li><strong>缺点</strong>：仍需要进行局部对象移动，一定程度上降低了效率。</li>
+</ul>
+</li>
+<li>分代收集算法<ul>
+<li>当前商业虚拟机都采用 分代收集 的垃圾收集算法。分代收集算法，顾名思义是根据对象的 存活周 期 将内存划分为几块。一般包括 年轻代 、 老年代 和 永久代 。</li>
+</ul>
+</li>
+</ul>
+<h4 id="22-新生代、老年代、永久代？"><a href="#22-新生代、老年代、永久代？" class="headerlink" title="22.新生代、老年代、永久代？"></a>22.新生代、老年代、永久代？</h4><ul>
+<li>在 Java 中，堆被划分成两个不同的区域：新生代 ( Young )、老年代 ( Old )。而新生代 ( Young ) 又被划分为三个区域：Eden、From Survivor、To Survivor。这样划分的目的是为了使 JVM 能够 更好的管理堆内存中的对象，包括内存的分配以及回收。</li>
+<li>新生代中一般保存新出现的对象，所以每次垃圾收集时都发现大批对象死去，只有少量对象存活， 便采用了 复制算法 ，只需要付出少量存活对象的复制成本就可以完成收集。</li>
+<li>老年代中一般保存存活了很久的对象，他们存活率高、没有额外空间对它进行分配担保，就必须采 用 “标记-清理”或者“标记-整理” 算法。</li>
+<li>永久代就是JVM的方法区。在这里都是放着一些被虚拟机加载的类信息，静态变量，常量等数据。 这个区中的东西比老年代和新生代更不容易回收。</li>
+</ul>
+<h4 id="23-Minor-GC-Major-GC-Full-GC"><a href="#23-Minor-GC-Major-GC-Full-GC" class="headerlink" title="23.Minor GC,Major GC,Full GC?"></a>23.Minor GC,Major GC,Full GC?</h4><ol>
+<li>Minor GC是新生代GC，指的是发生在新生代的垃圾收集动作。由于java对象大都是朝生夕死的， 所以Minor GC非常频繁，一般回收速度也比较快。（一般采用复制算法回收垃圾）</li>
+<li>Major GC是老年代GC，指的是发生在老年代的GC，通常执行Major GC会连着Minor GC一起执 行。Major GC的速度要比Minor GC慢的多。（可采用标记清楚法和标记整理法）</li>
+<li>Full GC是清理整个堆空间，包括年轻代和老年代</li>
+</ol>
+<h4 id="24-Minor-GC-Major-GC-Full-GC触发条件？"><a href="#24-Minor-GC-Major-GC-Full-GC触发条件？" class="headerlink" title="24.Minor GC,Major GC,Full GC触发条件？"></a>24.Minor GC,Major GC,Full GC触发条件？</h4><ul>
+<li>Minor GC 触发条件一般为：<ol>
+<li>eden区满时，触发MinorGC。即申请一个对象时，发现eden区不够用，则触发一次 MinorGC。</li>
+<li>新创建的对象大小 &gt; Eden所剩空间时触发Minor GC</li>
+</ol>
+</li>
+<li>Major GC和Full GC 触发条件一般为： Major GC通常是跟full GC是等价的<ol>
+<li>每次晋升到老年代的对象平均大小&gt;老年代剩余空间</li>
+<li>MinorGC后存活的对象超过了老年代剩余空间</li>
+<li>永久代空间不足</li>
+<li>执行System.gc()</li>
+<li>CMS GC异常</li>
+<li>堆内存分配很大的对象</li>
+</ol>
+</li>
+</ul>
+<h4 id="25-为什么新生代要分为Eden和两个Survivor区域？"><a href="#25-为什么新生代要分为Eden和两个Survivor区域？" class="headerlink" title="25.为什么新生代要分为Eden和两个Survivor区域？"></a>25.为什么新生代要分为Eden和两个Survivor区域？</h4><ul>
+<li>如果没有Survivor，Eden区每进行一次Minor GC，存活的对象就会被送到老年代。老年代很快被填满，触发Major GC。老年代的内存空间远大于新生代，进行一次Full GC消耗的时间比Minor GC 长得多,所以需要分为Eden和Survivor。</li>
+<li>Survivor的存在意义，就是减少被送到老年代的对象，进而减少Full GC的发生，Survivor的预筛选保证，只有经历15次Minor GC还能在新生代中存活的对象，才会被送到老年代。</li>
+<li>设置两个Survivor区最大的好处就是解决了碎片化，刚刚新建的对象在Eden中，经历一次Minor GC，Eden中的存活对象就会被移动到第一块survivor space S0，Eden被清空；等Eden区再满 了，就再触发一次Minor GC，Eden和S0中的存活对象又会被复制送入第二块survivor space S1（这个过程非常重要，因为这种复制算法保证了S1中来自S0和Eden两部分的存活对象占用连续 的内存空间，避免了碎片化的发生）</li>
+</ul>
+<h4 id="26-java堆老年代-Old-和新生代-Young-的默认比例？"><a href="#26-java堆老年代-Old-和新生代-Young-的默认比例？" class="headerlink" title="26.java堆老年代( Old ) 和新生代 ( Young ) 的默认比例？"></a>26.java堆老年代( Old ) 和新生代 ( Young ) 的默认比例？</h4><ul>
+<li>默认的，新生代 ( Young ) 与老年代 ( Old ) 的比例的值为 1:2 ( 该值可以通过参数 –XX:NewRatio 来指定 )，即：新生代 ( Young ) &#x3D; 1&#x2F;3 的堆空间大小。老年代 ( Old ) &#x3D; 2&#x2F;3 的堆空间大小。</li>
+<li>其中，新生代 ( Young ) 被细分为 Eden 和 两个 Survivor 区域，Edem 和俩个Survivor 区域比例 是 &#x3D; 8 : 1 : 1 ( 可以通过参数 –XX:SurvivorRatio 来设定 )</li>
+<li>但是JVM 每次只会使用 Eden 和其中的一块 Survivor 区域来为对象服务，所以无论什么时候，总 是有一块 Survivor 区域是空闲着的。</li>
+</ul>
+<h4 id="27-为什么要这样分代？"><a href="#27-为什么要这样分代？" class="headerlink" title="27.为什么要这样分代？"></a>27.为什么要这样分代？</h4><ul>
+<li>其实主要原因就是可以根据各个年代的特点进行对象分区存储，更便于回收，采用最适当的收集算法：<ul>
+<li>新生代中，每次垃圾收集时都发现大批对象死去，只有少量对象存活，便采用了复制算法， 只需要付出少量存活对象的复制成本就可以完成收集。</li>
+<li>而老年代中因为对象存活率高、没有额外空间对它进行分配担保，就必须采用“标记-清理”或 者“标记-整理”算法。</li>
+</ul>
+</li>
+<li>新生代又分为Eden和Survivor （From与To，这里简称一个区）两个区。加上老年代就这三个区。 数据会首先分配到Eden区当中（当然也有特殊情况，如果是大对象那么会直接放入到老年代（大 对象是指需要大量连续内存空间的java对象）。当Eden没有足够空间的时候就会触发jvm发起一次 Minor GC，。如果对象经过一次Minor-GC还存活，并且又能被Survivor空间接受，那么将被移动 到Survivor空间当中。并将其年龄设为1，对象在Survivor每熬过一次Minor GC，年龄就加1，当 年龄达到一定的程度（默认为15）时，就会被晋升到老年代中了，当然晋升老年代的年龄是可以 设置的。</li>
+</ul>
+<h4 id="28-JVM有哪些垃圾回收器？"><a href="#28-JVM有哪些垃圾回收器？" class="headerlink" title="28.JVM有哪些垃圾回收器？"></a>28.JVM有哪些垃圾回收器？</h4><img src="/2022/04/13/jvmface/1.png" class title="This is an example image">
+
+<table>
+<thead>
+<tr>
+<th align="center">垃圾回收器</th>
+<th align="center">工作区域</th>
+<th align="center">回收算法</th>
+<th align="center">工作线程</th>
+<th align="center">用户线程并行</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Serial</td>
+<td align="center">新生代</td>
+<td align="center">复制</td>
+<td align="center">单线程</td>
+<td align="center">否</td>
+<td align="center">Client模式下默认新生代收集器。 简单高效</td>
+</tr>
+<tr>
+<td align="center">ParNew</td>
+<td align="center">新生代</td>
+<td align="center">复制</td>
+<td align="center">多线程</td>
+<td align="center">否</td>
+<td align="center">Serial的多线程版本，Server模式 下首选， 可搭配CMS的新生代收集 器</td>
+</tr>
+<tr>
+<td align="center">Parallel Scavenge</td>
+<td align="center">新生代</td>
+<td align="center">复制</td>
+<td align="center">多线程</td>
+<td align="center">否</td>
+<td align="center">目标是达到可控制的吞吐量</td>
+</tr>
+<tr>
+<td align="center">Serial Old</td>
+<td align="center">老年代</td>
+<td align="center">标记-整理</td>
+<td align="center">单线程</td>
+<td align="center">否</td>
+<td align="center">否 Serial老年代版本，给Client模式下 的虚拟机使用</td>
+</tr>
+<tr>
+<td align="center">Paraller Old</td>
+<td align="center">老年代</td>
+<td align="center">标记-整理</td>
+<td align="center">多线程</td>
+<td align="center">否</td>
+<td align="center">Parallel Scavenge老年代版本，吞 吐量优先</td>
+</tr>
+<tr>
+<td align="center">CMS</td>
+<td align="center">老年代</td>
+<td align="center">标记-清除</td>
+<td align="center">多线程</td>
+<td align="center">？</td>
+<td align="center">以获取最短回收停顿时间为目标的收集器</td>
+</tr>
+<tr>
+<td align="center">G1</td>
+<td align="center">新生代+老年代</td>
+<td align="center">标记-整理+复制</td>
+<td align="center">多线程</td>
+<td align="center">是</td>
+<td align="center">JDK1.9默认垃圾收集器</td>
+</tr>
+</tbody></table>
+<ul>
+<li>Serial收集器（复制算法): 新生代单线程收集器，标记和清理都是单线程，优点是简单高效；</li>
+<li>ParNew收集器 (复制算法): 新生代收并行集器，实际上是Serial收集器的多线程版本，在多核CPU 环境下有着比Serial更好的表现；</li>
+<li>Parallel Scavenge收集器 (复制算法): 新生代并行收集器，追求高吞吐量，高效利用 CPU。吞吐量 &#x3D; 用户线程时间&#x2F;(用户线程时间+GC线程时间)，高吞吐量可以高效率的利用CPU时间，尽快完成程 序的运算任务，适合后台应用等对交互相应要求不高的场景；</li>
+<li>Serial Old收集器 (标记-整理算法): 老年代单线程收集器，Serial收集器的老年代版本；</li>
+<li>Parallel Old收集器 (标记-整理算法)： 老年代并行收集器，吞吐量优先，Parallel Scavenge收集器 的老年代版本；</li>
+<li>CMS(Concurrent Mark Sweep)收集器（标记-清除算法）： 老年代并行收集器，以获取最短回收 停顿时间为目标的收集器，具有高并发、低停顿的特点，追求最短GC回收停顿时间</li>
+<li>G1(Garbage First)收集器 ( 标记整理 + 复制算法来回收垃圾 )： Java堆并行收集器，G1收集器是 JDK1.7提供的一个新收集器，G1收集器基于“标记-整理”算法实现，也就是说不会产生内存碎片。 此外，G1收集器不同于之前的收集器的一个重要特点是：G1回收的范围是整个Java堆(包括新生 代，老年代)，而前六种收集器回收的范围仅限于新生代或老年代。、</li>
+</ul>
+<h4 id="29-简述分代垃圾回收器是怎么工作的？"><a href="#29-简述分代垃圾回收器是怎么工作的？" class="headerlink" title="29.简述分代垃圾回收器是怎么工作的？"></a>29.简述分代垃圾回收器是怎么工作的？</h4><ul>
+<li>分代回收器有两个分区：老生代和新生代，新生代默认的空间占比总空间的 1&#x2F;3，老生代的默认占 比是 2&#x2F;3。</li>
+<li>新生代使用的是复制算法，新生代里有 3 个分区：Eden、To Survivor、From Survivor，它们的 默认占比是 8:1:1，它的执行流程如下：<ul>
+<li>把 Eden + From Survivor 存活的对象放入 To Survivor 区；</li>
+<li>清空 Eden 和 From Survivor 分区；</li>
+<li>From Survivor 和 To Survivor 分区交换，From Survivor 变 To Survivor，To Survivor 变 From Survivor。</li>
+</ul>
+</li>
+<li>每次在 From Survivor 到 To Survivor 移动时都存活的对象，年龄就 +1，当年龄到达 15（默认配 置是 15）时，升级为老生代。大对象也会直接进入老生代。</li>
+<li>老生代当空间占用到达某个值之后就会触发全局垃圾收回，一般使用标记整理的执行算法。以上这 些循环往复就构成了整个分代垃圾回收的整体执行流程。</li>
+</ul>
+<h4 id="30-类加载机制及过程"><a href="#30-类加载机制及过程" class="headerlink" title="30.类加载机制及过程"></a>30.类加载机制及过程</h4><img src="/2022/04/13/jvmface/2.png" class title="This is an example image">
+
+<ul>
+<li>程序主动使用某个类时，如果该类还未被加载到内存中，则JVM会通过加载、连接、初始化3个步 骤来对该类进行初始化。如果没有意外，JVM将会连续完成3个步骤，所以有时也把这个3个步骤统 称为类加载或类初始化。</li>
+</ul>
+<ol>
+<li><p>加载</p>
+<ul>
+<li>加载指的是将类的class文件读入到内存，并将这些静态数据转换成方法区中的运行时数据结构， 并在堆中生成一个代表这个类的java.lang.Class对象，作为方法区类数据的访问入口，这个过程需要类加载器参与。</li>
+<li>Java类加载器由JVM提供，是所有程序运行的基础，JVM提供的这些类加载器通常被称为系统类加 载器。除此之外，开发者可以通过继承ClassLoader基类来创建自己的类加载器。</li>
+<li>类加载器，可以从不同来源加载类的二进制数据，比如：本地Class文件、Jar包Class文件、网络 Class文件等等等。</li>
+<li>类加载的最终产物就是位于堆中的Class对象（注意不是目标类对象），该对象封装了类在方法区 中的数据结构，并且向用户提供了访问方法区数据结构的接口，即Java反射的接口。</li>
+</ul>
+</li>
+<li><p>连接过程</p>
+<ul>
+<li>当类被加载之后，系统为之生成一个对应的Class对象，接着将会进入连接阶段，连接阶段负责把 类的二进制数据合并到JRE中（意思就是将java类的二进制代码合并到JVM的运行状态之中）。类连接又可分为如下3个阶段。</li>
+</ul>
+<ol>
+<li>验证：确保加载的类信息符合JVM规范，没有安全方面的问题。主要验证是否符合Class文件格式 规范，并且是否能被当前的虚拟机加载处理。</li>
+<li>准备：正式为类变量（static变量）分配内存并设置类变量初始值的阶段，这些内存都将在方法区 中进行分配</li>
+<li>解析：虚拟机常量池的符号引用替换为字节引用过程</li>
+</ol>
+</li>
+<li><p>初始化</p>
+<ul>
+<li>初始化阶段是执行类构造器  () 方法的过程。类构造器  ()方法是由编译器自动生成类中的 所有类变量的赋值动作和静态语句块(static块)中的语句合并产生，代码从上往下执行。</li>
+<li>当初始化一个类的时候，如果发现其父类还没有进行过初始化，则需要先触发其父类的初始化</li>
+<li>虚拟机会保证一个类的  () 方法在多线程环境中被正确加锁和同步</li>
+</ul>
+</li>
+</ol>
+<h4 id="31-什么是类加载器？类加载器有哪些？"><a href="#31-什么是类加载器？类加载器有哪些？" class="headerlink" title="31.什么是类加载器？类加载器有哪些？"></a>31.什么是类加载器？类加载器有哪些？</h4><ul>
+<li>实现通过类的权限定名获取该类的二进制字节流的代码块叫做类加载器。</li>
+<li>主要有一下四种类加载器:<ol>
+<li>启动类加载器(Bootstrap ClassLoader)用来加载java核心类库，无法被java程序直接引用。</li>
+<li>扩展类加载器(extensions class loader):它用来加载 Java 的扩展库。Java 虚拟机的实现会提 供一个扩展库目录。该类加载器在此目录里面查找并加载 Java 类。</li>
+<li>系统类加载器（system class loader）：它根据 Java 应用的类路径（CLASSPATH）来加载 Java 类。一般来说，Java 应用的类都是由它来完成加载的。可以通过ClassLoader.getSystemClassLoader()来获取它。</li>
+<li>用户自定义类加载器，通过继承 java.lang.ClassLoader类的方式实现。</li>
+</ol>
+</li>
+</ul>
+<h4 id="32-双亲委派模型？"><a href="#32-双亲委派模型？" class="headerlink" title="32.双亲委派模型？"></a>32.双亲委派模型？</h4><ul>
+<li>在介绍双亲委派模型之前先说下类加载器。对于任意一个类，都需要由加载它的类加载器和这个类 本身一同确立在 JVM 中的唯一性，每一个类加载器，都有一个独立的类名称空间。类加载器就是 根据指定全限定名称将 class 文件加载到 JVM 内存，然后再转化为 class 对象。</li>
+<li>类加载器分类：<ul>
+<li>启动类加载器（Bootstrap ClassLoader），是虚拟机自身的一部分，用来加载Java_HOME&#x2F;lib&#x2F;目录中的，或者被 -Xbootclasspath 参数所指定的路径中并且被虚拟机识别 的类库；</li>
+<li>扩展类加载器（Extension ClassLoader）：负责加载\lib\ext目录或Java. ext. dirs系统变量 指定的路径中的所有类库；</li>
+<li>应用程序类加载器（Application ClassLoader）。负责加载用户类路径（classpath）上的指 定类库，我们可以直接使用这个类加载器。一般情况，如果我们没有自定义类加载器默认就 是用这个加载器。</li>
+<li>自定义类加载器</li>
+</ul>
+</li>
+<li>双亲委派模型：：如果一个类加载器收到了类加载的请求，它首先不会自己去加载这个类，而是把这 个请求委派给父类加载器去完成，每一层的类加载器都是如此，这样所有的加载请求都会被传送到 顶层的启动类加载器中，只有当父加载无法完成加载请求（它的搜索范围中没找到所需的类）时， 子加载器才会尝试去加载类。</li>
+<li>总结就是： 当一个类收到了类加载请求时，不会自己先去加载这个类，而是将其委派给父类，由父类去加 载，如果此时父类不能加载，反馈给子类，由子类去完成类的加载。</li>
+</ul>
+<h4 id="33-常用JVM调优参数"><a href="#33-常用JVM调优参数" class="headerlink" title="33.常用JVM调优参数"></a>33.常用JVM调优参数</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">#常用的设置</span><br><span class="line">-Xms：初始堆大小，JVM 启动的时候，给定堆空间大小。</span><br><span class="line"></span><br><span class="line">-Xmx：最大堆大小，JVM 运行过程中，如果初始堆空间不足的时候，最大可以扩展到多少。</span><br><span class="line"></span><br><span class="line">-Xmn：设置堆中年轻代大小。整个堆大小=年轻代大小+年老代大小+持久代大小。</span><br><span class="line"></span><br><span class="line">-XX:NewSize=n 设置年轻代初始化大小大小</span><br><span class="line"></span><br><span class="line">-XX:MaxNewSize=n 设置年轻代最大值</span><br><span class="line"></span><br><span class="line">-XX:NewRatio=n 设置年轻代和年老代的比值。如: -XX:NewRatio=3，表示年轻代与年老代比值为 1：</span><br><span class="line">3，年轻代占整个年轻代+年老代和的 1/4</span><br><span class="line"></span><br><span class="line">-XX:SurvivorRatio=n 年轻代中 Eden 区与两个 Survivor 区的比值。注意 Survivor 区有两个。8表示两个Survivor :eden=2:8 ,即一个Survivor占年轻代的1/10，默认就为8</span><br><span class="line"></span><br><span class="line">-Xss：设置每个线程的堆栈大小。JDK5后每个线程 Java 栈大小为 1M，以前每个线程堆栈大小为 256K。</span><br><span class="line">-XX:ThreadStackSize=n 线程堆栈大小</span><br><span class="line"></span><br><span class="line">-XX:PermSize=n 设置持久代初始值</span><br><span class="line"></span><br><span class="line">-XX:MaxPermSize=n 设置持久代大小</span><br><span class="line"></span><br><span class="line">-XX:MaxTenuringThreshold=n 设置年轻带垃圾对象最大年龄。如果设置为 0 的话，则年轻代对象不经</span><br><span class="line">过 Survivor 区，直接进入年老代。</span><br><span class="line"></span><br><span class="line">#下面是一些不常用的</span><br><span class="line">-XX:LargePageSizeInBytes=n 设置堆内存的内存页大小</span><br><span class="line"></span><br><span class="line">-XX:+UseFastAccessorMethods 优化原始类型的getter方法性能</span><br><span class="line"></span><br><span class="line">-XX:+DisableExplicitGC 禁止在运行期显式地调用System.gc()，默认启用</span><br><span class="line"></span><br><span class="line">-XX:+AggressiveOpts 是否启用JVM开发团队最新的调优成果。例如编译优化，偏向锁，并行年老代收集</span><br><span class="line">等，jdk6纸之后默认启动</span><br><span class="line"></span><br><span class="line">-XX:+UseBiasedLocking 是否启用偏向锁，JDK6默认启用</span><br><span class="line"></span><br><span class="line">-Xnoclassgc 是否禁用垃圾回收</span><br><span class="line"></span><br><span class="line">-XX:+UseThreadPriorities 使用本地线程的优先级，默认启用</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="34-JVM的GC收集器设置"><a href="#34-JVM的GC收集器设置" class="headerlink" title="34.JVM的GC收集器设置"></a>34.JVM的GC收集器设置</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">-XX:+UseSerialGC:设置串行收集器，年轻带收集器</span><br><span class="line"></span><br><span class="line">-XX:+UseParNewGC:设置年轻代为并行收集。可与 CMS 收集同时使用。JDK5.0 以上，JVM 会根据系统</span><br><span class="line">配置自行设置，所以无需再设置此值。</span><br><span class="line"></span><br><span class="line">-XX:+UseParallelGC:设置并行收集器，目标是目标是达到可控制的吞吐量</span><br><span class="line"></span><br><span class="line">-XX:+UseParallelOldGC:设置并行年老代收集器，JDK6.0 支持对年老代并行收集。</span><br><span class="line"></span><br><span class="line">-XX:+UseConcMarkSweepGC:设置年老代并发收集器</span><br><span class="line"></span><br><span class="line">-XX:+UseG1GC:设置 G1 收集器，JDK1.9默认垃圾收集器</span><br></pre></td></tr></table></figure>
+
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Rayson Wen</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://rayson13.github.io/2022/04/13/jvmface/">https://rayson13.github.io/2022/04/13/jvmface/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2022 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/jvm/"># jvm</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2022/04/11/jvm/">jvm</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Rayson Wen | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>
