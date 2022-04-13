@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Rayson Wen">
+
+
+
+
+
+<title>数据库 | Rayson13&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Rayson13&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Rayson13&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6;    // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function () {
+            tocbot.refresh(obj_merge(tocbot_default_config, { hasInnerContainers: true }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function () {
+        tocbot.init(obj_merge(tocbot_default_config, { collapseDepth: 1 }));
+    });
+
+    function expandToc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, { collapseDepth: expanded ? 1 : DEPTH_MAX }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">数据库</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Rayson Wen</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">April 13, 2022&nbsp;&nbsp;11:41:49</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h4 id="1-什么是元组-码-候选码-主码-外码-主属性-非主属性？"><a href="#1-什么是元组-码-候选码-主码-外码-主属性-非主属性？" class="headerlink" title="1.什么是元组, 码, 候选码, 主码, 外码, 主属性, 非主属性？"></a>1.什么是元组, 码, 候选码, 主码, 外码, 主属性, 非主属性？</h4><ul>
+<li><strong>元组</strong> ： 元组（tuple）是关系数据库中的基本概念，关系是一张表，表中的每行（即数据库中的每条记录）就是一个元组，每列就是一个属性。 在二维表里，元组也称为行。</li>
+<li><strong>码</strong> ：码就是能唯一标识实体的属性，对应表中的列。</li>
+<li><strong>候选码</strong> ： 若关系中的某一属性或属性组的值能唯一的标识一个元组，而其任何、子集都不能再标识，则称该属性组为候选码。例如：在学生实体中，“学号”是能唯一的区分学生实体的，同时又假设“姓名”、“班级”的属性组合足以区分学生实体，那么{学号}和{姓名，班级}都是候选码。</li>
+<li><strong>主码</strong> : 主码也叫主键。主码是从候选码中选出来的。 一个实体集中只能有一个主码，但可以有多个候选码。</li>
+<li><strong>外码</strong> : 外码也叫外键。如果一个关系中的一个属性是另外一个关系中的主码则这个属性为外码。</li>
+<li><strong>主属性</strong> ： 候选码中出现过的属性称为主属性。比如关系 工人（工号，身份证号，姓名，性别，部门）. 显然工号和身份证号都能够唯一标示这个关系，所以都是候选码。工号、身份证号这两个属性就是主属性。如果主码是一个属性组，那么属性组中的属性都是主属性。</li>
+<li><strong>非主属性：</strong> 不包含在任何一个候选码中的属性称为非主属性。比如在关系——学生（学号，姓名，年龄，性别，班级）中，主码是“学号”，那么其他的“姓名”、“年龄”、“性别”、“班级”就都可以称为非主属性</li>
+</ul>
+<h4 id="2-主键和外键区别"><a href="#2-主键和外键区别" class="headerlink" title="2.主键和外键区别"></a>2.主键和外键区别</h4><ul>
+<li><strong>主键(主码)</strong> ：主键用于唯一标识一个元组，不能有重复，不允许为空。一个表只能有一个主键。</li>
+<li><strong>外键(外码)</strong> ：外键用来和其他表建立联系用，外键是另一表的主键，外键是可以有重复的，可以是空值。一个表可以有多个外键。</li>
+</ul>
+<h4 id="3-数据库范式"><a href="#3-数据库范式" class="headerlink" title="3.数据库范式"></a>3.数据库范式</h4><ul>
+<li><p><strong>第一范式</strong>（1NF，Normal Form）：<strong>属性不应该是可分的</strong>。举例：如果将“电话”作为一个属性（一列），是不符合1NF的，因为电话这个属性可以分解为家庭电话和移动电话…如果将“移动电话”作为一个属性，就符合1NF；</p>
+</li>
+<li><p><strong>第二范式</strong> 2NF：每个非主属性<strong>完全依赖</strong>于主属性集（候选键集）；</p>
+<p>2NF 在 1NF 的基础之上，消除了非主属性对于码的部分函数依赖。如下图所示，展示了第一范式到第二范式的过渡。第二范式在第一范式的基础上增加了一个列，这个列称为主键，非主属性都依赖于主键。</p>
+<p>一些重要的概念：</p>
+<ul>
+<li><strong>函数依赖（functional dependency）</strong> ：若在一张表中，在属性（或属性组）X 的值确定的情况下，必定能确定属性 Y 的值，那么就可以说 Y 函数依赖于 X，写作 X → Y。</li>
+<li><strong>部分函数依赖（partial functional dependency）</strong> ：如果 X→Y，并且存在 X 的一个真子集 X0，使得 X0→Y，则称 Y 对 X 部分函数依赖。比如学生基本信息表 R 中（学号，身份证号，姓名）当然学号属性取值是唯一的，在 R 关系中，（学号，身份证号）-&gt;（姓名），（学号）-&gt;（姓名），（身份证号）-&gt;（姓名）；所以姓名部分函数依赖与（学号，身份证号）；</li>
+<li><strong>完全函数依赖(Full functional dependency)</strong> ：在一个关系中，若某个非主属性数据项依赖于全部关键字称之为完全函数依赖。比如学生基本信息表 R（学号，班级，姓名）假设不同的班级学号有相同的，班级内学号不能相同，在 R 关系中，（学号，班级）-&gt;（姓名），但是（学号）-&gt;(姓名)不成立，（班级）-&gt;(姓名)不成立，所以姓名完全函数依赖与（学号，班级）；</li>
+<li><strong>传递函数依赖</strong> ： 在关系模式 R(U)中，设 X，Y，Z 是 U 的不同的属性子集，如果 X 确定 Y、Y 确定 Z，且有 X 不包含 Y，Y 不确定 X，（X∪Y）∩Z&#x3D;空集合，则称 Z 传递函数依赖(transitive functional dependency) 于 X。传递函数依赖会导致数据冗余和异常。传递函数依赖的 Y 和 Z 子集往往同属于某一个事物，因此可将其合并放到一个表中。比如在关系 R(学号 , 姓名, 系名，系主任)中，学号 → 系名，系名 → 系主任，所以存在非主属性系主任对于学号的传递函数依赖。</li>
+</ul>
+</li>
+<li><p><strong>第三范式</strong> 3NF：在 2NF 的基础上，非主属性<strong>不传递依赖</strong>于主属性</p>
+<ul>
+<li><p>传递依赖：如果C依赖于B，B依赖于A，那么C传递依赖于A；</p>
+</li>
+<li><p>3NF在2NF的基础上，消除了非主属性之间的依赖；比如一个表中，主属性有（学号），非主属性有（姓名，院系，院长名），可以看到院长名这个非主属性依赖于院系，传递依赖于学号。消除的办法是分解。 必须先满足第二范式（2NF），要求：表中的每一列只与主键直接相关而不是间接相关，（表中的每一列只能依赖于主键）；</p>
+</li>
+</ul>
+</li>
+<li><p>总结：</p>
+<ul>
+<li>1NF：属性不可再分。</li>
+<li>2NF：1NF 的基础之上，消除了非主属性对于码的部分函数依赖。</li>
+<li>3NF：3NF 在 2NF 的基础之上，消除了非主属性对于码的传递函数依赖 。</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-事务的概念和特性"><a href="#4-事务的概念和特性" class="headerlink" title="4.事务的概念和特性"></a>4.事务的概念和特性</h4><p>概念：事务（Transaction）是一个操作序列，不可分割的工作单位，以BEGIN TRANSACTION开始，以ROLLBACK&#x2F;COMMIT结束</p>
+<p>特性(ACID):</p>
+<ul>
+<li><strong>原子性</strong>（Atomicity）：逻辑上是不可分割的操作单元，事务的所有操作要么全部提交成功，要么全部失败回滚（用回滚日志实现，反向执行日志中的操作）；</li>
+<li><strong>一致性</strong>（Consistency）：事务的执行必须使数据库保持一致性状态。在一致性状态下，所有事务对一个数据的读取结果都是相同的；</li>
+<li><strong>隔离性</strong>（Isolation）：一个事务所做的修改在最终提交以前，对其它事务是不可见的（并发执行的事务之间不能相互影响）；</li>
+<li><strong>持久性</strong>（Durability）：一旦事务提交成功，对数据的修改是永久性的</li>
+</ul>
+<h4 id="5-并发一致性问题"><a href="#5-并发一致性问题" class="headerlink" title="5.并发一致性问题"></a>5.并发一致性问题</h4><ul>
+<li><strong>丢失修改</strong>：一个事务对数据进行了修改，在事务提交之前，另一个事务对同一个数据进行了修改，覆盖了之前的修改；</li>
+<li><strong>脏读</strong>（Dirty Read）：一个事务读取了被另一个事务修改、但未提交（进行了回滚）的数据，造成两个事务得到的数据不一致；</li>
+<li><strong>不可重复读</strong>（Nonrepeatable Read）：在同一个事务中，某查询操作在一个时间读取某一行数据和之后一个时间读取该行数据，发现数据已经发生修改（针对<strong>update</strong>操作）；</li>
+<li><strong>幻读</strong>（Phantom Read）：当同一查询多次执行时，由于其它事务在这个数据范围内执行了插入操作，会导致每次返回不同的结果集（和不可重复读的区别：针对的是一个数据整体&#x2F;范围；并且针对<strong>insert</strong>操作）</li>
+</ul>
+<h4 id="6-数据库的四种隔离级别"><a href="#6-数据库的四种隔离级别" class="headerlink" title="6.数据库的四种隔离级别"></a>6.数据库的四种隔离级别</h4><ul>
+<li><strong>未提交读</strong>（Read Uncommited）：在一个事务提交之前，它的执行结果对其它事务也是可见的。会导致脏读、不可重复读、幻读；</li>
+<li><strong>提交读</strong>（Read Commited）：一个事务只能看见已经提交的事务所作的改变。可避免脏读问题；</li>
+<li><strong>可重复读</strong>（Repeatable Read）：可以确保同一个事务在多次读取同样的数据时得到相同的结果。（MySQL的默认隔离级别）。可避免不可重复读；</li>
+<li><strong>可串行化</strong>（Serializable）：强制事务串行执行，使之不可能相互冲突，从而解决幻读问题。可能导致大量的超时现象和锁竞争，实际很少使用。</li>
+</ul>
+<h4 id="7-乐观锁和悲观锁"><a href="#7-乐观锁和悲观锁" class="headerlink" title="7.乐观锁和悲观锁"></a>7.乐观锁和悲观锁</h4><ul>
+<li><p>悲观锁：认为数据随时会被修改，因此每次读取数据之前都会上锁，防止其它事务读取或修改数据；应用于<strong>数据更新比较频繁</strong>的场景；</p>
+</li>
+<li><p>乐观锁：操作数据时不会上锁，但是更新时会判断在此期间有没有别的事务更新这个数据，若被更新过，则失败重试；适用于</p>
+<p>读多写少</p>
+<p>的场景。乐观锁的实现方式有：</p>
+<ul>
+<li>加一个版本号或者时间戳字段，每次数据更新时同时更新这个字段；</li>
+<li>先读取想要更新的字段或者所有字段，更新的时候比较一下，只有字段没有变化才进行更新</li>
+</ul>
+</li>
+</ul>
+<h4 id="8-常见的封锁类型？"><a href="#8-常见的封锁类型？" class="headerlink" title="8.常见的封锁类型？"></a>8.常见的封锁类型？</h4><p>意向锁是 InnoDB 自动加的， 不需用户干预。 对于 UPDATE、 DELETE 和 INSERT 语句， InnoDB 会自动给涉及数据集加排他锁（X)； 对于普通 SELECT 语句，InnoDB 不会加任何锁； 事务可以通过以下语句显式给记录集加共享锁或排他锁： 共享锁（S）：SELECT * FROM table_name WHERE … LOCK IN SHARE MODE。 其他 session 仍然可以查询记录，并也可以对该记录加 share mode 的共享锁。但是如果当前事务需要对该记录进行更新操作，则很有可能造成死锁。 排他锁（X)：SELECT * FROM table_name WHERE … FOR UPDATE。其他 session 可以查询该记录，但是不能对该记录加共享锁或排他锁，而是等待获得锁</p>
+<ul>
+<li><p><strong>排它锁</strong>（Exclusive Lock）&#x2F; X锁：事务对数据加上X锁时，只允许此事务读取和修改此数据，并且其它事务不能对该数据加任何锁；</p>
+</li>
+<li><p><strong>共享锁</strong>（Shared Lock）&#x2F; S锁：加了S锁后，该事务只能对数据进行读取而不能修改，并且其它事务只能加S锁，不能加X锁</p>
+</li>
+<li><p>意向锁（Intention Locks）：</p>
+<ul>
+<li>一个事务在获得某个<strong>数据行</strong>对象的 S 锁之前，必须先获得<strong>整个表</strong>的 IS 锁或更强的锁；</li>
+<li>一个事务在获得某个数据行对象的 X 锁之前，必须先获得整个表的 IX 锁；</li>
+<li>IS&#x2F;IX 锁之间都是兼容的；</li>
+<li>好处：如果一个事务想要对整个表加X锁，就需要先检测是否有其它事务对该表或者该表中的某一行加了锁，这种检测非常耗时。有了意向锁之后，只需要检测整个表是否存在IX&#x2F;IS&#x2F;X&#x2F;S锁就行了</li>
+</ul>
+<p>锁的作用：用于管理对共享资源的并发访问，保证数据库的完整性和一致性</p>
+</li>
+</ul>
+<h4 id="9-三级封锁协议"><a href="#9-三级封锁协议" class="headerlink" title="9.三级封锁协议"></a>9.三级封锁协议</h4><ul>
+<li>一级封锁协议：事务在修改数据之前必须先对其加X锁，直到事务结束才释放。可以解决丢失修改问题（两个事务不能同时对一个数据加X锁，避免了修改被覆盖）；</li>
+<li>二级封锁协议：在一级的基础上，事务在读取数据之前必须先加S锁，读完后释放。可以解决脏读问题（如果已经有事务在修改数据，就意味着已经加了X锁，此时想要读取数据的事务并不能加S锁，也就无法进行读取，避免了读取脏数据）；</li>
+<li>三级封锁协议：在二级的基础上，事务在读取数据之前必须先加S锁，直到事务结束才能释放。可以解决不可重复读问题（避免了在事务结束前其它事务对数据加X锁进行修改，保证了事务期间数据不会被其它事务更新）</li>
+</ul>
+<h4 id="10-什么是MVCC"><a href="#10-什么是MVCC" class="headerlink" title="10.什么是MVCC?"></a>10.什么是MVCC?</h4><p>多版本并发控制（Multi-Version Concurrency Control, MVCC），MVCC在每行记录后面都保存有两个隐藏的列，用来存储<strong>创建版本号</strong>和<strong>删除版本号</strong>。</p>
+<ul>
+<li>创建版本号：创建一个数据行时的事务版本号（<strong>事务版本号</strong>：事务开始时的系统版本号；系统版本号：每开始一个新的事务，系统版本号就会自动递增）；</li>
+<li>删除版本号：删除操作时的事务版本号；</li>
+<li>各种操作：<ul>
+<li>插入操作时，记录创建版本号；</li>
+<li>删除操作时，记录删除版本号；</li>
+<li>更新操作时，先记录删除版本号，再新增一行记录创建版本号；</li>
+<li>查询操作时，要符合以下条件才能被查询出来：删除版本号未定义或大于当前事务版本号（删除操作是在当前事务启动之后做的）；创建版本号小于或等于当前事务版本号（创建操作是事务完成或者在事务启动之前完成）</li>
+</ul>
+</li>
+</ul>
+<h4 id="11-数据库索引的实现原理（B-树）"><a href="#11-数据库索引的实现原理（B-树）" class="headerlink" title="11.数据库索引的实现原理（B+树）"></a>11.数据库索引的实现原理（B+树）</h4><p>使用B树和B+树的比较</p>
+<p>InnoDB的索引使用的是B+树实现，B+树对比B树的好处：</p>
+<ul>
+<li>IO次数少：B+树的中间结点只存放索引，数据都存在叶结点中，因此中间结点可以存更多的数据，让索引树更加矮胖；</li>
+<li>范围查询效率更高：B树需要中序遍历整个树，只B+树需要遍历叶结点中的链表；</li>
+<li>查询效率更加稳定：每次查询都需要从根结点到叶结点，路径长度相同，所以每次查询的效率都差不多</li>
+</ul>
+<h4 id="12-使用索引的有点"><a href="#12-使用索引的有点" class="headerlink" title="12.使用索引的有点"></a>12.使用索引的有点</h4><ul>
+<li>大大加快了数据的<strong>检索速度</strong>；</li>
+<li>可以显著减少查询中<strong>分组和排序</strong>的时间；</li>
+<li>通过创建唯一性索引，可以保证数据库表中每一行数据的唯一性；</li>
+<li>将随机 I&#x2F;O 变为<strong>顺序 I&#x2F;O</strong>（B+Tree 索引是有序的，会将相邻的数据都存储在一起）</li>
+</ul>
+<p>缺点：建立和维护索引耗费时间空间，更新索引很慢。</p>
+<h4 id="13-MySQL的两种存储引擎-InnoDB-和-MyISAM-的区别？"><a href="#13-MySQL的两种存储引擎-InnoDB-和-MyISAM-的区别？" class="headerlink" title="13.MySQL的两种存储引擎 InnoDB 和 MyISAM 的区别？"></a>13.MySQL的两种存储引擎 InnoDB 和 MyISAM 的区别？</h4><ul>
+<li>InnoDB<strong>支持事务</strong>，可以进行Commit和Rollback；</li>
+<li>MyISAM 只支持表级锁，而 InnoDB 还<strong>支持行级锁</strong>，提高了并发操作的性能；</li>
+<li>InnoDB <strong>支持外键</strong>；</li>
+<li>MyISAM <strong>崩溃</strong>后发生损坏的概率比 InnoDB 高很多，而且<strong>恢复的速度</strong>也更慢；</li>
+<li>MyISAM 支持<strong>压缩</strong>表和空间数据索引，InnoDB需要更多的内存和存储；</li>
+<li>InnoDB 支持在线<strong>热备份</strong></li>
+</ul>
+<h4 id="14-如何优化数据库？"><a href="#14-如何优化数据库？" class="headerlink" title="14.如何优化数据库？"></a>14.如何优化数据库？</h4><ul>
+<li>SQL语句的优化</li>
+<li>索引的优化</li>
+<li>数据库表结构的优化</li>
+<li>系统配置的优化</li>
+<li>硬件的优化</li>
+</ul>
+<h4 id="15-主从复制？实现原理？"><a href="#15-主从复制？实现原理？" class="headerlink" title="15.主从复制？实现原理？"></a>15.主从复制？实现原理？</h4><p>主从复制（Replication）是指数据可以从一个MySQL数据库主服务器复制到一个或多个从服务器，从服务器可以复制主服务器中的所有数据库或者特定的数据库，或者特定的表。默认采用异步模式。</p>
+<p>实现原理：</p>
+<ul>
+<li>主服务器 <strong>binary log dump 线程</strong>：将主服务器中的数据更改（增删改）日志写入 Binary log 中；</li>
+<li>从服务器 <strong>I&#x2F;O 线程</strong>：负责从主服务器读取binary log，并写入本地的 Relay log；</li>
+<li>从服务器 <strong>SQL 线程</strong>：负责读取 Relay log，解析出主服务器已经执行的数据更改，并在从服务器中重新执行（Replay），保证主从数据的一致性</li>
+</ul>
+<p>为什么要主从复制？</p>
+<ul>
+<li>读写分离：主服务器负责写，从服务器负责读<ul>
+<li>缓解了锁的争用，即使主服务器中加了锁，依然可以进行读操作；</li>
+<li>从服务器可以使用 MyISAM，提升查询性能以及节约系统开销；</li>
+<li>增加冗余，提高可用性</li>
+</ul>
+</li>
+<li>数据实时备份，当系统中某个节点发生故障时，可以方便的故障切换</li>
+<li>降低单个服务器磁盘I&#x2F;O访问的频率，提高单个机器的I&#x2F;O性能</li>
+</ul>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Rayson Wen</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://rayson13.github.io/2022/04/13/database/">https://rayson13.github.io/2022/04/13/database/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2022 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/database/"># database</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2022/04/13/jvmface/">jvm题目</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Rayson Wen | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>
