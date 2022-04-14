@@ -420,6 +420,65 @@
 <h4 id="7-HashSet-如何检查重复"><a href="#7-HashSet-如何检查重复" class="headerlink" title="7.HashSet 如何检查重复"></a>7.HashSet 如何检查重复</h4><ul>
 <li>当你把对象加入<code>HashSet</code>时，<code>HashSet</code> 会先计算对象的<code>hashcode</code>值来判断对象加入的位置，同时也会与其他加入的对象的 <code>hashcode</code> 值作比较，如果没有相符的 <code>hashcode</code>，<code>HashSet</code> 会假设对象没有重复出现。但是如果发现有相同 <code>hashcode</code> 值的对象，这时会调用<code>equals()</code>方法来检查 <code>hashcode</code> 相等的对象是否真的相同。如果两者相同，<code>HashSet</code> 就不会让加入操作成功。</li>
 </ul>
+<h4 id="8-HashMap源码中在计算hash值的时候为什么要右移16位？"><a href="#8-HashMap源码中在计算hash值的时候为什么要右移16位？" class="headerlink" title="8.HashMap源码中在计算hash值的时候为什么要右移16位？"></a>8.HashMap源码中在计算hash值的时候为什么要右移16位？</h4><p>HashMap的哈希函数</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">*重新计算哈希值</span><br><span class="line">*/</span><br><span class="line">static final int hash(Object kety)&#123;</span><br><span class="line">	int h;</span><br><span class="line">	</span><br><span class="line">	//h = key.hashCode() 为第一步区hashCode值</span><br><span class="line">	//h ^ (h &gt;&gt;&gt; 16) 为第二部 高位参与运算</span><br><span class="line">	return (key == null) ? 0 : (h = key.hashCode()) ^ (h &gt;&gt;&gt; 16);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>&#x2F;&#x2F;计算数组槽位</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(n-1) &amp; hash n为数组长度</span><br></pre></td></tr></table></figure>
+
+<p>对key斤西瓜了hashCode运算，得到一个32位的int值h，然后用h异或h&gt;&gt;&gt;16位。在JDK1.8实现中，优化了高位运算的算法，通过hashCode()的高16位异或低16位是实现的:(h&#x3D;k.hashCode())^(h&gt;&gt;&gt;16)</p>
+<img src="/2022/04/10/collection/2.png" class title="This is an example image">
+
+<p>这样做的好处是，可以将hashCode高位和地位的值进行混合做异或运算，而且混合后，低位的信息中加入了高位的信息，这样高位的信息被变相的保留了下来。</p>
+<p>等于说计算下标时把hash的高16位也 参与进来了，参杂的元素多了，那么生成的hash值的随机性会增大，减少了哈市碰撞。</p>
+<h4 id="9-HashMap底层实现？扩容？"><a href="#9-HashMap底层实现？扩容？" class="headerlink" title="9.HashMap底层实现？扩容？"></a>9.HashMap底层实现？扩容？</h4><img src="/2022/04/10/collection/3.png" class title="This is an example image">
+
+<p><strong>JDK1.8之前</strong></p>
+<p>JDK1.8 之前 HashMap 底层是 <strong>数组和链表</strong> 结合在一起使用也就是 <strong>链表散列</strong>。</p>
+<p>HashMap 通过 key 的 hashCode 经过扰动函数处理过后得到 hash 值，然后通过 <code>(n - 1) &amp; hash</code> 判断当前元素存放的位置（这里的 n 指的是数组的长度），如果当前位置存在元素的话，就判断该元素与要存入的元素的 hash 值以及 key 是否相同，如果相同的话，直接覆盖，不相同就通过拉链法解决冲突。</p>
+<p>所谓扰动函数指的就是 HashMap 的 hash 方法。使用 hash 方法也就是扰动函数是为了防止一些实现比较差的 hashCode() 方法 换句话说使用扰动函数之后可以减少碰撞。</p>
+<p><strong>JDK1.8之后</strong></p>
+<p>当链表长度大于阈值（默认为 8）时，会首先调用 <code>treeifyBin()</code>方法。这个方法会根据 HashMap 数组来决定是否转换为红黑树。只有当数组长度大于或者等于 64 的情况下，才会执行转换红黑树操作，以减少搜索时间。</p>
+<h4 id="10-为什么HashMap扩容的时候为2的n次幂？"><a href="#10-为什么HashMap扩容的时候为2的n次幂？" class="headerlink" title="10.为什么HashMap扩容的时候为2的n次幂？"></a>10.为什么HashMap扩容的时候为2的n次幂？</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(n-1) &amp; hash 计算槽位即添加元素的位置</span><br></pre></td></tr></table></figure>
+
+<p>当HashMap的容量是2的n次幂时，与添加元素的hash值进行位运算时，能够充分的散列，使得添加的元素均匀分布在HashMap的每个位置上，减少hash碰撞。</p>
+<p>当HashMap的容量是16时，它的二进制是10000，(n-1)的二进制是01111，与hash值得计算结果如下：</p>
+<img src="/2022/04/10/collection/4.png" class title="This is an example image">
+
+<p>上面四种情况我们可以看出，不同的hash值，和(n-1)进行位运算后，能够得出不同的值，使得添加的元素能够均匀分布在集合中不同的位置上，避免hash碰撞。下面就来看一下HashMap的容量不是2的n次幂的情况，当容量为10时，二进制为01010，(n-1)的二进制是01001，向里面添加同样的元素，结果为：</p>
+<img src="/2022/04/10/collection/5.png" class title="This is an example image">
+
+<p>可以看出，有三个不同的元素经过&amp;运算得出了同样的结果，严重的hash碰撞了。</p>
+<p>HashMap的初始容量是2的n次幂，扩容也是2倍的形式进行扩容，是因为容量是2的n次幂，可以使得添加的元素均匀分布在HashMap中的数组上，减少hash碰撞，避免形成链表的结构，使得查询效率降低！</p>
+<h4 id="11-HashMap的put方法"><a href="#11-HashMap的put方法" class="headerlink" title="11.HashMap的put方法"></a>11.HashMap的put方法</h4><img src="/2022/04/10/collection/6.png" class title="This is an example image">
+
+<h4 id="12-ConcurrentHashMap的底层实现？"><a href="#12-ConcurrentHashMap的底层实现？" class="headerlink" title="12.ConcurrentHashMap的底层实现？"></a>12.ConcurrentHashMap的底层实现？</h4><p><strong>JDK1.7</strong></p>
+<ul>
+<li><p>首先将数据分为一段一段的存储，然后给每一段数据配一把锁，当一个线程占用锁访问其中一个段数据时，其他段的数据也能被其他线程访问。</p>
+</li>
+<li><p>在JDK1.7中，ConcurrentHashMap采用Segment + HashEntry的方式进行实现，</p>
+</li>
+<li><p>一个 ConcurrentHashMap 里包含一个 Segment 数组。Segment 的结构和HashMap类似，是一 种数组和链表结构，一个 Segment 包含一个 HashEntry 数组，每个 HashEntry 是一个链表结构 的元素，每个 Segment 守护着一个HashEntry数组里的元素，当对 HashEntry 数组的数据进行修 改时，必须首先获得对应的 Segment的锁</p>
+<img src="/2022/04/10/collection/7.png" class title="This is an example image">
+
+<ol>
+<li>该类包含两个静态内部类 HashEntry 和 Segment ；前者用来封装映射表的键值对，后者用来充当锁的角色；</li>
+<li>Segment 是一种可重入的锁 ReentrantLock，每个 Segment 守护一个HashEntry 数组里得元 素，当对 HashEntry 数组的数据进行修改时，必须首先获得对应的 Segment 锁。</li>
+</ol>
+</li>
+</ul>
+<p><strong>JDK1.8</strong></p>
+<ul>
+<li><p>在JDK1.8中，放弃了Segment臃肿的设计，取而代之的是采用Node + CAS + Synchronized来保 证并发安全进行实现，synchronized只锁定当前链表或红黑二叉树的首节点，这样只要hash不冲 突，就不会产生并发，效率又提升N倍。</p>
+</li>
+<li><p>结构如下</p>
+<img src="/2022/04/10/collection/8.png" class title="This is an example image"></li>
+</ul>
+<p><strong>总结</strong></p>
+<ul>
+<li>Java7 中 ConcurrentHashMap 使用的分段锁，也就是每一个 Segment 上同时只有一个线程可以操作，每一个 Segment 都是一个类似 HashMap 数组的结构，它可以扩容，它的冲突会转化为链表。但是 Segment 的个数一但初始化就不能改变。</li>
+<li>Java8 中的 ConcurrentHashMap 使用的 Synchronized 锁加 CAS 的机制。结构也由 Java7 中的 <strong>Segment 数组 + HashEntry 数组 + 链表</strong> 进化成了 <strong>Node 数组 + 链表 &#x2F; 红黑树</strong>，Node 是类似于一个 HashEntry 的结构。它的冲突再达到一定大小时会转化成红黑树，在冲突小于一定数量时又退回链表。</li>
+</ul>
 
         </div>
 
