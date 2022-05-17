@@ -343,6 +343,15 @@
 <li>模板方法：用来解决代码重复的问题。比如RestTemplate，JmsTemplate，JpaTemplate；</li>
 <li>观察者模式：定义对象键一种一对多的依赖关系，当一个对象的状态发生改变时，所有依赖于它的对象都会得到通知被动更新，如Spring中listener的实现–ApplicationListener。</li>
 </ul>
+<h4 id="14-使用了-Autowired注解自动装配的过程是怎样的？"><a href="#14-使用了-Autowired注解自动装配的过程是怎样的？" class="headerlink" title="14.使用了@Autowired注解自动装配的过程是怎样的？"></a>14.使用了@Autowired注解自动装配的过程是怎样的？</h4><ul>
+<li>使用@Autowired注解来自动装配指定的bean。在使用@Autowired注解之前需要在Spring配置文件进行配置，&lt; context:annotation-config&#x2F;&gt;。</li>
+<li>在启动spring IOC时，容器自动装载了一个AutowiredAnnotationBeanPostProcessor后置处理 器，当容器扫描到@Autowied、@Resource或@Inject时，就会在IOC容器自动查找需要的bean， 并装配给该对象的属性。在使用@Autowired时，首先在容器中查询对应类型的bean：<ul>
+<li>如果查询结果刚好为一个，就将该bean装配给@Autowired指定的数据；</li>
+<li>如果查询的结果不止一个，那么@Autowired会根据名称来查找；</li>
+<li>如果上述查找的结果为空，那么会抛出异常。解决方法是，使用required&#x3D;false。</li>
+</ul>
+</li>
+</ul>
 
         </div>
 
