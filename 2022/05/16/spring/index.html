@@ -336,6 +336,13 @@
 <li>异常通知（After-throwing）：在目标方法抛出异常后调用通知；</li>
 <li>环绕通知（Around）：通知包裹了被通知的方法，在被通知的方法调用之前和调用之后执行 自定义的行为。</li>
 </ol>
+<h4 id="13-Spring框架中用到了哪些设计模式？"><a href="#13-Spring框架中用到了哪些设计模式？" class="headerlink" title="13.Spring框架中用到了哪些设计模式？"></a>13.Spring框架中用到了哪些设计模式？</h4><ul>
+<li>工厂模式：BeanFactory就是简单工厂模式的体现，用来创建对象的实例；</li>
+<li>单例模式：Bean默认为单例模式；</li>
+<li>代理模式：Spring的AOP功能用到了JDK的动态代理和CGLIB字节码生成技术；</li>
+<li>模板方法：用来解决代码重复的问题。比如RestTemplate，JmsTemplate，JpaTemplate；</li>
+<li>观察者模式：定义对象键一种一对多的依赖关系，当一个对象的状态发生改变时，所有依赖于它的对象都会得到通知被动更新，如Spring中listener的实现–ApplicationListener。</li>
+</ul>
 
         </div>
 
