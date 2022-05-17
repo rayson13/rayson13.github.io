@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Rayson Wen">
+
+
+
+
+
+<title>spring相关 | Rayson13&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Rayson13&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Rayson13&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6;    // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function () {
+            tocbot.refresh(obj_merge(tocbot_default_config, { hasInnerContainers: true }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function () {
+        tocbot.init(obj_merge(tocbot_default_config, { collapseDepth: 1 }));
+    });
+
+    function expandToc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, { collapseDepth: expanded ? 1 : DEPTH_MAX }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">spring相关</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Rayson Wen</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">May 16, 2022&nbsp;&nbsp;16:01:51</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h4 id="1-SpringMVC的基本工作流程？"><a href="#1-SpringMVC的基本工作流程？" class="headerlink" title="1.SpringMVC的基本工作流程？"></a>1.SpringMVC的基本工作流程？</h4><ol>
+<li>用户向服务端发送一次请求，这个请求会先到前端控制器DispatcherServlet(中央控制器)</li>
+<li>DispatcherServlet接收到请求后会调用HandlerMapping处理器映射器。由此得知该请求改由那个Controller来处理</li>
+<li>DispatcherServlet调用HandlerAdapter处理器适配器，告诉处理器适配器应该要去执行那个Controller</li>
+<li>HandlerAdapter处理器适配器去执行Controller并得到ModelAndView(数据和视图),并层层返回改DispatcherServlet</li>
+<li>DispatcherServlet将ModelAndView交给ViewReslover视图解析器解析然后返回真正的视图</li>
+<li>DispatcherServlet将模型数据填充到试图中</li>
+<li>DispatcherServlet将结果响应给用户</li>
+</ol>
+<h4 id="2-spring好处？"><a href="#2-spring好处？" class="headerlink" title="2.spring好处？"></a>2.spring好处？</h4><ul>
+<li><p>方便解耦，简化开发：</p>
+<p>所有对象创建和依赖关系的维护交由spring管理</p>
+</li>
+<li><p>控制反转：</p>
+<p>spring通过控制反转实现了松散耦合，对象们给出它们的依赖而不是创建或查找依赖的对象们</p>
+</li>
+<li><p>面向切面的变成(AOP)：</p>
+<p>把应用业务逻辑和系统服务分开，可以方便的实现对程序进行权限拦截、运行监控等共呢个</p>
+</li>
+<li><p>事务管理：</p>
+<p>只需要用过配置就可以完成对事务的管理而无需手动编程</p>
+</li>
+<li><p>方便集成各种优秀框架</p>
+</li>
+<li><p>降低JavaEE API的使用难度，对难用的一些API(JDBC,JavaMail,远程调用等)提供了封装，使API应用难度大大降低</p>
+</li>
+</ul>
+<h4 id="3-BeanFactory和ApplicationContext"><a href="#3-BeanFactory和ApplicationContext" class="headerlink" title="3.BeanFactory和ApplicationContext"></a>3.BeanFactory和ApplicationContext</h4><ul>
+<li>BeanFactory和ApplicationContext是Spring的两大核心接口，都可以当做Spring的容器。其中 ApplicationContext是BeanFactory的子接口。</li>
+<li>依赖关系<ul>
+<li>BeanFactory：是Spring里面最底层的接口，包含了各种Bean的定义，读取bean配置文档， 管理bean的加载、实例化，控制bean的生命周期，维护bean之间的依赖关系。</li>
+</ul>
+</li>
+<li>ApplicationContext接口作为BeanFactory的派生，除了提供BeanFactory所具有的功能外，还提 供了更完整的框架功能：<ul>
+<li>继承MessageSource，因此支持国际化。 </li>
+<li>统一的资源文件访问方式。 </li>
+<li>提供在监听器中注册bean的事件。 </li>
+<li>同时加载多个配置文件。 </li>
+<li>载入多个（有继承关系）上下文 ，使得每一个上下文都专注于一个特定的层次，比如应用的 web层。</li>
+</ul>
+</li>
+<li>加载方式<ul>
+<li>BeanFactroy采用的是延迟加载形式来注入Bean的，即只有在使用到某个Bean时(调用 getBean())，才对该Bean进行加载实例化。这样，我们就不能发现一些存在的Spring的配置 问题。如果Bean的某一个属性没有注入，BeanFacotry加载后，直至第一次使用调用 getBean方法才会抛出异常。</li>
+<li>ApplicationContext，它是在容器启动时，一次性创建了所有的Bean。这样，在容器启动 时，我们就可以发现Spring中存在的配置错误，这样有利于检查所依赖属性是否注入。 ApplicationContext启动后预载入所有的单实例Bean，通过预载入单实例bean ,确保当你需 要的时候，你就不用等待，因为它们已经创建好了</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-依赖注入"><a href="#4-依赖注入" class="headerlink" title="4.依赖注入"></a>4.依赖注入</h4><ul>
+<li>依赖注入，是 IOC 的一个方面，是个通常的概念，它有多种解释。这概念是说你不 用创建对象，而只需要描述它如何被创建。你不在代码里直接组装你的组件和服务， 但是要在配置文件里描述哪些组件需要哪些服务，之后一个容器（IOC 容器）负责把 他们组装起来。</li>
+<li>注入方式：<ul>
+<li>构造器依赖注入：构造器依赖注入通过容器触发一个类的构造器来实现的，该类有一系列参数，每个参数代表一个对其他类的依赖。 </li>
+<li>Setter方法注入：Setter方法注入是容器通过调用无参构造器或无参 static 工厂方法实例化 bean之后，调用该 bean 的 setter 方法，即实现了基于setter的依赖注 入。</li>
+</ul>
+</li>
+</ul>
+<h4 id="5-Spring-beans"><a href="#5-Spring-beans" class="headerlink" title="5.Spring beans"></a>5.Spring beans</h4><ul>
+<li>Spring beans 是那些形成Spring应用的主干的 java 对象。它们被SpringIOC容器初始化，装配和管理。这些beans通过容器中配置的元数据创建。比如，以XML文件中的形式定义。</li>
+<li>一个Spring Bean 的定义包含容器必知的所有配置元数据，包括如何创建一个bean，它的生命周 期详情及它的依赖。</li>
+<li>有三种重要的方法给Spring 容器提供配置元数据。<ul>
+<li>XML配置文件。 </li>
+<li>基于注解的配置。 </li>
+<li>基于java的配置。</li>
+</ul>
+</li>
+</ul>
+<h4 id="6-Spring支持的集中bean的作用域"><a href="#6-Spring支持的集中bean的作用域" class="headerlink" title="6.Spring支持的集中bean的作用域"></a>6.Spring支持的集中bean的作用域</h4><ul>
+<li><p>singleton : bean在每个Spring ioc 容器中只有一个实例。</p>
+</li>
+<li><p>prototype：一个bean的定义可以有多个实例。</p>
+</li>
+<li><p>request：每次http请求都会创建一个bean，该作用域仅在基于web的Spring ApplicationContext情形下有效。</p>
+</li>
+<li><p>session：在一个HTTP Session中，一个bean定义对应一个实例。该作用域仅在基于web的 Spring ApplicationContext情形下有效。</p>
+</li>
+<li><p>global-session：在一个全局的HTTP Session中，一个bean定义对应一个实例。该作用域仅在基 于web的Spring ApplicationContext情形下有效。</p>
+<p>注意： 缺省的Spring bean 的作用域是Singleton。使用 prototype 作用域需要慎重的思考，因为频繁 创建和销毁 bean 会带来很大的性能开销。</p>
+</li>
+</ul>
+<h4 id="7-Component-Controller-Repository-Service"><a href="#7-Component-Controller-Repository-Service" class="headerlink" title="7.@Component, @Controller, @Repository, @Service"></a>7.@Component, @Controller, @Repository, @Service</h4><ul>
+<li>@Component：这将 java 类标记为 bean。它是任何 Spring 管理组件的通用构造型。spring 的 组件扫描机制现在可以将其拾取并将其拉入应用程序环境中。</li>
+<li>@Controller：这将一个类标记为 Spring Web MVC 控制器。标有它的 Bean 会自动导入到 IOC 容器中。</li>
+<li>@Service：此注解是组件注解的特化。它不会对 @Component 注解提供任何其他行为。您可以在服务层类中使用 @Service 而不是 @Component，因为它以更好的方式指定了意图。</li>
+<li>@Repository：这个注解是具有类似用途和功能的 @Component 注解的特化。它为 DAO 提供了额外的好处。它将 DAO 导入 IOC 容器，并使未经检查的异常有资格转换为 Spring DataAccessException。</li>
+</ul>
+<h4 id="8-Autowired和-Resource"><a href="#8-Autowired和-Resource" class="headerlink" title="8.@Autowired和@Resource"></a>8.@Autowired和@Resource</h4><ul>
+<li>@Autowired和@Resource可用于：构造函数、成员变量、Setter方法</li>
+<li>@Autowired和@Resource之间的区别在于 <ul>
+<li>@Autowired默认是按照类型装配注入的，默认情况下它要求依赖对象必须存在（可以设置它 required属性为false）。 </li>
+<li>@Resource默认是按照名称来装配注入的，只有当找不到与名称匹配的bean才会按照类型来 装配注入。</li>
+</ul>
+</li>
+</ul>
+<h4 id="9-Spring支持的事务管理类型"><a href="#9-Spring支持的事务管理类型" class="headerlink" title="9.Spring支持的事务管理类型"></a>9.Spring支持的事务管理类型</h4><ul>
+<li>编程式事务管理：你通过编程的方式管理事务，给你带来极大的灵活性，但是很难维护。</li>
+<li>声明式事务管理：可以将业务代码和事务管理分离，只需用注解和XML配置来管理事务</li>
+</ul>
+<h4 id="10-什么是AOP？"><a href="#10-什么是AOP？" class="headerlink" title="10.什么是AOP？"></a>10.什么是AOP？</h4><ul>
+<li>OOP(Object-Oriented Programming)面向对象编程，允许开发者定义纵向的关系，但并适用于定义横向的关系，导致了大量代码的重复，而不利于各个模块的重用。</li>
+<li>AOP(Aspect-Oriented Programming)，一般称为面向切面编程，作为面向对象的一种补充，用于将那些与业务无关，但却对多个对象产生影响的公共行为和逻辑，抽取并封装为一个可重用的模块，这个模块被命名为“切面”（Aspect），减少系统中的重复代码，降低了模块间的耦合度，同时提高了系统的可维护性。可用于权限认证、日志、事务处理等。</li>
+</ul>
+<h4 id="11-Spring-AOP几个名词"><a href="#11-Spring-AOP几个名词" class="headerlink" title="11.Spring AOP几个名词"></a>11.Spring AOP几个名词</h4><ul>
+<li><strong>切面（Aspect）</strong>：切面是通知和切点的结合。通知和切点共同定义了切面的全部内容。 在 Spring AOP中，切面可以使用通用类（基于模式的风格） 或者在普通类中以 @AspectJ 注解来实 现。</li>
+<li><strong>连接点（Join point）</strong>：指方法，在Spring AOP中，一个连接点 总是 代表一个方法的执行。 应用可能有数以千计的时机应用通知。这些时机被称为连接点。连接点是在应用执行过程中能够插 入切面的一个点。这个点可以是调用方法时、抛出异常时、甚至修改一个字段时。切面代码可以利用这些点插入到应用的正常流程之中，并添加新的行为。</li>
+<li><strong>切入点（Pointcut）</strong>：切点的定义会匹配通知所要织入的一个或多个连接点。我们通常使用 明确的类和方法名称，或是利用正则表达式定义所匹配的类和方法名称来指定这些切点。（对哪些 Joinpoint 进行拦截的定义。）</li>
+<li><strong>通知（Advice）</strong>：在AOP术语中，切面的工作被称为通知。知是指拦截到 Joinpoint 之后所要做的事情</li>
+<li><strong>目标对象（Target Object）</strong>：被一个或者多个切面（aspect）所通知（advise）的对象。 它通常是一个代理对象。也有人把它叫做 被通知（adviced） 对象。 既然Spring AOP是通过运行 时代理实现的，这个对象永远是一个 被代理（proxied） 对象。</li>
+<li><strong>织入（Weaving）</strong>：织入是把切面应用到目标对象并创建新的代理对象的过程。在目标对象 的生命周期里有多少个点可以进行织入：<ul>
+<li>编译期：切面在目标类编译时被织入。AspectJ的织入编译器是以这种方式织入切面的。</li>
+<li>类加载期：切面在目标类加载到JVM时被织入。需要特殊的类加载器，它可以在目标类被引 入应用之前增强该目标类的字节码。AspectJ5的加载时织入就支持以这种方式织入切面。</li>
+<li>运行期：切面在应用运行的某个时刻被织入。一般情况下，在织入切面时，AOP容器会为目 标对象动态地创建一个代理对象。SpringAOP就是以这种方式织入切面。</li>
+</ul>
+</li>
+<li>**Introduction(引介)**：引介是一种特殊的通知在不修改类代码的前提下, Introduction 可以在运行期为类动态地添加一些方 法或 Field。、</li>
+</ul>
+<h4 id="12-Spring通知类型"><a href="#12-Spring通知类型" class="headerlink" title="12.Spring通知类型"></a>12.Spring通知类型</h4><ol>
+<li>前置通知（Before）：在目标方法被调用之前调用通知功能；</li>
+<li>后置通知（After）：在目标方法完成之后调用通知，此时不会关心方法的输出是什么；</li>
+<li>返回通知（After-returning ）：在目标方法成功执行之后调用通知；</li>
+<li>异常通知（After-throwing）：在目标方法抛出异常后调用通知；</li>
+<li>环绕通知（Around）：通知包裹了被通知的方法，在被通知的方法调用之前和调用之后执行 自定义的行为。</li>
+</ol>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Rayson Wen</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://rayson13.github.io/2022/05/16/spring/">https://rayson13.github.io/2022/05/16/spring/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2022 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/spring/"># spring</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2022/04/13/database/">数据库(MySQL)</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Rayson Wen | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>
