@@ -323,7 +323,7 @@
 <li>cas 是一种基于锁的操作，而且是乐观锁。</li>
 <li>CAS 操作包含三个操作数 —— 内存位置（V）、预期原值（A）和新值(B)。如果内存地址里面的 值和 A 的值是一样的，那么就将内存里面的值更新成 B。CAS是通过无限循环来获取数据的，若果 在第一轮循环中，a 线程获取地址里面的值被b 线程修改了，那么 a 线程需要自旋，到下次循环才 有可能机会执行。</li>
 </ul>
-<p>​    CAS产生的问题：</p>
+<p>​    <strong>CAS产生的问题：</strong></p>
 <ol>
 <li>ABA问题：比如说一个线程 one 从内存位置 V 中取出 A，这时候另一个线程 two 也从内存中取出 A，并且 two 进 行了一些操作变成了 B，然后 two 又将 V 位置的数据变成 A，这时候线程 one 进行 CAS 操作发现内存 中仍然是 A，然后 one 操作成功。“值相同&#x3D;没有被改变过”无法成立，即使第二个线程确确实实改过这个值，只不过又改回来了。“值曾经发生过改动”这个事件就无法被观测到。对于需要<strong>跟踪值的改变</strong>过程（比如记录值改变的次数）的场景来说ABA问题就是致命的。  从 Java1.5 开始 JDK 的 atomic包里提供了一个类 AtomicStampedReference 来解决 ABA 问题。</li>
 <li>循环时间长开销大：对于资源竞争严重（线程冲突严重）的情况，CAS 自旋的概率会比较大，从而浪费更多的 CPU 资源， 效率低于 synchronized。</li>
@@ -533,6 +533,79 @@
 <li>轻量级锁是由偏向所升级来的，偏向锁运行在一个线程进入同步块的情况下，当第二个线程加入锁争用的时候，轻量级锁就会升级为重量级锁；</li>
 <li>重量级锁是synchronized ，是 Java 虚拟机中最为基础的锁实现。在这种状态下，Java 虚拟机会阻塞加锁失败的线程，并且在目标锁被释放的时候，唤醒这些线程。</li>
 </ul>
+<h4 id="26-线程池"><a href="#26-线程池" class="headerlink" title="26.线程池"></a>26.线程池</h4><ul>
+<li>降低的资源消耗。通过重复利用已创建的线程降低线程创建和销毁造成的消耗。</li>
+<li>提高相应速度。可有效的控制最大并发线程数，提高系统资源的使用率，同时避免过多资源竞争，避免堵塞。当任务到达时，任务可以不需要的等到线程创建就能立即执行。</li>
+<li>提高线程的可管理性。线程是稀缺资源，如果无限制的创建，不仅会消耗系统资源，还会降低系统的稳定性，使用线程池可以进行统一的分配、调优和监控。</li>
+</ul>
+<h4 id="28-ThreadPoolExecutor"><a href="#28-ThreadPoolExecutor" class="headerlink" title="28.ThreadPoolExecutor"></a>28.ThreadPoolExecutor</h4><p><strong>ThreadPoolExecutor</strong>就是线程池，是JAVA的一个类，通过Executors工厂类的方法，通过传入不同的参数，就可以构造出适用于不同应用场景下的ThreadPoolExecutor（线程池）。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">构造参数介绍</span><br><span class="line">corePoolSize 核心线程数量</span><br><span class="line">maximumPoolSize 最大线程数量</span><br><span class="line">keepAliveTime 线程保持时间，N个时间单位</span><br><span class="line">unit 时间单位（比如秒，分）</span><br><span class="line">workQueue 阻塞队列</span><br><span class="line">threadFactory 线程工厂</span><br><span class="line">handler 线程池拒绝策略</span><br></pre></td></tr></table></figure>
+
+<h4 id="29-Executors"><a href="#29-Executors" class="headerlink" title="29.Executors"></a>29.Executors</h4><p><strong>Executors</strong>框架实现的就是线程池的功能。</p>
+<p>Executors工厂类中提供的newCachedThreadPool、newFixedThreadPool 、 newScheduledThreadPool 、newSingleThreadExecutor 等方法其实也只是 ThreadPoolExecutor的构造函数参数不同而已。通过传入不同的参数，就可以构造出适用于不同 应用场景下的线程池</p>
+<h4 id="30-线程池四种创建方式"><a href="#30-线程池四种创建方式" class="headerlink" title="30.线程池四种创建方式"></a>30.线程池四种创建方式</h4><p>Java通过Executors（jdk1.5并发包）提供四种线程池</p>
+<ol>
+<li>newCachedThreadPool创建一个可缓存线程池，如果线程池长度超过处理需要，可灵活回收空闲线程，若无可回收，则新建线程。</li>
+<li>newFixedThreadPool 创建一个定长线程池，可控制线程最大并发数，超出的线程会在队列中等待。</li>
+<li>newScheduledThreadPool 创建一个定长线程池，支持定时及周期性任务执行。</li>
+<li>newSingleThreadExecutor 创建一个单线程化的线程池，它只会用唯一的工作线程来执行任 务，保证所有任务按照指定顺序(FIFO, LIFO, 优先级)执行。</li>
+</ol>
+<h4 id="31-四种构建线程池的区别及特点？"><a href="#31-四种构建线程池的区别及特点？" class="headerlink" title="31.四种构建线程池的区别及特点？"></a>31.四种构建线程池的区别及特点？</h4><ol>
+<li><strong>newCachedThreadPool</strong><ul>
+<li><strong>特点</strong>：newCachedThreadPool创建一个可缓存线程池，如果当前线程池的长度超过了处理的需要 时，它可以灵活的回收空闲的线程，当需要增加时，它可以灵活的添加新的线程，而不会对池的长度作任何限制</li>
+<li><strong>缺点</strong>：他虽然可以无线的新建线程，但是容易造成堆外内存溢出，因为它的最大值是在初始化的时 候设置为 Integer.MAX_VALUE，一般来说机器都没那么大内存给它不断使用。当然知道可能出问 题的点，就可以去重写一个方法限制一下这个最大值</li>
+<li><strong>总结</strong>：线程池为无限大，当执行第二个任务时第一个任务已经完成，会复用执行第一个任务的线 程，而不用每次新建线程。</li>
+</ul>
+</li>
+<li><strong>newFixedThreadPool</strong><ul>
+<li><strong>特点</strong>：创建一个定长线程池，可控制线程最大并发数，超出的线程会在队列中等待。定长线程池的 大小最好根据系统资源进行设置。</li>
+<li><strong>缺点</strong>：线程数量是固定的，但是阻塞队列是无界队列。如果有很多请求积压，阻塞队列越来越长， 容易导致OOM（超出内存空间）</li>
+<li><strong>总结</strong>：请求的挤压一定要和分配的线程池大小匹配，定线程池的大小最好根据系统资源进行设置。 如Runtime.getRuntime().availableProcessors()</li>
+</ul>
+</li>
+<li><strong>newScheduledThreadPool</strong><ul>
+<li><strong>特点</strong>：创建一个固定长度的线程池，而且支持定时的以及周期性的任务执行，类似于 Timer（Timer是Java的一个定时器类）。</li>
+<li><strong>缺点</strong>：由于所有任务都是由同一个线程来调度，因此所有任务都是串行执行的，同一时间只能有一 个任务在执行，前一个任务的延迟或异常都将会影响到之后的任务（比如：一个任务出错，以后的 任务都无法继续）。</li>
+</ul>
+</li>
+<li><strong>newSingleThreadExecutor</strong><ul>
+<li><strong>特点</strong>：创建一个单线程化的线程池，它只会用唯一的工作线程来执行任务，如果这个唯一的线程因 为异常结束，那么会有一个新的线程来替代它，他必须保证前一项任务执行完毕才能执行后一项。 保证所有任务按照指定顺序(FIFO, LIFO, 优先级)执行。</li>
+<li><strong>缺点</strong>：缺点的话，很明显，他是单线程的，高并发业务下有点无力</li>
+<li><strong>总结</strong>：保证所有任务按照指定顺序执行的，如果这个唯一的线程因为异常结束，那么会有一个新的 线程来替代它</li>
+</ul>
+</li>
+</ol>
+<h4 id="32-线程池状态"><a href="#32-线程池状态" class="headerlink" title="32.线程池状态"></a>32.线程池状态</h4><ul>
+<li>RUNNING：这是最正常的状态，接受新的任务，处理等待队列中的任务。</li>
+<li>SHUTDOWN：不接受新的任务提交，但是会继续处理等待队列中的任务。</li>
+<li>STOP：不接受新的任务提交，不再处理等待队列中的任务，中断正在执行任务的线程。</li>
+<li>TIDYING：所有的任务都销毁了，workCount 为 0，线程池的状态在转换为 TIDYING 状态时，会 执行钩子方法 terminated()。</li>
+<li>TERMINATED：terminated()方法结束后，线程池的状态就会变成这个。</li>
+</ul>
+<h4 id="33-线程池中submin-和execute-方法有什么区别？"><a href="#33-线程池中submin-和execute-方法有什么区别？" class="headerlink" title="33.线程池中submin()和execute()方法有什么区别？"></a>33.线程池中submin()和execute()方法有什么区别？</h4><ul>
+<li>相同点：<ul>
+<li>都可以开启线程执行池中的任务</li>
+</ul>
+</li>
+<li>不同点：<ul>
+<li>接收参数：execute()只能执行 Runnable 类型的任务。submit()可以执行 Runnable 和 Callable 类型的任务。</li>
+<li>返回值：submit()方法可以返回持有计算结果的 Future 对象，而execute()没有</li>
+<li>异常处理：submit()方便Exception处理</li>
+</ul>
+</li>
+</ul>
+<h4 id="34-ThreadPoolExecutor饱和策略"><a href="#34-ThreadPoolExecutor饱和策略" class="headerlink" title="34.ThreadPoolExecutor饱和策略"></a>34.ThreadPoolExecutor饱和策略</h4><ul>
+<li>ThreadPoolExecutor.AbortPolicy：抛出 RejectedExecutionException来拒绝新任务的处理。</li>
+<li>ThreadPoolExecutor.CallerRunsPolicy：调用执行自己的线程运行任务。而是将任务的请求返回到请求者那里，由提交任务的线程去执行自己提交的任务。会降低对于新任务提交速度，影响程序的整体性能。另外，这个策略喜欢增加队列容量。 如果应用程序可以承受此延迟并且不能任务丢弃任何一个任务请求的话，可以选择这个策略。</li>
+<li>ThreadPoolExecutor.DiscardPolicy：不处理新任务，直接丢弃掉。</li>
+<li>ThreadPoolExecutor.DiscardOldestPolicy： 此策略将丢弃最早的未处理的任务请求。抛弃掉等待队列中等待最久的任务，将其移除队列，然后执行当前任务。</li>
+</ul>
+<h4 id="35-线程池执行原理"><a href="#35-线程池执行原理" class="headerlink" title="35.线程池执行原理"></a>35.线程池执行原理</h4><p>提交一个任务到线程池中，线程池的处理流程如下：</p>
+<ol>
+<li>判断线程池里的核心线程是否都在执行任务，如果不是(核心线程空闲或者还有核心线程没被创建)则创建一个新的工作线程来执行任务。如果核心线程都在执行任务，则进入下个流程。</li>
+<li>线程池判断工作队列是否已满，如果工作队列没有满，则将新提交的任务存储在这个工作队列里。如果工作队列满了，则进入下个流程。</li>
+<li>判断线程池里的线程是否都处于工作状态，如果没有，则创建一个新的工作线程来执行任务。如果已经满了，则交给饱和策略来处理这个任务。</li>
+</ol>
 
         </div>
 
