@@ -373,6 +373,25 @@
 <p><strong>非聚簇索引：</strong>将数据与索引分开存储，索引结构的叶子节点指向了数据对应的位置</p>
 <h4 id="17-mysql默认隔离级别是可重复读？"><a href="#17-mysql默认隔离级别是可重复读？" class="headerlink" title="17.mysql默认隔离级别是可重复读？"></a>17.mysql默认隔离级别是可重复读？</h4><p>主从复制 -&gt; bin log -&gt; bin log三种格式：1.statement：记录修改的sql 2.raw：记录每行实际数据的变更 3.mixed: 1,2的混合</p>
 <p>mysql5.1之前bin log的记录方式只支持statement方式，而这种格式在读已提交的隔离级别下主从复制是有bug的，所以将可重复读作为默认隔离级别。</p>
+<h4 id="18-索引失效"><a href="#18-索引失效" class="headerlink" title="18.索引失效"></a>18.索引失效</h4><ol>
+<li><p>对于使用 like 查询， 查询如果是 ‘%aaa’ 不会使用索引，而 ‘aaa%’ 会使用到索引。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select * from user where name like &quot;%meiyu&quot; 无效</span><br><span class="line">select * from user where name like &quot;meiyu%&quot; 有效</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>对于索引字段如果发生类型自动转化也会失效</p>
+</li>
+</ol>
+   <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select * from user where card_id =&#x27;421127199604124781&#x27;  --索引有效</span><br><span class="line">select * from user where card_id =421127199604124781 --索引失效</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li><p>如果条件中有 or， 有条件没有使用索引，即使其中有条件带索引也不会使用。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">--card_id 有索引 address没有索引</span><br><span class="line">explain</span><br><span class="line">select * from user where card_id =&#x27;111&#x27;  or address = &#x27;广州&#x27; 索引失效</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>对列进行计算或者是使用函数，则该列的索引会失效</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from user where age+10 = 18</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>联合索引遵循最左匹配原则</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">KEY `name_and_address` (`name`,`address`) USING BTREE</span><br><span class="line"></span><br><span class="line">--有效</span><br><span class="line">explain</span><br><span class="line">select * from user where name = &#x27;huangyaoshi&#x27; and address = &#x27;桃花岛&#x27;</span><br><span class="line">--有效</span><br><span class="line">explain</span><br><span class="line">select * from user where name = &#x27;huangyaoshi&#x27; </span><br><span class="line">--无效</span><br><span class="line">explain</span><br><span class="line">select * from user where address = &#x27;桃花岛&#x27;</span><br></pre></td></tr></table></figure></li>
+</ol>
 
         </div>
 
