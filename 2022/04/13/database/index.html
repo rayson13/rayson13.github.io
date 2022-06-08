@@ -392,6 +392,53 @@
 <li><p>联合索引遵循最左匹配原则</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">KEY `name_and_address` (`name`,`address`) USING BTREE</span><br><span class="line"></span><br><span class="line">--有效</span><br><span class="line">explain</span><br><span class="line">select * from user where name = &#x27;huangyaoshi&#x27; and address = &#x27;桃花岛&#x27;</span><br><span class="line">--有效</span><br><span class="line">explain</span><br><span class="line">select * from user where name = &#x27;huangyaoshi&#x27; </span><br><span class="line">--无效</span><br><span class="line">explain</span><br><span class="line">select * from user where address = &#x27;桃花岛&#x27;</span><br></pre></td></tr></table></figure></li>
 </ol>
+<h4 id="19-sql语句优化"><a href="#19-sql语句优化" class="headerlink" title="19.sql语句优化"></a>19.sql语句优化</h4><ol>
+<li><p>对查询进行优化尽量避免全表扫描，首先应考虑在where及order by涉及的列上简历索引</p>
+</li>
+<li><p>避免where子句中使用！&#x3D;或&lt;&gt;操作符，否则引擎将放弃使用索引而进行全表扫描</p>
+</li>
+<li><p>避免在 where 子句中对字段进行 null 值 判断，否则将导致引擎放弃使用索引而进行全表扫描</p>
+<p>select id from t where num is null</p>
+<p>可以在num上设置默认值0，确保表中num列没有null值，然后这样查询：</p>
+<p>select id from t where num&#x3D;0</p>
+</li>
+<li><p>避免在 where 子句中使用 or 来连接条件，否则将导致引擎放弃使用索引而进行全表扫描</p>
+</li>
+<li><p>where 子句中使用参数，也会导致全表扫描。</p>
+</li>
+<li><p>where 子句中对字段进行表达式操作</p>
+<p>select id from t where num&#x2F;2&#x3D;100</p>
+<p>应改为:</p>
+<p>select id from t where num&#x3D;100*2</p>
+</li>
+<li><p>不要使用 select * from t ，用具体的字段列表代替“*”，不要返回用不到的任何字段。</p>
+</li>
+</ol>
+<p><strong>explain</strong>可用来分析SQL的执行计划</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">type列，连接类型。一个好的SQL语句至少要达到range级别。杜绝出现all级别。</span><br><span class="line">key列，使用到的索引名。如果没有选择索引，值是NULL。可以采取强制索引方式。</span><br><span class="line">key_len列，索引长度。</span><br><span class="line">rows列，扫描行数。该值是个预估值。</span><br><span class="line">extra列，详细说明。注意，常见的不太友好的值，如下：Using filesort，Using temporary。</span><br></pre></td></tr></table></figure>
+
+<p>SQL语句中IN包含的值不应过多</p>
+<ul>
+<li>in关键字其实是等值查询的合并，将多个等值查询合并成一个，减少查询和返回次数；</li>
+<li>between查询是典型的范围查询，在命中索引的情况下，会直接在查询首个符合条件的数据，然后根据指针依次获取下一个叶子节点数据进行比较直到查询到不符合条件的数据为止。</li>
+</ul>
+<p><strong>SELECT</strong>语句务必指明字段名称</p>
+<p>限制条件中其他字段没有索引，尽量少用or</p>
+<ul>
+<li>or两边的字段中，如果有一个不是索引字段，而其他条件也不是索引字段，会造成该查询不走索引的情况。很多时候使用union all或者是union（必要的时候）的方式来代替“or”会得到更好的效果。</li>
+</ul>
+<p>尽量用union all代替union</p>
+<ul>
+<li>union和union all的差异主要是前者需要将结果集合并后再进行唯一性过滤操作，这就会涉及到排序，增加大量的CPU运算，加大资源消耗及延迟。当然，union all的前提条件是两个结果集没有重复数据</li>
+</ul>
+<p>in和exists</p>
+<ul>
+<li>n和exists主要是造成了驱动顺序的改变（这是性能变化的关键），如果是exists，那么以外层表为驱动表，先被访问，如果是IN，那么先执行子查询。所以IN适合于外表大而内表小的情况；EXISTS适合于外表小而内表大的情况。</li>
+</ul>
+<p>not in和not exists</p>
+<ul>
+<li>推荐使用not exists，不仅仅是效率问题，not in可能存在逻辑问题。</li>
+</ul>
 
         </div>
 
