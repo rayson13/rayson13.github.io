@@ -363,6 +363,96 @@
 </ul>
 </li>
 </ul>
+<h4 id="6-排序算法"><a href="#6-排序算法" class="headerlink" title="6.排序算法"></a>6.排序算法</h4><ol>
+<li><p>冒泡排序(BubbleSort)</p>
+<ul>
+<li><p><strong>基本思想：</strong>两个数比较大小，较大的数下沉，较小的数冒起来</p>
+</li>
+<li><p><strong>过程：</strong></p>
+<ul>
+<li><p>比较相邻的两个数据，如果第二个数小，就交换位置。</p>
+</li>
+<li><p>从后向前两两比较，一直到比较最前两个数据。最终最小数被交换到起始的位置，这样第一个最小数的位置就排好了。</p>
+</li>
+<li><p>继续重复上述过程，依次将第2.3…n-1个最小数排好位置。</p>
+<img src="/2022/05/31/zonghe/1.png" class title="This is an example image"></li>
+</ul>
+</li>
+<li><p><strong>平均时间复杂度：</strong>O(n2)</p>
+</li>
+<li><p>优化：</p>
+<ul>
+<li><strong>针对问题：</strong><br>数据的顺序排好之后，冒泡算法仍然会继续进行下一轮的比较，直到arr.length-1次，后面的比较没有意义的。</li>
+<li><strong>方案：</strong><br>设置标志位flag，如果发生了交换flag设置为true；如果没有交换就设置为false。<br>这样当一轮比较结束后如果flag仍为false，即：这一轮没有发生交换，说明数据的顺序已经排好，没有必要继续进行下去。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">public static void BubbleSort1(int [] arr)&#123;</span><br><span class="line"></span><br><span class="line">   int temp;//临时变量</span><br><span class="line">   boolean flag;//是否交换的标志</span><br><span class="line">   for(int i=0; i&lt;arr.length-1; i++)&#123;   //表示趟数，一共 arr.length-1 次</span><br><span class="line"></span><br><span class="line">       // 每次遍历标志位都要先置为false，才能判断后面的元素是否发生了交换</span><br><span class="line">       flag = false;</span><br><span class="line">       </span><br><span class="line">       for(int j=arr.length-1; j&gt;i; j--)&#123; //选出该趟排序的最大值往后移动</span><br><span class="line"></span><br><span class="line">           if(arr[j] &lt; arr[j-1])&#123;</span><br><span class="line">               temp = arr[j];</span><br><span class="line">               arr[j] = arr[j-1];</span><br><span class="line">               arr[j-1] = temp;</span><br><span class="line">               flag = true;    //只要有发生了交换，flag就置为true</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       // 判断标志位是否为false，如果为false，说明后面的元素已经有序，就直接return</span><br><span class="line">       if(!flag) break;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>选择排序(SelctionSort)</p>
+<ul>
+<li><p><strong>基本思想：</strong><br>在长度为N的无序数组中，第一次遍历n-1个数，找到最小的数值与第一个元素交换；<br>第二次遍历n-2个数，找到最小的数值与第二个元素交换；<br>。。。<br>第n-1次遍历，找到最小的数值与第n-1个元素交换，排序完成。</p>
+</li>
+<li><p>过程：</p>
+<img src="/2022/05/31/zonghe/2.png" class title="This is an example image">
+</li>
+<li><p><strong>平均时间复杂度：</strong>O(n2)</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public static void select_sort(int array[],int lenth)&#123;</span><br><span class="line"></span><br><span class="line">   for(int i=0;i&lt;lenth-1;i++)&#123;</span><br><span class="line"></span><br><span class="line">       int minIndex = i;</span><br><span class="line">       for(int j=i+1;j&lt;lenth;j++)&#123;</span><br><span class="line">          if(array[j]&lt;array[minIndex])&#123;</span><br><span class="line">              minIndex = j;</span><br><span class="line">          &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       if(minIndex != i)&#123;</span><br><span class="line">           int temp = array[i];</span><br><span class="line">           array[i] = array[minIndex];</span><br><span class="line">           array[minIndex] = temp;</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>插入排序(Insertion Sort)</p>
+<ul>
+<li><p><strong>基本思想：</strong><br>在要排序的一组数中，假定前n-1个数已经排好序，现在将第n个数插到前面的有序数列中，使得这n个数也是排好顺序的。如此反复循环，直到全部排好顺序。</p>
+</li>
+<li><p>过程：</p>
+<img src="/2022/05/31/zonghe/3.png" class title="This is an example image">
+</li>
+<li><p><strong>平均时间复杂度：</strong>O(n2)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">public static void  insert_sort(int array[],int lenth)&#123;</span><br><span class="line"></span><br><span class="line">   int temp;</span><br><span class="line"></span><br><span class="line">   for(int i=0;i&lt;lenth-1;i++)&#123;</span><br><span class="line">       for(int j=i+1;j&gt;0;j--)&#123;</span><br><span class="line">           if(array[j] &lt; array[j-1])&#123;</span><br><span class="line">               temp = array[j-1];</span><br><span class="line">               array[j-1] = array[j];</span><br><span class="line">               array[j] = temp;</span><br><span class="line">           &#125;else&#123;         //不需要交换</span><br><span class="line">               break;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>希尔排序(Shell Sort)</p>
+<ul>
+<li><p><strong>前言：</strong><br>数据序列1： 13-17-20-42-28 利用插入排序，13-17-20-28-42. Number of swap:1;<br>数据序列2： 13-17-20-42-14 利用插入排序，13-14-17-20-42. Number of swap:3;<br>如果数据序列基本有序，使用插入排序会更加高效。</p>
+</li>
+<li><p><strong>基本思想：</strong><br>在要排序的一组数中，根据某一增量分为若干子序列，并对子序列分别进行插入排序。<br>然后逐渐将增量减小,并重复上述过程。直至增量为1,此时数据序列基本有序,最后进行插入排序。</p>
+</li>
+<li><p>过程:</p>
+<img src="/2022/05/31/zonghe/4.png" class title="This is an example image">
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">public static void shell_sort(int array[],int lenth)&#123;</span><br><span class="line"></span><br><span class="line">   int temp = 0;</span><br><span class="line">   int incre = lenth;</span><br><span class="line"></span><br><span class="line">   while(true)&#123;</span><br><span class="line">       incre = incre/2;</span><br><span class="line"></span><br><span class="line">       for(int k = 0;k&lt;incre;k++)&#123;    //根据增量分为若干子序列</span><br><span class="line"></span><br><span class="line">           for(int i=k+incre;i&lt;lenth;i+=incre)&#123;</span><br><span class="line"></span><br><span class="line">               for(int j=i;j&gt;k;j-=incre)&#123;</span><br><span class="line">                   if(array[j]&lt;array[j-incre])&#123;</span><br><span class="line">                       temp = array[j-incre];</span><br><span class="line">                       array[j-incre] = array[j];</span><br><span class="line">                       array[j] = temp;</span><br><span class="line">                   &#125;else&#123;</span><br><span class="line">                       break;</span><br><span class="line">                   &#125;</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       if(incre == 1)&#123;</span><br><span class="line">           break;</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>快速排序(Quicksort)</p>
+<ul>
+<li><p><strong>基本思想：（分治）</strong></p>
+<ul>
+<li>先从数列中取出一个数作为key值；</li>
+<li>将比这个数小的数全部放在它的左边，大于或等于它的数全部放在它的右边；</li>
+<li>对左右两个小数列重复第二步，直至各区间只有1个数。</li>
+</ul>
+</li>
+<li><p><strong>平均时间复杂度：</strong>O(N*logN)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">public static void quickSort(int a[],int l,int r)&#123;</span><br><span class="line">     if(l&gt;=r)</span><br><span class="line">       return;</span><br><span class="line"></span><br><span class="line">     int i = l; int j = r; int key = a[l];//选择第一个数为key</span><br><span class="line"></span><br><span class="line">     while(i&lt;j)&#123;</span><br><span class="line"></span><br><span class="line">         while(i&lt;j &amp;&amp; a[j]&gt;=key)//从右向左找第一个小于key的值</span><br><span class="line">             j--;</span><br><span class="line">         if(i&lt;j)&#123;</span><br><span class="line">             a[i] = a[j];</span><br><span class="line">             i++;</span><br><span class="line">         &#125;</span><br><span class="line"></span><br><span class="line">         while(i&lt;j &amp;&amp; a[i]&lt;key)//从左向右找第一个大于key的值</span><br><span class="line">             i++;</span><br><span class="line"></span><br><span class="line">         if(i&lt;j)&#123;</span><br><span class="line">             a[j] = a[i];</span><br><span class="line">             j--;</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;</span><br><span class="line">     //i == j</span><br><span class="line">     a[i] = key;</span><br><span class="line">     quickSort(a, l, i-1);//递归调用</span><br><span class="line">     quickSort(a, i+1, r);//递归调用</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>归并排序(Merge Sort)</p>
+<ul>
+<li><p><strong>基本思想</strong>：</p>
+<p>其的基本思路就是将数组分成2组A，B，如果这2组组内的数据都是有序的，那么就可以很方便的将这2组数据进行排序。如何让这2组组内数据有序了？<br>可以将A，B组各自再分成2组。依次类推，当分出来的小组只有1个数据时，可以认为这个小组组内已经达到了有序，然后再合并相邻的2个小组就可以了。这样通过<strong>先递归的分解数列</strong>，<strong>再合并数列</strong>就完成了归并排序。</p>
+</li>
+<li><p>过程：</p>
+<img src="/2022/05/31/zonghe/5.png" class title="This is an example image">
+</li>
+<li><p><strong>平均时间复杂度：</strong>O(NlogN)<br>归并排序的效率是比较高的，设数列长为N，将数列分开成小数列一共要logN步，每步都是一个合并有序数列的过程，时间复杂度可以记为O(N)，故一共为O(N*logN)。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">public static void merge_sort(int a[],int first,int last,int temp[])&#123;</span><br><span class="line"></span><br><span class="line">  if(first &lt; last)&#123;</span><br><span class="line">      int middle = (first + last)/2;</span><br><span class="line">      merge_sort(a,first,middle,temp);//左半部分排好序</span><br><span class="line">      merge_sort(a,middle+1,last,temp);//右半部分排好序</span><br><span class="line">      mergeArray(a,first,middle,last,temp); //合并左右部分</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">//合并 ：将两个序列a[first-middle],a[middle+1-end]合并</span><br><span class="line">public static void mergeArray(int a[],int first,int middle,int end,int temp[])&#123;    </span><br><span class="line">  int i = first;</span><br><span class="line">  int m = middle;</span><br><span class="line">  int j = middle+1;</span><br><span class="line">  int n = end;</span><br><span class="line">  int k = 0;</span><br><span class="line">  while(i&lt;=m &amp;&amp; j&lt;=n)&#123;</span><br><span class="line">      if(a[i] &lt;= a[j])&#123;</span><br><span class="line">          temp[k] = a[i];</span><br><span class="line">          k++;</span><br><span class="line">          i++;</span><br><span class="line">      &#125;else&#123;</span><br><span class="line">          temp[k] = a[j];</span><br><span class="line">          k++;</span><br><span class="line">          j++;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;    </span><br><span class="line">  while(i&lt;=m)&#123;</span><br><span class="line">      temp[k] = a[i];</span><br><span class="line">      k++;</span><br><span class="line">      i++;</span><br><span class="line">  &#125;    </span><br><span class="line">  while(j&lt;=n)&#123;</span><br><span class="line">      temp[k] = a[j];</span><br><span class="line">      k++;</span><br><span class="line">      j++;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  for(int ii=0;ii&lt;k;ii++)&#123;</span><br><span class="line">      a[first + ii] = temp[ii];</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>堆排序(HeapSort)</p>
+</li>
+<li><p>基数排序(RadixSort)</p>
+</li>
+</ol>
 
         </div>
 
