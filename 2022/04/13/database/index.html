@@ -632,6 +632,29 @@
 </ol>
 </li>
 </ul>
+<h4 id="25-binlog"><a href="#25-binlog" class="headerlink" title="25.binlog"></a>25.binlog</h4><p><code>binlog </code>用于记录数据库执行的写入性操作(不包括查询)信息，以二进制的形式保存在磁盘中。 <code>binlog </code>是 <code>mysql</code><br>的逻辑日志，并且由 <code>Server </code>层进行记录，使用任何存储引擎的 <code>mysql </code>数据库都会记录 <code>binlog </code>日志。</p>
+<h4 id="26-关系型数据库和非关系型数据库"><a href="#26-关系型数据库和非关系型数据库" class="headerlink" title="26.关系型数据库和非关系型数据库"></a>26.关系型数据库和非关系型数据库</h4><table>
+<thead>
+<tr>
+<th align="center">数据库类型</th>
+<th align="center">特性</th>
+<th align="center">优点</th>
+<th align="center">缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">关系型数据库<br>SQLite、Oracle、mysql</td>
+<td align="center">1、关系型数据库，是指采用了关系模型来组织数据的数据库<br>2、关系型数据库的最大特点就是事务的一致性；<br>3、简单来说，关系模型指的就是二维表格模型，<br>而一个关系型数据库就是由二维表及其之间的联系所组成的一个数据组织</td>
+<td align="center">1、容易理解：二维表结构是非常贴近逻辑世界一个概念，关系模型相对网状、层次等其他模型来说更容易理解；<br>2、使用方便：通用的SQL语言使得操作关系型数据库非常方便；<br>3、易于维护：丰富的完整性(实体完整性、参照完整性和用户定义的完整性)大大减低了数据冗余和数据不一致的概率；<br>4、支持SQL，可用于复杂的查询。</td>
+<td align="center">1、为了维护一致性所付出的巨大代价就是其读写性能比较差；<br>2、固定的表结构；<br>3、高并发读写需求；<br>4、海量数据的高效率读写；</td>
+</tr>
+<tr>
+<td align="center">非关系型数据库<br>MongoDb、redis、HBase</td>
+<td align="center">1、使用键值对存储数据；<br>2、分布式；<br>3、一般不支持ACID特性；<br>4、非关系型数据库严格上不是一种数据库，应该是一种数据结构化存储方法的集合。</td>
+<td align="center">1、无需经过sql层的解析，读写性能很高；<br>2、基于键值对，数据没有耦合性，容易扩展；<br>3、存储数据的格式：nosql的存储格式是key,value形式、文档形式、图片形式等等，而关系型数据库则只支持基础类型。</td>
+<td align="center">1、不提供sql支持，学习和使用成本较高；<br>2、无事务处理，附加功能bi和报表等支持也不好；</td>
+</tr>
+</tbody></table>
 
         </div>
 
