@@ -655,6 +655,9 @@
 <td align="center">1、不提供sql支持，学习和使用成本较高；<br>2、无事务处理，附加功能bi和报表等支持也不好；</td>
 </tr>
 </tbody></table>
+<h4 id="27-MYSQL的WAL机制"><a href="#27-MYSQL的WAL机制" class="headerlink" title="27.MYSQL的WAL机制"></a>27.MYSQL的WAL机制</h4><p>WAL全称为Write-Ahead Logging，预写日志系统。其主要是指MySQL在执行写操作的时候并不是立刻更新到磁盘上，而是先记录在日志中，之后在合适的时间更新到磁盘中。</p>
+<p>日志主要分为undo log、redo log、binlog。<br>当<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=%E5%86%85%E5%AD%98&spm=1001.2101.3001.7020">内存</a>数据页跟磁盘数据页内容不一致的时候，我们成这个内存页为“脏页”。内存数据写入磁盘后，内存和磁盘上的数据页内容就一致了，称为“干净页”。</p>
+<p>MySQL真正使用WAL的原因是：磁盘的写操作是随机IO，比较耗性能，所以如果把每一次的更新操作都先写入log中，那么就成了顺序写操作，实际更新操作由后台线程再根据log异步写入。这样对于client端，延迟就降低了。并且，由于顺序写入大概率是在一个磁盘块内，这样产生的IO次数也大大降低。所以WAL的核心在于将随机写转变为了顺序写，降低了客户端的延迟，提升了吞吐量。</p>
 
         </div>
 
