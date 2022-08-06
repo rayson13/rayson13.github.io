@@ -454,6 +454,11 @@
 </li>
 </ol>
 <p>​    <img src="/2022/05/31/zonghe/6.png" class title="This is an example image"></p>
+<h4 id="7-Unicode-和-UTF-8"><a href="#7-Unicode-和-UTF-8" class="headerlink" title="7.Unicode 和 UTF-8"></a>7.Unicode 和 UTF-8</h4><p>Unicode是“字符集”，UTF-8 是“编码规则”。</p>
+<ul>
+<li>Unicode （”Universal Multiple-Octet Coded Character Set”，简称 UCS, 俗称 “unicode“）为世界上所有字符都分配了一个唯一的数字编号，这个编号范围从 0x000000 到 0x10FFFF (十六进制)，有 110 多万，每个字符都有一个唯一的 Unicode 编号，这个编号一般写成 16 进制，在前面加上 U+。例如：“马”的 Unicode 是U+9A6C。Unicode 就相当于一张表，建立了字符与编号之间的联系。</li>
+<li>为解决Unicode如何在网络上传输的问题，于是面向传输的众多 UTF（UCS Transfer Format）标准出现了，顾名思义，UTF-8就是每次8个位传输数据，而UTF-16就是每次16个位，UTF-32就是每次32个位。UTF-8就是在互联网上使用最广的一种Unicode的实现方式，这是为传输而设计的编码，并使编码无国界，这样就可以显示全世界上所有文化的字符了。UTF-8最大的一个特点，就是它是一种变长的编码方式。它可以使用1~4个字节表示一个符号，根据不同的符号而变化字节长度，当字符在ASCII码的范围时，就用一个字节表示，保留了ASCII字符一个字节的编码做为它的一部分，注意的是Unicode一个中文字符占2个字节，而UTF-8一个中文字符占3个字节。</li>
+</ul>
 
         </div>
 
