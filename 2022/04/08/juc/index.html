@@ -539,6 +539,14 @@
 <li>提高线程的可管理性。线程是稀缺资源，如果无限制的创建，不仅会消耗系统资源，还会降低系统的稳定性，使用线程池可以进行统一的分配、调优和监控。</li>
 </ul>
 <h4 id="28-ThreadPoolExecutor"><a href="#28-ThreadPoolExecutor" class="headerlink" title="28.ThreadPoolExecutor"></a>28.ThreadPoolExecutor</h4><p><strong>ThreadPoolExecutor</strong>就是线程池，是JAVA的一个类，通过Executors工厂类的方法，通过传入不同的参数，就可以构造出适用于不同应用场景下的ThreadPoolExecutor（线程池）。</p>
+<p>工作顺序：</p>
+<ol>
+<li>线程池创建，准备好core数量的核心线程，准备接受任务</li>
+<li>core满了，就将在进来的任务放入阻塞队列中。空闲的core就会自己去阻塞队列获取任务执行</li>
+<li>阻塞队列满了，就直接开新线程执行，最大只能开到max指定的数量</li>
+<li>max满了就用handler拒绝策略拒绝任务</li>
+<li>max都执行完成有空闲线程，在keepAliveTime以后，释放max-core这些线程</li>
+</ol>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">构造参数介绍</span><br><span class="line">corePoolSize 核心线程数量</span><br><span class="line">maximumPoolSize 最大线程数量</span><br><span class="line">keepAliveTime 线程保持时间，N个时间单位</span><br><span class="line">unit 时间单位（比如秒，分）</span><br><span class="line">workQueue 阻塞队列</span><br><span class="line">threadFactory 线程工厂</span><br><span class="line">handler 线程池拒绝策略</span><br></pre></td></tr></table></figure>
 
 <h4 id="29-Executors"><a href="#29-Executors" class="headerlink" title="29.Executors"></a>29.Executors</h4><p><strong>Executors</strong>框架实现的就是线程池的功能。</p>
