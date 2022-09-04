@@ -479,6 +479,13 @@
 <li>Java7 中 ConcurrentHashMap 使用的分段锁，也就是每一个 Segment 上同时只有一个线程可以操作，每一个 Segment 都是一个类似 HashMap 数组的结构，它可以扩容，它的冲突会转化为链表。但是 Segment 的个数一但初始化就不能改变。</li>
 <li>Java8 中的 ConcurrentHashMap 使用的 Synchronized 锁加 CAS 的机制。结构也由 Java7 中的 <strong>Segment 数组 + HashEntry 数组 + 链表</strong> 进化成了 <strong>Node 数组 + 链表 &#x2F; 红黑树</strong>，Node 是类似于一个 HashEntry 的结构。它的冲突再达到一定大小时会转化成红黑树，在冲突小于一定数量时又退回链表。</li>
 </ul>
+<h4 id="13-ArrayList扩容机制"><a href="#13-ArrayList扩容机制" class="headerlink" title="13.ArrayList扩容机制"></a>13.ArrayList扩容机制</h4><ul>
+<li>使用无参构造函数创建对象,会使用长度为0的数组</li>
+<li>使用ArrayList(int initialCapacity)创建对象,会使用容量为initialCapacity的数组</li>
+<li>使用ArrayList(Collection&lt;? extends E&gt; c)创建对象,会使用c的大小作为数组容量</li>
+<li>调用add(Object o),首次扩容为10,再次扩容为之前容量的1.5倍</li>
+<li>调用addAll(Collection o),没有元素时扩容为Math.max(10,c的元素个数);有元素时扩容为Math.max(原容量的1.5倍,c的元素个数+ArrayList元素个数)</li>
+</ul>
 
         </div>
 
