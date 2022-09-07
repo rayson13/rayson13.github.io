@@ -615,9 +615,11 @@
 <li>判断线程池里的线程是否都处于工作状态，如果没有，则创建一个新的工作线程来执行任务。如果已经满了，则交给饱和策略来处理这个任务。</li>
 </ol>
 <h4 id="36-ThreadLocal"><a href="#36-ThreadLocal" class="headerlink" title="36.ThreadLocal"></a>36.ThreadLocal</h4><ul>
-<li>ThreadLocal,即线程变量,它将需要并发访问的资源复制多份,让每个线程拥有一份资源。由于每个线程都拥有自己的资源副本,从而也就没有必要对该变量进行同步了。ThreadLocal提供了线程安全的共享机制,在编写多线程代码时,可以把不安全的变量封装进ThreadLocal。 在实现上,Thread类中声明了threadLocals变量,用于存放当前线程独占的资源。ThreadLocal类中定义了该变量的类型（ThreadLocalMap）,这是一个类似于Map的结构,用于存放键值对。ThreadLocal类中还提供了set和get方法,set方法会初始化ThreadLocalMap并将其绑定到Thread.threadLocals,从而将传入的值绑定到当前线程。在数据存储上,传入的值将作为键值对的value,而key则是ThreadLocal对象本身（this）。get方法没有任何参数,它会以当前ThreadLocal对象（this）为key,从Thread.threadLocals中获取与当前线程绑定的数据。</li>
+<li>ThreadLocal,即线程变量,它将需要并发访问的资源复制多份,让每个线程拥有一份资源。由于每个线程都拥有自己的资源副本,从而也就没有必要对该变量进行同步了。ThreadLocal提供了线程安全的共享机制,在编写多线程代码时,可以把不安全的变量封装进ThreadLocal。 在实现上,Thread类中声明了threadLocals变量,用于存放当前线程独占的资源。ThreadLocal类中定义了该变量(threadLocals)的类型（ThreadLocalMap）,这是一个类似于Map的结构,用于存放键值对。ThreadLocal类中还提供了set和get方法,set方法会初始化ThreadLocalMap并将其绑定到Thread.threadLocals,从而将传入的值绑定到当前线程。在数据存储上,传入的值将作为键值对的value,而key则是ThreadLocal对象本身（this）。get方法没有任何参数,它会以当前ThreadLocal对象（this）为key,从Thread.threadLocals中获取与当前线程绑定的数据。</li>
 <li>内存泄漏问题<ul>
-<li>ThreadLocalMap是里面entry是以ThreadLocal作为key值的，但是是<strong>弱引用</strong>的。意味着下次gc的时候，不管jvm堆内存是否足够，threadlocal都会被回收掉，这样一来，ThreadLocalMap中就会出现key为null的Entry，就没有办法访问这些key为null的Entry的value，如果当前线程再迟迟不结束的话，这些key为null的Entry的value就会一直存在一条强引用链：Thread Ref -&gt; Thread -&gt; ThreaLocalMap -&gt; Entry -&gt; value永远无法回收，造成内存泄漏。</li>
+<li><del>ThreadLocalMap是里面entry是以ThreadLocal作为key值的，但是是<strong>弱引用</strong>的。意味着下次gc的时候，不管jvm堆内存是否足够，threadlocal都会被回收掉，这样一来，ThreadLocalMap中就会出现key为null的Entry，就没有办法访问这些key为null的Entry的value，如果当前线程再迟迟不结束的话，这些key为null的Entry的value就会一直存在一条强引用链：Thread Ref -&gt; Thread -&gt; ThreaLocalMap -&gt; Entry -&gt; value永远无法回收，造成内存泄漏。</del></li>
+<li>当一个线程调用 ThreadLocal 的set 方法设置变量时，当前线程的 ThreadLoca!Map就会存放一个记录， 这个记录key为ThreadLocal的弱引用，value 为设置的值。如果当前线程一直存在且没有 ThreadLocal remove 方法，并且这时候候在其他地方还有对ThreadLocal的引用，则当前线程的 ThreadLoca!Map变量里面会存在对ThreadLocal变量的引用和value对象的引用，它们不会被释放的，这就会造成内存泄漏。</li>
+<li>考虑这个ThreadLocal变量没有其他强依赖，而当前线程还存在的情况，由于线程的ThreadLocalmap里面的key是弱依赖，所以当前线程的ThreadLocalMap里面的ThreadLocal变量的弱引用会在gc的时候被回收，但是对应的value还是会造成内存泄漏，因为这时候ThreadLocalMap里面就会存在key为null但是value不为null的entry项。</li>
 <li>每次使用完ThreadLocal，都调用它的remove()方法，清除数据。</li>
 </ul>
 </li>
