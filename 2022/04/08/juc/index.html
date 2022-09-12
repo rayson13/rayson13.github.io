@@ -624,6 +624,58 @@
 </ul>
 </li>
 </ul>
+<h4 id="37-volatile底层实现原理"><a href="#37-volatile底层实现原理" class="headerlink" title="37.volatile底层实现原理"></a>37.volatile底层实现原理</h4><p>对比有volatile关键字和没有volatile关键字时所生成的汇编代码，发现有volatile关键字修饰时，会多出一个lock addl $0x0,(%esp)，即多出一个lock前缀指令，lock指令相当于一个「内存屏障」。</p>
+<p>volatile的底层实现原理是内存屏障，MemoryBarrier</p>
+<ul>
+<li><p>在每个volatile写操作的前面插入一个StoreStore屏障</p>
+</li>
+<li><p>在每个volatile写操作的后面插入一个StoreLoad屏障</p>
+</li>
+<li><p>StoreStore屏障将保障上面所有的普通写操作结果在volatile写之前会被刷新到主内存-&gt;普通写操作对其他线程可见</p>
+</li>
+<li><p>StoreLoad屏障的作用是避免volatile写操作与后面可能有的volatile读&#x2F;写操作重排序</p>
+<img src="/2022/04/08/juc/1.png" class title="This is an example image">
+</li>
+<li><p>在每个volatile读操作的后面插入一个LoadLoad屏障</p>
+</li>
+<li><p>在每个volatile读操作的后面插入一个LoadStore屏障</p>
+</li>
+<li><p>LoadStore屏障用来禁止编译器把上面的volatile读操作与下面的普通读写操作重排序</p>
+<img src="/2022/04/08/juc/2.png" class title="This is an example image">
+</li>
+<li><p>JVM层面的内存屏障</p>
+<table>
+<thead>
+<tr>
+<th>屏障类型</th>
+<th>指令示例</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>LoadLoad</td>
+<td>Load1；LoadLoad；Load2</td>
+<td>确保Load1的读取操作在Load2及后续所有读取操作之前执行</td>
+</tr>
+<tr>
+<td>StoreStore</td>
+<td>Store1；StoreStore；Store2</td>
+<td>在Store2及其后的写操作之前，保证Store1的写操作已刷新到主内存</td>
+</tr>
+<tr>
+<td>LoadStore</td>
+<td>Load1；LoadStore；Store2</td>
+<td>在Store2及其后的写操作之前，保证Load1的读操作已结束</td>
+</tr>
+<tr>
+<td>StoreLoad</td>
+<td>Store1；StoreLoad；Load2</td>
+<td>保证Store1的写操作已刷新到主内存后，Load2及之后的读写操作才会执行</td>
+</tr>
+</tbody></table>
+<p>StoreLoad Barriers是一个“全能型”的屏障，它同时具有其他3个屏障的效果</p>
+</li>
+</ul>
 
         </div>
 
