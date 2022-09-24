@@ -676,6 +676,11 @@
 <p>StoreLoad Barriers是一个“全能型”的屏障，它同时具有其他3个屏障的效果</p>
 </li>
 </ul>
+<h4 id="38-线程的创建方式"><a href="#38-线程的创建方式" class="headerlink" title="38.线程的创建方式"></a>38.线程的创建方式</h4><ol>
+<li>继承Thread类并重写run方法。实现简单，但不符合里氏替换原则，不可以继承其它类。</li>
+<li>实现Runnable接口并重写run方法。避免了单继承局限性，实现解耦。</li>
+<li>实现Callable接口并重写call方法。可以获取线程执行结果的返回值，并且可以抛出异常。</li>
+</ol>
 
         </div>
 
