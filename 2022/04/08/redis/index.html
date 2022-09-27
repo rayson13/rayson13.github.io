@@ -451,6 +451,41 @@
 <p>Redis集群中的节点分为主节点和从节点，其中主节点用于处理槽，而从节点则用于复制某个主节点，并在被复制的主节点下线时，代替下线主节点继续处理命令请求。</p>
 </li>
 </ul>
+<h4 id="15-redis底层数据结构"><a href="#15-redis底层数据结构" class="headerlink" title="15.redis底层数据结构"></a>15.redis底层数据结构</h4><ul>
+<li><p><strong>简单动态字符串（SDS）</strong></p>
+</li>
+<li><p><strong>链表</strong></p>
+</li>
+<li><p>**字典 **</p>
+<p>Redis的字典底层是使用<strong>哈希表</strong>实现的，一个哈希表里面可以有多个<strong>哈希表节点</strong>，每个哈希表节点中保存了字典中的一个<strong>键值对</strong></p>
+<p>字典d<code>dict</code>的<code>ht</code>属性是两个元素的数组，包含两个<code>dictht</code>哈希表，一般字典只使用<code>ht[0]</code>哈希表，<code>ht[1]</code>哈希表会在对<code>ht[0]</code>哈希表进行<code>rehash</code>（重哈希）的时候使用，即当哈希表的键值对数量超过负载数量过多的时候，会将键值对迁移到<code>ht[1]</code>上</p>
+</li>
+<li><p><strong>跳跃表</strong></p>
+<p>一个普通的单链表查询一个元素的时间复杂度为O(N)，即便该单链表是有序的。使用跳跃表（SkipList）是来解决查找问题的，它是一种有序的数据结构，不属于平衡树结构，也不属于Hash结构，它通过在每个节点维持多个指向其他节点的指针，而达到快速访问节点的目的</p>
+<p>跳跃表是有序集合（Sorted Set）的底层实现之一，如果有序集合包含的元素比较多，或者元素的成员是比较长的字符串时，Redis会使用跳跃表做有序集合的底层实现</p>
+</li>
+<li><p><strong>整数集合</strong></p>
+<p>整数集合（intset）是Redis用于保存整数值的集合抽象数据结构，可以保存类型为int16_t、int32_t、int64_t的整数值，并且保证集合中不会出现重复元素</p>
+<p>整数集合是集合（Set）的底层实现之一，如果一个集合只包含整数值元素，且元素数量不多时，会使用整数集合作为底层实现</p>
+</li>
+<li><p><strong>压缩列表</strong></p>
+<p>压缩列表（ziplist）是为了节约内存而设计的，是由一系列特殊编码的连续内存块组成的顺序性（sequential）数据结构，一个压缩列表可以包含多个节点，每个节点可以保存一个字节数组或者一个整数值</p>
+<p>压缩列表是列表（List）和散列（Hash）的底层实现之一，一个列表只包含少量列表项，并且每个列表项是小整数值或比较短的字符串，会使用压缩列表作为底层实现（在3.2版本之后是使用<code>quicklist</code>实现）</p>
+</li>
+</ul>
+<h4 id="16-redis基本数据类型"><a href="#16-redis基本数据类型" class="headerlink" title="16.redis基本数据类型"></a>16.redis基本数据类型</h4><p>​    字符串(String)、列表(List)、散列(Hash)、集合(Set)、有序集合(Sorted Set)</p>
+<h4 id="17-Mysql的索引为什么使用B-树而不使用跳表？"><a href="#17-Mysql的索引为什么使用B-树而不使用跳表？" class="headerlink" title="17.Mysql的索引为什么使用B+树而不使用跳表？"></a>17.Mysql的索引为什么使用B+树而不使用跳表？</h4><ul>
+<li><strong>B+树</strong>是多叉树结构，每个结点都是一个16k的数据页，能存放较多索引信息，所以<strong>扇出很高</strong>。<strong>三层</strong>左右就可以存储2kw左右的数据（知道结论就行，想知道原因可以看之前的文章）。也就是说查询一次数据，如果这些数据页都在磁盘里，那么最多需要查询<strong>三次磁盘IO</strong>。</li>
+<li><strong>跳表</strong>是链表结构，一条数据一个结点，如果最底层要存放2kw数据，且每次查询都要能达到<strong>二分查找</strong>的效果，2kw大概在2的24次方左右，所以，跳表大概高度在<strong>24层</strong>左右。最坏情况下，这24层数据会分散在不同的数据页里，也即是查一次数据会经历<strong>24次磁盘IO</strong>。</li>
+<li>存放同样量级的数据，B+树的高度比跳表的要少，如果放在mysql数据库上来说，就是<strong>磁盘IO次数更少，因此B+树查询更快</strong>。</li>
+<li>针对<strong>写操作</strong>，B+树需要拆分合并索引数据页，跳表则独立插入，并根据随机函数确定层数，没有旋转和维持平衡的开销，因此<strong>跳表的写入性能会比B+树要好。</strong></li>
+</ul>
+<h4 id="18-redis（zset）为什么使用跳表而不使用B-树或二叉树呢？"><a href="#18-redis（zset）为什么使用跳表而不使用B-树或二叉树呢？" class="headerlink" title="18.redis（zset）为什么使用跳表而不使用B+树或二叉树呢？"></a>18.redis（zset）为什么使用跳表而不使用B+树或二叉树呢？</h4><ul>
+<li>redis 是纯的<a target="_blank" rel="noopener" href="https://www.isolves.com/it/yj/nc/">内存</a>数据库。进行读写数据都是操作内存，跟磁盘没啥关系，因此也<strong>不存在磁盘IO</strong>了，所以层高就不再是跳表的劣势了。</li>
+<li>B+树是有一系列合并拆分操作的，换成红黑树或者其他AVL树的话也是各种旋转，目的也是<strong>为了保持树的平衡</strong>。</li>
+<li>跳表插入数据时，只需要随机一下，就知道自己要不要往上加索引，根本不用考虑前后结点的感受，也就<strong>少了旋转平衡的开销</strong>。</li>
+<li>因此，redis选了跳表，而不是B+树。</li>
+</ul>
 
         </div>
 
